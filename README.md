@@ -104,7 +104,7 @@ sip/
 | Fase | Estado |
 |---|---|
 | Fase 00 — Bootstrap / Arquitectura | Em curso |
-| Fase 01 — Identidade + Auth | Pendente |
+| Fase 01 — Identidade + Auth | Em curso |
 | Fase 02 — Organização + Utilizadores | Pendente |
 | ... | ... |
 | Fase 16 — QA + Release | Pendente |
