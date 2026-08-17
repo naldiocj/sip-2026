@@ -49,6 +49,20 @@ class Settings(BaseSettings):
     # CORS
     cors_origins: list[str] = ["http://localhost:3000", "http://localhost"]
 
+    # Autenticação (JWT)
+    jwt_secret: str = "dev-secret-do-not-use-in-production"
+    jwt_algorithm: str = "HS256"
+    jwt_issuer: str = "sip-backend"
+    jwt_audience: str = "sip-frontend"
+    access_token_expire_minutes: int = 30
+    session_ttl_days: int = 7
+    access_token_cookie_name: str = "sip_access_token"
+
+    # Rate limiting de autenticação
+    rate_limit_enabled: bool = True
+    login_rate_limit_attempts: int = 10
+    login_rate_limit_window_seconds: int = 900
+
     # Headers de correlação
     request_id_header: str = "X-Request-ID"
     correlation_id_header: str = "X-Correlation-ID"
