@@ -195,4 +195,4 @@ volumes:
   prometheus_data:
   grafana_data:
   backend_deps:
-  frontend_deps:
+  frontend_node_modules:
