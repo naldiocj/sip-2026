@@ -1,5 +1,24 @@
 # AGENTS.md — Regras para Agentes IA no SIP
 
+## Uso Obrigatório de Skills
+
+As skills estão em `skills/<skill-name>/SKILL.md` e são carregadas via a ferramenta `skill`.
+
+- Se uma skill se aplicar à tarefa (mesmo com 1% de probabilidade), **MUST** invocá-la com a ferramenta `skill` antes de agir.
+- Seguir a skill exactamente, nunca parcialmente.
+- **NUNCA** implementar directamente se uma skill se aplica.
+- Mapeamento automático de intenção → skill:
+  - Feature / nova funcionalidade → `spec-driven-development`, depois `incremental-implementation` + `test-driven-development`
+  - Planeamento / breakdown → `planning-and-task-breakdown`
+  - Bug / falha inesperada → `debugging-and-error-recovery`
+  - Code review → `code-review-and-quality`
+  - Refactoring / simplificação → `code-simplification`
+  - API ou design de interfaces → `api-and-interface-design`
+  - Trabalho de UI → `frontend-ui-engineering`
+  - Segurança → `security-and-hardening`
+  - Documentação / ADRs → `documentation-and-adrs`
+- Ciclo de vida implícito: DEFINE → `spec-driven-development`; PLAN → `planning-and-task-breakdown`; BUILD → `incremental-implementation` + `test-driven-development`; VERIFY → `debugging-and-error-recovery`; REVIEW → `code-review-and-quality`; SHIP → `shipping-and-launch`.
+
 ## Ciclo Obrigatório de Execução
 
 Para cada Sprint:
