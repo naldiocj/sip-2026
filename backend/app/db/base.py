@@ -1,0 +1,45 @@
+"""Base declarativa e mixins partilhados do SQLAlchemy."""
+
+import uuid
+from datetime import datetime
+
+from sqlalchemy import DateTime, Uuid, func
+from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
+
+
+class Base(DeclarativeBase):
+    """Base declarativa de todos os modelos."""
+
+
+class UUIDPrimaryKeyMixin:
+    """Primary key UUID gerada no lado da aplicação."""
+
+    id: Mapped[uuid.UUID] = mapped_column(
+        Uuid,
+        primary_key=True,
+        default=uuid.uuid4,
+    )
+
+
+class TimestampMixin:
+    """created_at / updated_at consistentes.
+
+    Estratégia SIP:
+    - created_at: server_default now(), imutável.
+    - updated_at: server_default now() + onupdate now().
+    - created_by / updated_by: adicionados nos módulos quando aplicável,
+      sempre como colunas UUID opcionais referenciando users.id.
+    """
+
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        server_default=func.now(),
+        nullable=False,
+    )
+
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        server_default=func.now(),
+        onupdate=func.now(),
+        nullable=False,
+    )
