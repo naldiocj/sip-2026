@@ -1,11 +1,26 @@
 "use client";
 
+import { usePathname } from "next/navigation";
 import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/layout/sidebar";
 import { Header } from "@/components/layout/header";
 import { Toaster } from "sonner";
 
+const AUTH_ROUTES = ["/login"];
+
 export function AppLayout({ children }: { children: React.ReactNode }) {
+  const pathname = usePathname();
+  const isAuthRoute = AUTH_ROUTES.includes(pathname);
+
+  if (isAuthRoute) {
+    return (
+      <>
+        {children}
+        <Toaster position="top-right" />
+      </>
+    );
+  }
+
   return (
     <SidebarProvider defaultOpen>
       <AppSidebar />
