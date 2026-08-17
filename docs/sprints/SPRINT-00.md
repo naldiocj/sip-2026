@@ -7,7 +7,7 @@ testes, lint, CI e documentação arquitectural.
 
 ## Estado
 
-**IN_PROGRESS**
+**DONE**
 
 ## Tasks
 
@@ -19,7 +19,7 @@ testes, lint, CI e documentação arquitectural.
 | TASK-004 | Infraestrutura Docker | DONE |
 | TASK-005 | Observabilidade | DONE |
 | TASK-006 | Testes + CI | DONE |
-| TASK-007 | Documentação | IN_PROGRESS |
+| TASK-007 | Documentação | DONE |
 
 ## Critérios de Conclusão
 
