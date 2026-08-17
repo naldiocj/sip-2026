@@ -9,6 +9,7 @@ Mecanismos centralizados — nunca duplicar lógica de auth nos endpoints:
 """
 
 import uuid
+from collections.abc import Callable
 
 from fastapi import Depends, HTTPException, Request, status
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
@@ -17,7 +18,9 @@ from sqlalchemy.orm import Session
 
 from app.core.config import get_settings
 from app.db.session import get_db_session
+from app.modules.auth.application.authorization import AuthorizationService
 from app.modules.auth.application.tokens import TokenService
+from app.modules.auth.domain.profile import ProfileEnum
 from app.modules.auth.domain.session import UserSession
 from app.modules.auth.domain.user import User, UserStatus
 
@@ -79,3 +82,46 @@ def require_authenticated_user(
 ) -> User:
     """Garante que o utilizador está autenticado."""
     return user
+
+
+def require_permission(permission_code: str) -> Callable[..., User]:
+    """Factory de dependência: exige uma permissão específica.
+
+    Uso nos routers::
+
+        @router.get("/x")
+        def x(user: User = Depends(require_permission("process.read"))):
+            ...
+    """
+
+    def dependency(
+        user: User = Depends(get_current_user),
+        db: Session = Depends(get_db_session),
+    ) -> User:
+        service = AuthorizationService(db)
+        if not service.check_permission(user, permission_code):
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="Permission denied",
+            )
+        return user
+
+    return dependency
+
+
+def require_profile(profile_code: str | ProfileEnum) -> Callable[..., User]:
+    """Factory de dependência: exige um perfil específico (activo)."""
+
+    def dependency(
+        user: User = Depends(get_current_user),
+        db: Session = Depends(get_db_session),
+    ) -> User:
+        service = AuthorizationService(db)
+        if not service.check_profile(user, profile_code):
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="Profile required",
+            )
+        return user
+
+    return dependency
