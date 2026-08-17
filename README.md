@@ -28,23 +28,32 @@ Modular Monolith — backend FastAPI, frontend Next.js, PostgreSQL, Redis, Rabbi
 - Python 3.12+
 - Node.js 22+
 
-### Iniciar
+### Quick Start
 
 ```bash
-# Infraestrutura completa
-cd infra && docker compose up -d
-
-# Backend (desenvolvimento local)
-cd backend
-python -m venv .venv && source .venv/bin/activate
-pip install -e ".[dev]"
-uvicorn app.main:app --reload
-
-# Frontend (desenvolvimento local)
-cd frontend
-npm install
-npm run dev
+make setup          # cria .env.local (se não existir)
+make install        # instala deps backend + frontend
+make infra-up       # sobe containers base (postgres, redis, rabbitmq, minio)
+make dev-backend    # uvicorn --reload (porta 8000)
+make dev-frontend   # next dev (porta 3000)
 ```
+
+Ver todos os targets: `make help`
+
+### Docker Compose Profiles
+
+A infraestrutura usa **profiles** para evitar subir serviços pesados desnecessariamente.
+
+| Comando | O que sobe |
+|---|---|
+| `make infra-up` | postgres, redis, backend, frontend, nginx, rabbitmq, minio |
+| `make infra-up-heavy` | acima + OpenSearch (~2GB RAM) |
+| `make infra-up-obs` | acima + Prometheus + Grafana |
+| `make infra-up-all` | tudo |
+
+**Profile `all`** (default): postgres, redis, backend, frontend, nginx, rabbitmq, minio
+**Profile `heavy`**: opensearch
+**Profile `obs`**: prometheus, grafana
 
 ### Endpoints
 
@@ -62,29 +71,17 @@ npm run dev
 ### Testes
 
 ```bash
-# Backend
-cd backend && pytest
-
-# Frontend
-cd frontend && npx vitest run
-
-# CI completo
-bash scripts/ci.sh
+make test           # CI completo (backend + frontend)
+make test-backend   # pytest
+make test-frontend  # vitest run
 ```
 
 ### Lint + Typecheck
 
 ```bash
-# Backend
-cd backend
-ruff check app tests
-ruff format --check app tests
-mypy app
-
-# Frontend
-cd frontend
-npx eslint src/
-npx tsc --noEmit
+make lint           # backend + frontend
+make typecheck      # backend + frontend
+make ci             # lint + typecheck + test
 ```
 
 ## Estrutura
@@ -97,6 +94,7 @@ sip/
 ├── docs/             # Documentação arquitectural
 ├── prompts/          # Prompts e tasks por sprint
 ├── scripts/          # Scripts utilitários
+├── Makefile          # Comandos de dev, infra, lint, test
 ├── AGENTS.md         # Regras para agentes IA
 └── README.md
 ```
