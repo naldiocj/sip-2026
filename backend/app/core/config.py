@@ -6,6 +6,7 @@ Não utilizar configurações espalhadas pelo código.
 
 from functools import lru_cache
 
+from pydantic import model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -74,6 +75,18 @@ class Settings(BaseSettings):
     # OpenTelemetry
     otel_exporter_otlp_endpoint: str | None = None
     otel_service_name: str = "sip-backend"
+
+    @model_validator(mode="after")
+    def _validate_security(self) -> "Settings":
+        dev_default = "dev-secret-do-not-use-in-production"
+        if self.app_env == "production" and self.jwt_secret == dev_default:
+            raise ValueError(
+                "jwt_secret MUST be overridden in production. "
+                "Set a secure random value via JWT_SECRET environment variable."
+            )
+        if len(self.jwt_secret) < 32:
+            raise ValueError("jwt_secret must be at least 32 characters long")
+        return self
 
 
 @lru_cache

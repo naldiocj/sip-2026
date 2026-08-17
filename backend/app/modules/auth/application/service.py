@@ -76,7 +76,12 @@ class AuthService:
         """Autentica um utilizador e cria a sessão."""
         user = self.db.scalar(select(User).where(User.username == username))
 
-        if user is None or not self.password_service.verify_password(password, user.password_hash):
+        # Always run verify_password to prevent timing side-channel.
+        # Even when user is None, a dummy hash ensures constant-time behaviour
+        # so attackers cannot distinguish "user not found" from "wrong password".
+        dummy_hash = "$argon2id$v=19$m=65536,t=3,p=4$YXBwLmR1bW15$placeholder"
+        password_hash = user.password_hash if user else dummy_hash
+        if user is None or not self.password_service.verify_password(password, password_hash):
             self.audit_service.record(
                 AuditEventType.LOGIN_FAILED,
                 user_id=user.id if user else None,

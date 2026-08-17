@@ -77,16 +77,18 @@ def login(
             detail="Invalid credentials",
         ) from None
     except AccountBlockedError:
+        # Return 401 (not 403) to avoid leaking account state via status code.
         logger.info("login_failed", username=body.username, reason="blocked")
         raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail="Account blocked",
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid credentials",
         ) from None
     except AccountNotActiveError:
+        # Return 401 (not 403) to avoid leaking account state via status code.
         logger.info("login_failed", username=body.username, reason="not_active")
         raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail="Account not active",
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid credentials",
         ) from None
 
     settings = get_settings()
@@ -102,7 +104,6 @@ def login(
 
     logger.info("login_success", username=body.username)
     return LoginResponse(
-        access_token=result.access_token,
         user=UserSummary(
             id=result.user.id,
             username=result.user.username,

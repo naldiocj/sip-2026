@@ -113,7 +113,7 @@ def test_logout_records_logout_and_session_revoked(client: TestClient, db_sessio
 
 def test_permission_denied_records_audit_event(client: TestClient, db_session: Session) -> None:
     login = client.post(LOGIN_URL, json={"username": "pgr", "password": "pgr123"})
-    token = login.json()["access_token"]
+    token = login.cookies.get("sip_access_token", "")
 
     from typing import Annotated
 

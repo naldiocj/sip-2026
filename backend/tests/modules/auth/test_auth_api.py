@@ -52,8 +52,6 @@ def test_login_valid_returns_token_and_user(client: TestClient) -> None:
 
     assert response.status_code == 200
     body = response.json()
-    assert body["token_type"] == "bearer"
-    assert body["access_token"]
     assert body["user"]["username"] == "admin"
     assert body["user"]["profiles"][0]["code"] == "ADMINISTRADOR_SISTEMA"
     assert "password" not in body
@@ -87,7 +85,7 @@ def test_login_unknown_username_returns_same_generic_error(client: TestClient) -
 
 
 @requires_database
-def test_login_blocked_user_returns_403(client: TestClient, db_session: Session) -> None:
+def test_login_blocked_user_returns_generic_401(client: TestClient, db_session: Session) -> None:
     hasher = PasswordService()
     user = User(
         username=f"bloqueado-{uuid.uuid4().hex[:8]}",
@@ -102,12 +100,12 @@ def test_login_blocked_user_returns_403(client: TestClient, db_session: Session)
 
     response = client.post(LOGIN_URL, json={"username": user.username, "password": "segredo123"})
 
-    assert response.status_code == 403
-    assert response.json()["message"] == "Account blocked"
+    assert response.status_code == 401
+    assert response.json()["message"] == "Invalid credentials"
 
 
 @requires_database
-def test_login_inactive_user_returns_403(client: TestClient, db_session: Session) -> None:
+def test_login_inactive_user_returns_generic_401(client: TestClient, db_session: Session) -> None:
     hasher = PasswordService()
     user = User(
         username=f"inactivo-{uuid.uuid4().hex[:8]}",
@@ -122,12 +120,12 @@ def test_login_inactive_user_returns_403(client: TestClient, db_session: Session
 
     response = client.post(LOGIN_URL, json={"username": user.username, "password": "segredo123"})
 
-    assert response.status_code == 403
-    assert response.json()["message"] == "Account not active"
+    assert response.status_code == 401
+    assert response.json()["message"] == "Invalid credentials"
 
 
 @requires_database
-def test_login_pending_user_returns_403(client: TestClient, db_session: Session) -> None:
+def test_login_pending_user_returns_generic_401(client: TestClient, db_session: Session) -> None:
     hasher = PasswordService()
     user = User(
         username=f"pendente-{uuid.uuid4().hex[:8]}",
@@ -142,8 +140,8 @@ def test_login_pending_user_returns_403(client: TestClient, db_session: Session)
 
     response = client.post(LOGIN_URL, json={"username": user.username, "password": "segredo123"})
 
-    assert response.status_code == 403
-    assert response.json()["message"] == "Account not active"
+    assert response.status_code == 401
+    assert response.json()["message"] == "Invalid credentials"
 
 
 @requires_database
@@ -226,7 +224,7 @@ def test_me_returns_instructor_permissions(client: TestClient) -> None:
 @requires_database
 def test_logout_revokes_session(client: TestClient, db_session: Session) -> None:
     login_response = _login(client)
-    token = login_response.json()["access_token"]
+    token = login_response.cookies.get("sip_access_token")
 
     logout_response = client.post(LOGOUT_URL)
     assert logout_response.status_code == 200

@@ -1,7 +1,7 @@
 """Rate limiting para endpoints sensíveis (login, refresh, password).
 
-Implementação simples baseada em Redis (janela fixa). Utilizado nos
-endpoints de autenticação; extensível a outros endpoints sensíveis.
+Implementação baseada em Redis com atomicidade garantida via Lua script.
+Utilizado nos endpoints de autenticação; extensível a outros endpoints sensíveis.
 
 Quando o Redis está indisponível, o limite falha-open (o serviço não
 deixa de funcionar) — o comportamento é observável nos logs.
@@ -15,6 +15,19 @@ from app.core.config import get_settings
 from app.shared.cache import get_redis
 
 logger = structlog.get_logger("auth.rate_limit")
+
+# Lua script for atomic INCR + EXPIRE to prevent race conditions.
+# Returns the new count after increment.
+_LUA_INCR_EXPIRE = """
+local key = KEYS[1]
+local limit = tonumber(ARGV[1])
+local window = tonumber(ARGV[2])
+local current = redis.call("incr", key)
+if current == 1 then
+    redis.call("expire", key, window)
+end
+return current
+"""
 
 
 class RateLimiter:
@@ -41,9 +54,7 @@ class RateLimiter:
         redis_key = f"rl:{key}"
         try:
             client = self._client()
-            attempts = int(client.incr(redis_key))
-            if attempts == 1:
-                client.expire(redis_key, window_seconds)
+            attempts = int(client.eval(_LUA_INCR_EXPIRE, 1, redis_key, limit, window_seconds))
             return attempts <= limit
         except RedisError:
             logger.warning("rate_limit_redis_unavailable", key=key)

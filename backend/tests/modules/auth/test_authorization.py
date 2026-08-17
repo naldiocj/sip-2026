@@ -126,7 +126,7 @@ def _login(client: TestClient, username: str, password: str) -> str:
         json={"username": username, "password": password},
     )
     assert response.status_code == 200
-    return response.json()["access_token"]
+    return response.cookies.get("sip_access_token", "")
 
 
 def test_require_permission_allows_with_permission(auth_client: TestClient) -> None:

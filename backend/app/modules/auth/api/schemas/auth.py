@@ -40,10 +40,12 @@ class UserSummary(BaseModel):
 
 
 class LoginResponse(BaseModel):
-    """Schema for successful login response."""
+    """Schema for successful login response.
 
-    access_token: str
-    token_type: str = "bearer"
+    O access_token é transmitido APENAS via cookie httpOnly.
+    Nunca retornar tokens no body da resposta.
+    """
+
     user: UserSummary
 
 

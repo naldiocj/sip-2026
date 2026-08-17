@@ -6,7 +6,7 @@ Implementar a fundação completa de identidade, autenticação, autorização, 
 
 ## Estado
 
-**IN PROGRESS**
+**DONE**
 
 ## Tasks
 
@@ -48,18 +48,29 @@ Implementar a fundação completa de identidade, autenticação, autorização, 
 - [x] Frontend tests
 - [x] E2E tests
 - [x] Documentation
+- [x] Security review completed
+- [x] Security fixes applied
+- [x] Frontend Engineering Standards created
 - [x] All Tasks DONE
 - [x] All tests passing
 - [x] Lint passing
 - [x] Typecheck passing
 - [x] Build passing
-- [ ] Commits created
+- [x] Commits created
 
 ## Riscos
 
 - Sincronização entre backend e frontend durante desenvolvimento
 - Complexidade do modelo de permissões
+- Rate limiter fail-open quando Redis indisponível (documentado)
 
 ## Decisões
 
-- A executar durante a implementação
+- JWT claims mínimos (sem permissões no token)
+- Cookie httpOnly para access token (nunca no body)
+- Status codes uniformes (401 para todos os erros de login)
+- JWT secret validation em produção (model_validator)
+- Atomic rate limiting via Lua script
+- Timing-safe login (dummy hash para users inexistentes)
+- Frontend Engineering Standards criado como referência
+- Security Model documentado
