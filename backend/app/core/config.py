@@ -49,6 +49,10 @@ class Settings(BaseSettings):
     # CORS
     cors_origins: list[str] = ["http://localhost:3000", "http://localhost"]
 
+    # Segurança — headers de resposta
+    security_headers_enabled: bool = True
+    content_security_policy: str = "default-src 'none'; frame-ancestors 'none'"
+
     # Autenticação (JWT)
     jwt_secret: str = "dev-secret-do-not-use-in-production"
     jwt_algorithm: str = "HS256"

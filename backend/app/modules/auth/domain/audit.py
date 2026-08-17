@@ -1,0 +1,88 @@
+"""Audit event entity.
+
+Fundação de auditoria de segurança — registar eventos importantes:
+
+- LOGIN_SUCCESS
+- LOGIN_FAILED
+- LOGOUT
+- ACCOUNT_BLOCKED
+- PASSWORD_CHANGED
+- PERMISSION_DENIED
+- SESSION_REVOKED
+
+Permite responder futuramente a: quem, quando, o quê, origem, resultado.
+NUNCA guardar passwords ou tokens neste modelo (nem nos details).
+"""
+
+import enum
+import uuid
+from datetime import datetime
+from typing import Any
+
+from sqlalchemy import JSON, DateTime, ForeignKey, String, Uuid
+from sqlalchemy.orm import Mapped, mapped_column
+
+from app.db.base import Base, TimestampMixin, UUIDPrimaryKeyMixin
+
+
+class AuditEventType(enum.StrEnum):
+    """Tipos de eventos de segurança auditáveis."""
+
+    LOGIN_SUCCESS = "LOGIN_SUCCESS"
+    LOGIN_FAILED = "LOGIN_FAILED"
+    LOGOUT = "LOGOUT"
+    ACCOUNT_BLOCKED = "ACCOUNT_BLOCKED"
+    PASSWORD_CHANGED = "PASSWORD_CHANGED"
+    PERMISSION_DENIED = "PERMISSION_DENIED"
+    SESSION_REVOKED = "SESSION_REVOKED"
+
+
+class AuditResult(enum.StrEnum):
+    """Resultado do evento auditado."""
+
+    SUCCESS = "success"
+    FAILURE = "failure"
+
+
+class AuditEvent(UUIDPrimaryKeyMixin, TimestampMixin, Base):
+    """Evento de auditoria de segurança."""
+
+    __tablename__ = "audit_events"
+
+    event_type: Mapped[AuditEventType] = mapped_column(
+        String(50),
+        nullable=False,
+        index=True,
+    )
+    user_id: Mapped[uuid.UUID | None] = mapped_column(
+        Uuid,
+        ForeignKey("users.id", ondelete="SET NULL"),
+        nullable=True,
+        index=True,
+    )
+    timestamp: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        nullable=False,
+        index=True,
+    )
+    ip_address: Mapped[str | None] = mapped_column(
+        String(45),
+        nullable=True,
+    )
+    user_agent: Mapped[str | None] = mapped_column(
+        String(512),
+        nullable=True,
+    )
+    details: Mapped[dict[str, Any]] = mapped_column(
+        JSON,
+        nullable=False,
+        default=dict,
+    )
+    result: Mapped[AuditResult] = mapped_column(
+        String(20),
+        nullable=False,
+        default=AuditResult.SUCCESS,
+    )
+
+    def __repr__(self) -> str:
+        return f"<AuditEvent {self.event_type} user={self.user_id}>"

@@ -18,8 +18,10 @@ from sqlalchemy.orm import Session
 
 from app.core.config import get_settings
 from app.db.session import get_db_session
+from app.modules.auth.application.audit import AuditService
 from app.modules.auth.application.authorization import AuthorizationService
 from app.modules.auth.application.tokens import TokenService
+from app.modules.auth.domain.audit import AuditEventType, AuditResult
 from app.modules.auth.domain.profile import ProfileEnum
 from app.modules.auth.domain.session import UserSession
 from app.modules.auth.domain.user import User, UserStatus
@@ -95,11 +97,21 @@ def require_permission(permission_code: str) -> Callable[..., User]:
     """
 
     def dependency(
+        request: Request,
         user: User = Depends(get_current_user),
         db: Session = Depends(get_db_session),
     ) -> User:
         service = AuthorizationService(db)
         if not service.check_permission(user, permission_code):
+            client_ip = request.client.host if request.client else None
+            AuditService(db).record(
+                AuditEventType.PERMISSION_DENIED,
+                user_id=user.id,
+                ip_address=client_ip,
+                user_agent=request.headers.get("user-agent"),
+                details={"permission": permission_code},
+                result=AuditResult.FAILURE,
+            )
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN,
                 detail="Permission denied",
@@ -113,11 +125,21 @@ def require_profile(profile_code: str | ProfileEnum) -> Callable[..., User]:
     """Factory de dependência: exige um perfil específico (activo)."""
 
     def dependency(
+        request: Request,
         user: User = Depends(get_current_user),
         db: Session = Depends(get_db_session),
     ) -> User:
         service = AuthorizationService(db)
         if not service.check_profile(user, profile_code):
+            client_ip = request.client.host if request.client else None
+            AuditService(db).record(
+                AuditEventType.PERMISSION_DENIED,
+                user_id=user.id,
+                ip_address=client_ip,
+                user_agent=request.headers.get("user-agent"),
+                details={"profile": str(ProfileEnum(profile_code))},
+                result=AuditResult.FAILURE,
+            )
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN,
                 detail="Profile required",

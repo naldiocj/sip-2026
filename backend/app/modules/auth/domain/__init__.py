@@ -1,6 +1,7 @@
 """Auth domain layer."""
 
 from app.modules.auth.domain.associations import profile_permissions, user_profiles
+from app.modules.auth.domain.audit import AuditEvent, AuditEventType, AuditResult
 from app.modules.auth.domain.humanize import (
     PERMISSION_LABELS,
     USER_STATUS_LABELS,
@@ -24,6 +25,9 @@ __all__ = [
     "Permission",
     "PermissionConstants",
     "UserSession",
+    "AuditEvent",
+    "AuditEventType",
+    "AuditResult",
     "user_profiles",
     "profile_permissions",
     "OrganizationScope",

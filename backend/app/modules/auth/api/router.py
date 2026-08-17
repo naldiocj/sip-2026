@@ -127,11 +127,14 @@ def login(
     status_code=status.HTTP_200_OK,
 )
 def logout(
+    request: Request,
     user: User = Depends(require_authenticated_user),
     db: Session = Depends(get_db_session),
 ) -> LogoutResponse:
     """Revoga a sessão do utilizador autenticado e limpa o cookie."""
-    AuthService(db).logout(user)
+    client_ip = request.client.host if request.client else None
+    user_agent = request.headers.get("user-agent")
+    AuthService(db).logout(user, ip_address=client_ip, user_agent=user_agent)
 
     response = Response()
     response.delete_cookie(get_settings().access_token_cookie_name, path="/")

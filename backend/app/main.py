@@ -11,6 +11,7 @@ from app.api.v1.router import api_router
 from app.core.config import get_settings
 from app.core.logging import setup_logging
 from app.core.middleware import CorrelationIdMiddleware
+from app.core.security_headers import SecurityHeadersMiddleware
 
 setup_logging()
 settings = get_settings()
@@ -32,6 +33,7 @@ def create_app() -> FastAPI:
         allow_headers=["*"],
     )
     application.add_middleware(CorrelationIdMiddleware, settings=settings)
+    application.add_middleware(SecurityHeadersMiddleware, settings=settings)
 
     application.include_router(api_router, prefix=settings.api_v1_prefix)
 
