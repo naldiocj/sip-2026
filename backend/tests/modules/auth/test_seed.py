@@ -8,6 +8,7 @@ from alembic import command
 from alembic.config import Config
 from app.core.config import get_settings
 from app.modules.auth.domain import (
+    PROFILE_LABELS,
     Permission,
     PermissionConstants,
     Profile,
@@ -63,6 +64,15 @@ def seeded_session() -> Session:
 def test_seed_creates_all_profiles(seeded_session: Session) -> None:
     profiles = seeded_session.scalars(select(Profile)).all()
     assert {p.code for p in profiles} == set(ProfileEnum)
+
+
+@requires_database
+def test_seed_profiles_have_humanized_names(seeded_session: Session) -> None:
+    profiles = seeded_session.scalars(select(Profile)).all()
+    for profile in profiles:
+        assert "_" not in profile.name
+        assert profile.name == profile.label
+        assert profile.name == PROFILE_LABELS[ProfileEnum(profile.code)]
 
 
 @requires_database

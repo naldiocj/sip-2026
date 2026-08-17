@@ -18,6 +18,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from app.db.session import SessionLocal
 from app.modules.auth.domain import (
+    PROFILE_LABELS,
     Permission,
     PermissionConstants,
     Profile,
@@ -191,16 +192,20 @@ def seed(session: Session, hasher: PasswordHasher | None = None) -> dict[str, in
     # Perfis
     profiles: dict[ProfileEnum, Profile] = {}
     for profile_enum in ProfileEnum:
+        humanized_name = PROFILE_LABELS[profile_enum]
         profile = session.scalar(select(Profile).where(Profile.code == profile_enum))
         if profile is None:
             profile = Profile(
                 code=profile_enum,
-                name=profile_enum.value.replace("_", " ").title(),
-                description=f"Perfil {profile_enum.value}",
+                name=humanized_name,
+                description=f"Perfil {humanized_name}",
                 is_active=True,
             )
             session.add(profile)
             created["profiles"] += 1
+        elif profile.name != humanized_name:
+            profile.name = humanized_name
+            profile.description = f"Perfil {humanized_name}"
         profiles[profile_enum] = profile
 
     # Permissões

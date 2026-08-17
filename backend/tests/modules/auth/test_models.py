@@ -115,6 +115,7 @@ def test_user_session_instantiation_and_revocation() -> None:
     session.revoke()
     assert session.is_revoked is True
     assert session.revoked_at is not None
+    assert session.revoked_at.tzinfo is not None
     session.revoke()  # idempotente
 
 

@@ -88,4 +88,7 @@ class Profile(UUIDPrimaryKeyMixin, TimestampMixin, Base):
     @property
     def label(self) -> str:
         """Human-readable label for this profile."""
-        return PROFILE_LABELS.get(self.code, self.code)
+        try:
+            return PROFILE_LABELS[ProfileEnum(self.code)]
+        except (KeyError, ValueError):
+            return self.code

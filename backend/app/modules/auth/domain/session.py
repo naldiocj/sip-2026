@@ -6,7 +6,7 @@ sprint, keeping the architecture revocable from day one.
 """
 
 import uuid
-from datetime import datetime
+from datetime import UTC, datetime
 
 from sqlalchemy import DateTime, ForeignKey, String, Uuid
 from sqlalchemy.orm import Mapped, mapped_column, relationship
@@ -61,7 +61,7 @@ class UserSession(UUIDPrimaryKeyMixin, TimestampMixin, Base):
     def revoke(self) -> None:
         """Revoke this session (idempotent)."""
         if self.revoked_at is None:
-            self.revoked_at = datetime.now()
+            self.revoked_at = datetime.now(UTC)
 
     def __repr__(self) -> str:
         return f"<UserSession {self.id} user={self.user_id}>"
