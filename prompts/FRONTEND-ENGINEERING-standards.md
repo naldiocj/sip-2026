@@ -10,11 +10,19 @@ APLICAÇÃO:
 Todo prompt que envolva trabalho de frontend DEVE referenciar e seguir
 estas normas. Estas normas são o padrão de referência, não uma sugestão.
 
+Atue como um Senior Frontend Architect / Principal Frontend Engineer e
+estabeleça no projecto uma arquitectura frontend moderna, enterprise,
+escalável, performática, acessível e altamente manutenível.
+
+Não trate a tarefa apenas como instalação de bibliotecas. Analise o
+projecto existente, preserve o que estiver correcto, elimine
+inconsistências e estabeleça padrões profissionais de desenvolvimento.
+
 ========================================================================
 1. STACK PRINCIPAL OBRIGATÓRIA
 ========================================================================
 
-Utilizar exclusivamente:
+Utilizar:
 
 - Next.js com App Router
 - React
@@ -35,44 +43,40 @@ Utilizar exclusivamente:
 - ESLint
 - Prettier
 
-NÃO introduzir:
-
-- Redux
-- GraphQL
-- WebSocket
-- Micro-frontends
-- Bibliotecas redundantes sem justificativa arquitectural
+Não introduzir Redux, GraphQL, WebSocket, micro-frontends ou bibliotecas
+redundantes sem justificativa arquitectural.
 
 ========================================================================
-2. TTIPOGRAFIA GLOBAL
+2. TIPOGRAFIA GLOBAL
 ========================================================================
 
-Estabelecer tipografia profissional e consistente em toda a aplicação.
+Estabeleça uma tipografia profissional e consistente em toda a
+aplicação.
 
-Fonte padrão:
+A fonte padrão deve ser:
 
-    font-family: sans-serif
+    font-family: sans-serif;
 
-A aplicação DEVE utilizar sans-serif como fallback padrão, incluindo:
+A aplicação deve utilizar sans-serif como fallback padrão, incluindo:
 
 - shadcn/ui
-- Componentes próprios
-- Tabelas
-- Formulários
-- Dialogs
-- Menus
-- Sidebar
-- Breadcrumbs
-- Páginas
-- Estados de loading
-- Mensagens
-- Dashboards
+- componentes próprios
+- tabelas
+- formulários
+- dialogs
+- menus
+- sidebar
+- breadcrumbs
+- páginas
+- estados de loading
+- mensagens
+- dashboards
 
-NÃO permitir que componentes utilizem fontes diferentes arbitrariamente.
+Não permitir que componentes utilizem fontes diferentes arbitrariamente.
 
-Centralizar definição tipográfica no design system/Tailwind.
+Centralizar a definição tipográfica no design system/Tailwind.
 
-Hierarquia tipográfica consistente:
+A hierarquia tipográfica deve ser consistente:
 
     Display
     H1
@@ -86,66 +90,68 @@ Hierarquia tipográfica consistente:
 
 Garantir:
 
-- Tamanho consistente
-- Peso consistente
-- Line-height adequado
-- Contraste
-- Legibilidade
-- Truncamento quando necessário
-- Suporte a textos longos
-- Comportamento responsivo
+- tamanho consistente
+- peso consistente
+- line-height adequado
+- contraste
+- legibilidade
+- truncamento quando necessário
+- suporte a textos longos
+- comportamento responsivo
 
-NÃO utilizar fontes decorativas ou serifadas como padrão.
+Não utilizar fontes decorativas ou serifadas como padrão.
 
 ========================================================================
 3. DESIGN SYSTEM
 ========================================================================
 
-Construir sobre:
+Construir o design system sobre:
 
     shadcn/ui + Tailwind CSS v4
 
-Componentes base a padronizar:
+Os componentes devem possuir aparência consistente em toda a aplicação.
 
-    Button
-    Input
-    Textarea
-    Select
-    Combobox
-    Checkbox
-    Radio
-    Switch
-    Form
-    Dialog
-    Sheet
-    Drawer
-    Dropdown
-    Popover
-    Tooltip
-    Tabs
-    Card
-    Badge
-    Alert
-    Breadcrumb
-    Pagination
-    Command
-    Calendar
-    DatePicker
-    DateRangePicker
-    Skeleton
-    Separator
-    Avatar
-    Table
+Criar e padronizar:
 
-NÃO criar versões duplicadas.
+- Button
+- Input
+- Textarea
+- Select
+- Combobox
+- Checkbox
+- Radio
+- Switch
+- Form
+- Dialog
+- Sheet
+- Drawer
+- Dropdown
+- Popover
+- Tooltip
+- Tabs
+- Card
+- Badge
+- Alert
+- Breadcrumb
+- Pagination
+- Command
+- Calendar
+- DatePicker
+- DateRangePicker
+- Skeleton
+- Separator
+- Avatar
+- Table
 
-Quando shadcn/ui fornecer solução adequada, reutilizar.
+Não criar versões duplicadas desses componentes.
+
+Quando o shadcn/ui já fornecer uma solução adequada, reutilizá-la.
 
 ========================================================================
 4. COMPONENTES EMPRESARIAIS REUTILIZÁVEIS
 ========================================================================
 
-Criar componentes de nível de aplicação:
+Além dos componentes base, criar componentes de nível de aplicação:
 
     PageContainer
     PageHeader
@@ -171,13 +177,13 @@ Criar componentes de nível de aplicação:
     DocumentPreview
     CommandMenu
 
-Esses componentes DEVEM ser reutilizáveis entre módulos.
+Esses componentes devem ser reutilizáveis entre módulos.
 
 ========================================================================
 5. LAYOUT PROFissional
 ========================================================================
 
-Sistema de layout consistente:
+Estabelecer um sistema de layout consistente:
 
     AppShell
     ├── Sidebar
@@ -189,44 +195,47 @@ Sistema de layout consistente:
             ├── PageToolbar
             └── PageContent
 
-O conteúdo principal NÃO deve possuir diferentes max-width, paddings e
+O conteúdo principal não deve possuir diferentes max-width, paddings e
 margens arbitrariamente.
 
-Centralizar regras de layout.
+Centralizar as regras de layout.
 
 ========================================================================
 6. RESPONSIVIDADE
 ========================================================================
 
-O frontend DEVE ser:
+O frontend deve ser:
 
-- Desktop-first (aplicação predominantemente administrativa)
-- Responsivo
-- Adaptável a tablets
-- Funcional em resoluções menores
-- Sem overflow horizontal acidental
+- desktop-first quando a aplicação for predominantemente administrativa
+- responsivo
+- adaptável a tablets
+- funcional em resoluções menores
+- sem overflow horizontal acidental
 
 Garantir comportamento adequado para:
 
-- Sidebar
-- Tabelas
-- Formulários
-- Dialogs
-- Filtros
-- Cards
-- Dashboards
+- sidebar
+- tabelas
+- formulários
+- dialogs
+- filtros
+- cards
+- dashboards
 
 ========================================================================
 7. TEMA
 ========================================================================
 
-Preparar design system para:
+Preparar o design system para:
 
-- Light mode
-- Dark mode
-- System preference
+- light mode
+- dark mode
+- system preference
 
-Cores baseadas em tokens, sem espalhar valores arbitrários:
+As cores devem ser baseadas em tokens sem espalhar valores arbitrários
+pelo código.
+
+Exemplo conceitual:
 
     background
     foreground
@@ -242,7 +251,8 @@ Cores baseadas em tokens, sem espalhar valores arbitrários:
     input
     ring
 
-NUNCA espalhar hexadecimal directamente por componentes sem necessidade.
+Nunca espalhar hexadecimal directamente pelos componentes sem
+necessidade.
 
 ========================================================================
 8. ÍCONES
@@ -252,15 +262,15 @@ Utilizar exclusivamente:
 
     Lucide React
 
-NÃO criar SVGs manualmente quando existir ícone equivalente.
+Não criar SVGs manualmente quando existir um ícone equivalente.
 
-Os ícones DEVEM:
+Os ícones devem:
 
-- Possuir tamanho consistente
-- Possuir alinhamento correcto
-- Respeitar currentColor
-- Possuir tooltip quando a accção não for óbvia
-- Não substituir texto quando o contexto exigir clareza
+- possuir tamanho consistente
+- possuir alinhamento correcto
+- respeitar currentColor
+- possuir tooltip quando a acção não for óbvia
+- não substituir texto quando o contexto exigir clareza
 
 ========================================================================
 9. NEXT.JS
@@ -268,34 +278,46 @@ Os ícones DEVEM:
 
 Utilizar App Router.
 
-Preferir Server Components por padrão.
+Preferir:
 
-Utilizar "use client" SOMENTE quando houver necessidade de:
+    Server Components
 
-- Interação
-- Estado
-- Eventos
-- Browser APIs
+por padrão.
+
+Utilizar:
+
+    "use client"
+
+somente quando houver necessidade de:
+
+- interação
+- estado
+- eventos
+- browser APIs
 - React Hook Form
 - TanStack Query
-- Componentes interativos
+- componentes interativos
 
 Implementar adequadamente:
 
-- Layouts
+- layouts
 - loading.tsx
 - error.tsx
 - not-found.tsx
-- Route groups
-- Metadata
-- Dynamic imports
-- Streaming quando adequado
+- route groups
+- metadata
+- dynamic imports
+- streaming quando adequado
 
 ========================================================================
 10. SERVER STATE
 ========================================================================
 
-Utilizar TanStack Query para dados da API.
+Utilizar:
+
+    TanStack Query
+
+para dados provenientes da API.
 
 Separar rigorosamente:
 
@@ -305,7 +327,7 @@ Separar rigorosamente:
     Global UI State   → Zustand
     Local UI State    → useState/useReducer
 
-NUNCA duplicar desnecessariamente server state em Zustand.
+Nunca duplicar desnecessariamente server state em Zustand.
 
 ========================================================================
 11. API LAYER
@@ -313,19 +335,19 @@ NUNCA duplicar desnecessariamente server state em Zustand.
 
 Centralizar comunicação com o backend.
 
-Criar camada responsável por:
+Criar uma camada responsável por:
 
 - HTTP client
-- Autenticação
-- Headers
-- Timeout
-- Tratamento de erros
-- Serialização
-- Tipagem
-- Cancellation
-- Intercepção quando necessária
+- autenticação
+- headers
+- timeout
+- tratamento de erros
+- serialização
+- tipagem
+- cancellation
+- intercepção quando necessária
 
-Os componentes NÃO devem possuir chamadas HTTP directamente.
+Os componentes não devem possuir chamadas HTTP directamente.
 
 ========================================================================
 12. FORMULÁRIOS
@@ -337,17 +359,17 @@ Utilizar:
 
 Padronizar:
 
-- Schemas
-- Validação
-- Mensagens
-- Estados
-- Submit
-- Erros
-- Loading
-- Sucesso
-- Reset
-- Dirty state
-- Confirmação antes de abandonar alterações quando necessário
+- schemas
+- validação
+- mensagens
+- estados
+- submit
+- erros
+- loading
+- sucesso
+- reset
+- dirty state
+- confirmação antes de abandonar alterações quando necessário
 
 Evitar formulários monolíticos.
 
@@ -361,43 +383,43 @@ Utilizar:
 
     TanStack Table
 
-Com suporte a:
+com suporte a:
 
-- Server-side pagination
-- Sorting
-- Filtering
-- Global search
-- Column filtering
-- Column visibility
-- Row selection
-- Bulk actions
+- server-side pagination
+- sorting
+- filtering
+- global search
+- column filtering
+- column visibility
+- row selection
+- bulk actions
 - URL state
-- Responsive behavior
-- Loading
-- Empty state
-- Error state
+- responsive behavior
+- loading
+- empty state
+- error state
 
-Criar infraestrutura DataTable reutilizável.
+Criar uma infraestrutura de DataTable reutilizável.
 
 ========================================================================
 14. PERFORMANCE
 ========================================================================
 
-Aplicar boas práticas:
+Aplicar boas práticas de performance:
 
 - Server Components
-- Code splitting
-- Lazy loading
-- Dynamic imports
-- Cache
-- Prefetch
-- Otimização de imagens
-- Virtualização para grandes datasets
-- Evitar renders desnecessários
-- Evitar componentes gigantes
-- Evitar dependências desnecessárias
+- code splitting
+- lazy loading
+- dynamic imports
+- cache
+- prefetch
+- otimização de imagens
+- virtualização para grandes datasets
+- evitar renders desnecessários
+- evitar componentes gigantes
+- evitar dependências desnecessárias
 
-NÃO aplicar memo, useMemo e useCallback indiscriminadamente.
+Não aplicar memo, useMemo e useCallback indiscriminadamente.
 
 Utilizar otimização baseada em necessidade real.
 
@@ -409,24 +431,24 @@ Seguir boas práticas WCAG.
 
 Garantir:
 
-- Keyboard navigation
-- Focus management
-- Focus visible
-- Semantic HTML
-- Labels
+- keyboard navigation
+- focus management
+- focus visible
+- semantic HTML
+- labels
 - ARIA quando necessário
-- Dialogs acessíveis
-- Tabelas acessíveis
-- Contraste adequado
-- Screen readers
+- dialogs acessíveis
+- tabelas acessíveis
+- contraste adequado
+- screen readers
 
-NÃO utilizar apenas cor para transmitir informação.
+Não utilizar apenas cor para transmitir informação.
 
 ========================================================================
 16. UX STATES
 ========================================================================
 
-Toda operação assíncrona DEVE considerar:
+Toda operação assíncrona deve considerar:
 
     Idle
     Loading
@@ -436,7 +458,8 @@ Toda operação assíncrona DEVE considerar:
     Unauthorized
     Forbidden
 
-NUNCA deixar área da interface aparentemente quebrada ou vazia sem feedback.
+Nunca deixar uma área da interface aparentemente quebrada ou vazia sem
+feedback.
 
 Criar componentes reutilizáveis:
 
@@ -453,14 +476,14 @@ Criar componentes reutilizáveis:
 
 Implementar:
 
-- Protecção de rotas
-- Controlo de acesso
-- Tratamento de sessão
-- Protecção contra exposição de secrets
-- Validação de inputs
-- Tratamento seguro de erros
+- protecção de rotas
+- controle de acesso
+- tratamento de sessão
+- protecção contra exposição de secrets
+- validação de inputs
+- tratamento seguro de erros
 
-NUNCA confiar no frontend como mecanismo definitivo de autorização.
+Nunca confiar no frontend como mecanismo definitivo de autorização.
 
 A autorização real pertence ao backend.
 
@@ -488,7 +511,7 @@ Utilizar Feature-Based Architecture:
     ├── types/
     └── styles/
 
-Cada feature DEVE encapsular sua própria lógica:
+Cada feature deve encapsular sua própria lógica:
 
     feature/
     ├── components/
@@ -511,26 +534,26 @@ Configurar:
 - TypeScript strict
 - ESLint
 - Prettier
-- Import aliases
-- Import sorting
+- import aliases
+- import sorting
 - lint-staged
 - Husky
-- Typecheck
-- Testes automatizados
+- typecheck
+- testes automatizados
 - CI quality gates
 
 Proibir ou reduzir fortemente:
 
 - any
 - @ts-ignore
-- Casts desnecessários
-- Código duplicado
-- Funções gigantes
-- Componentes gigantes
-- Hooks gigantes
-- Prop drilling excessivo
-- Lógica de negócio dentro da UI
-- Chamadas HTTP directamente em componentes
+- casts desnecessários
+- código duplicado
+- funções gigantes
+- componentes gigantes
+- hooks gigantes
+- prop drilling excessivo
+- lógica de negócio dentro da UI
+- chamadas HTTP directamente em componentes
 
 ========================================================================
 20. TESTES
@@ -544,16 +567,16 @@ Implementar:
 
 Testar principalmente:
 
-- Autenticação
-- Autorização
-- Formulários
-- Tabelas
-- Filtros
+- autenticação
+- autorização
+- formulários
+- tabelas
+- filtros
 - CRUD
-- Navegação
-- Estados de erro
-- Loading
-- Fluxos críticos
+- navegação
+- estados de erro
+- loading
+- fluxos críticos
 
 ========================================================================
 21. STORYBOOK
@@ -561,17 +584,17 @@ Testar principalmente:
 
 Utilizar Storybook para documentar componentes reutilizáveis.
 
-Cada componente importante DEVE possuir:
+Cada componente importante deve possuir:
 
-- Default state
-- Loading
-- Disabled
-- Error
-- Empty
-- Variants
-- Casos extremos
+- default state
+- loading
+- disabled
+- error
+- empty
+- variants
+- casos extremos
 
-Storybook funciona como catálogo vivo do design system.
+O Storybook deve funcionar como catálogo vivo do design system.
 
 ========================================================================
 22. DEVELOPER EXPERIENCE
@@ -589,7 +612,8 @@ Criar scripts padronizados:
     test:e2e
     storybook
 
-O projecto DEVE permitir que novo desenvolvedor inicie ambiente rapidamente.
+O projecto deve permitir que um novo desenvolvedor consiga iniciar o
+ambiente rapidamente.
 
 Documentar decisões arquitecturais importantes.
 
@@ -597,9 +621,9 @@ Documentar decisões arquitecturais importantes.
 23. PRINCÍPIO FUNDAMENTAL
 ========================================================================
 
-NÃO adicionar tecnologia apenas porque é popular.
+Não adicionar tecnologia apenas porque é popular.
 
-Cada dependência DEVE responder a uma necessidade real.
+Cada dependência deve responder a uma necessidade real.
 
 Priorizar:
 
@@ -617,28 +641,31 @@ Priorizar:
     +
     Manutenibilidade
 
-O resultado DEVE ter qualidade de Senior/Staff/Principal Frontend Engineer,
-com arquitectura preparada para crescimento sem cair em overengineering.
+O resultado final deve ter qualidade de Senior/Staff/Principal Frontend
+Engineer, com uma arquitectura preparada para crescimento sem cair em
+overengineering.
 
 ========================================================================
 AUDITÓRIA ANTES DE IMPLEMENTAR
 ========================================================================
 
-Antes de modificar o projecto, FAZER auditoria da implementação existente:
+Antes de modificar o projecto, faça uma auditoria da implementação
+existente e identifique:
 
-1. Tecnologias já utilizadas
-2. Duplicações
-3. Inconsistências
-4. Componentes reutilizáveis existentes
-5. Problemas de arquitectura
-6. Problemas de performance
-7. Problemas de acessibilidade
-8. Problemas de tipagem
-9. Problemas de UX
-10. Dependências desnecessárias
+1. tecnologias já utilizadas
+2. duplicações
+3. inconsistências
+4. componentes reutilizáveis existentes
+5. problemas de arquitectura
+6. problemas de performance
+7. problemas de acessibilidade
+8. problemas de tipagem
+9. problemas de UX
+10. dependências desnecessárias
 
-Depois da auditoria, aplicar arquitectura definida de forma incremental,
-preservando funcionalidades existentes e evitando regressões.
+Depois da auditoria, aplique a arquitectura definida neste prompt de
+forma incremental, preservando funcionalidades existentes e evitando
+regressões.
 
 ========================================================================
 FIM — FRONTEND ENGINEERING STANDARDS
