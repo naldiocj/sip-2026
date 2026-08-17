@@ -1,6 +1,7 @@
 services:
   # ─── BACKEND ───
   backend:
+    profiles: ["all"]
     build:
       context: ../backend
       dockerfile: Dockerfile
@@ -22,6 +23,7 @@ services:
 
   # ─── FRONTEND ───
   frontend:
+    profiles: ["all"]
     build:
       context: ../frontend
       dockerfile: Dockerfile
@@ -50,6 +52,7 @@ services:
 
   # ─── NGINX ───
   nginx:
+    profiles: ["all"]
     image: nginx:alpine
     container_name: sip-nginx
     ports:
@@ -64,6 +67,7 @@ services:
 
   # ─── POSTGRESQL ───
   postgres:
+    profiles: ["all"]
     image: postgres:16-alpine
     container_name: sip-postgres
     environment:
@@ -85,6 +89,7 @@ services:
 
   # ─── REDIS ───
   redis:
+    profiles: ["all"]
     image: redis:7-alpine
     container_name: sip-redis
     ports:
@@ -102,6 +107,7 @@ services:
 
   # ─── RABBITMQ ───
   rabbitmq:
+    profiles: ["all"]
     image: rabbitmq:3-management-alpine
     container_name: sip-rabbitmq
     environment:
@@ -118,6 +124,7 @@ services:
 
   # ─── MINIO ───
   minio:
+    profiles: ["all"]
     image: minio/minio
     container_name: sip-minio
     environment:
@@ -135,6 +142,7 @@ services:
 
   # ─── OPENSEARCH ───
   opensearch:
+    profiles: ["heavy", "all"]
     image: opensearchproject/opensearch:2.17.0
     container_name: sip-opensearch
     environment:
@@ -151,6 +159,7 @@ services:
 
   # ─── PROMETHEUS ───
   prometheus:
+    profiles: ["obs", "all"]
     image: prom/prometheus:latest
     container_name: sip-prometheus
     ports:
@@ -164,6 +173,7 @@ services:
 
   # ─── GRAFANA ───
   grafana:
+    profiles: ["obs", "all"]
     image: grafana/grafana:latest
     container_name: sip-grafana
     environment:
