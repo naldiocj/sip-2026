@@ -12,6 +12,9 @@ from sqlalchemy import engine_from_config, pool
 from app.core.config import get_settings
 from app.db.base import Base
 
+# Importar módulos para registar as tabelas no metadata.
+from app.modules.auth import domain  # noqa: F401  (registers auth tables)
+
 config = context.config
 
 if config.config_file_name is not None:
