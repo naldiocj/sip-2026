@@ -9,6 +9,7 @@ import { useAuth } from "@/hooks/use-auth";
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
@@ -48,16 +49,18 @@ export function Header() {
               </Avatar>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-56">
-              <DropdownMenuLabel>
-                <div className="flex flex-col space-y-1">
-                  <p className="text-sm font-medium">{user.full_name}</p>
-                  <p className="text-xs text-muted-foreground">
-                    {user.profiles[0]
-                      ? humanizeProfile(user.profiles[0].code)
-                      : "Sem perfil"}
-                  </p>
-                </div>
-              </DropdownMenuLabel>
+              <DropdownMenuGroup>
+                <DropdownMenuLabel>
+                  <div className="flex flex-col space-y-1">
+                    <p className="text-sm font-medium">{user.full_name}</p>
+                    <p className="text-xs text-muted-foreground">
+                      {user.profiles[0]
+                        ? humanizeProfile(user.profiles[0].code)
+                        : "Sem perfil"}
+                    </p>
+                  </div>
+                </DropdownMenuLabel>
+              </DropdownMenuGroup>
               <DropdownMenuSeparator />
               <DropdownMenuItem onClick={logout}>
                 <LogOut className="mr-2 size-4" />
