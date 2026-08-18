@@ -53,11 +53,24 @@ redundantes sem justificativa arquitectural.
 Estabeleça uma tipografia profissional e consistente em toda a
 aplicação.
 
-A fonte padrão deve ser:
+A fonte padrão deve ser **Geist** (Google Fonts), carregada via `next/font/google`:
 
-    font-family: sans-serif;
+    import { Geist, Geist_Mono } from "next/font/google";
+    const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
+    const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
 
-A aplicação deve utilizar sans-serif como fallback padrão, incluindo:
+A definição CSS no `@theme inline` do Tailwind v4 deve referenciar as variáveis
+com nomes diferentes das que está a definir:
+
+    --font-sans: var(--font-geist-sans);
+    --font-mono: var(--font-geist-mono);
+
+> **Nota:** No Tailwind v4 com `@theme inline`, as variáveis CSS são resolvidas a
+> parse time, não runtime. Usar `var(--font-sans)` dentro de `--font-sans` cria
+> uma referência circular. Referenciar sempre variáveis com nomes diferentes
+> (ex: `--font-geist-sans` em vez de `--font-sans`).
+
+A aplicação deve utilizar Geist como fallback padrão, incluindo:
 
 - shadcn/ui
 - componentes próprios
@@ -353,22 +366,52 @@ Os componentes não devem possuir chamadas HTTP directamente.
 12. FORMULÁRIOS
 ========================================================================
 
-Utilizar:
+## Regra Obrigatória: React Hook Form
 
-    React Hook Form + Zod + shadcn/ui
+**Todos** os formulários devem usar `react-hook-form` + `@hookform/resolvers` + `zod`.
 
-Padronizar:
+**NÃO utilizar:**
+- `useState` para cada campo de form
+- `onChange` handlers manuais
+- Validação manual com `required` HTML only
+- Lógica de validação inline no componente
 
-- schemas
-- validação
-- mensagens
-- estados
-- submit
-- erros
-- loading
-- sucesso
-- reset
-- dirty state
+**Padrão obrigatório:**
+
+    import { useForm } from "react-hook-form";
+    import { zodResolver } from "@hookform/resolvers/zod";
+    import { z } from "zod";
+
+    const schema = z.object({ ... });
+    type FormData = z.infer<typeof schema>;
+
+    const form = useForm<FormData>({
+      resolver: zodResolver(schema),
+      defaultValues: { ... },
+    });
+
+    // No JSX:
+    <Input {...form.register("fieldName")} />
+    {form.formState.errors.fieldName && (
+      <p className="text-sm text-destructive">
+        {form.formState.errors.fieldName.message}
+      </p>
+    )}
+
+**Integração com shadcn/ui:**
+- Usar `{...form.register("field")}` nos componentes `Input`, `Textarea`, `Select`
+- Erros de validação com `form.formState.errors`
+- Loading com `form.formState.isSubmitting` ou prop `isSubmitting`
+- Reset com `form.reset()` após sucesso
+
+**Padronizar:**
+
+- schemas Zod por form (exportados)
+- validação server-side via mesmo schema
+- mensagens de erro em PT
+- estados: idle, loading, success, error
+- submit com `form.handleSubmit`
+- dirty state com `form.formState.isDirty`
 - confirmação antes de abandonar alterações quando necessário
 
 Evitar formulários monolíticos.

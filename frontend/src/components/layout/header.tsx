@@ -40,7 +40,7 @@ export function Header() {
         </Button>
         {user && (
           <DropdownMenu>
-            <DropdownMenuTrigger render={<Button variant="ghost" size="icon" aria-label="Utilizador" />}>
+            <DropdownMenuTrigger>
               <Avatar className="size-6">
                 <AvatarFallback className="text-xs">
                   {getInitials(user.full_name)}

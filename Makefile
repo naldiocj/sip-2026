@@ -44,44 +44,53 @@ install-frontend: ## Instala dependências do frontend (npm)
 # ──────────────────────────────────────────────
 
 .PHONY: infra-up
-infra-up: ## Sobe infraestrutura base (postgres, redis, backend, frontend, nginx, rabbitmq, minio)
+infra-up: ## Sobe infraestrutura dev (postgres, redis, backend, frontend, nginx)
+	$(COMPOSE) --profile dev up -d
+
+.PHONY: infra-up-all
+infra-up-all: ## Sobe tudo: app + RabbitMQ + MinIO
 	$(COMPOSE) --profile all up -d
 
 .PHONY: infra-up-heavy
-infra-up-heavy: ## Sobe infraestrutura + OpenSearch (~2GB RAM)
-	$(COMPOSE) --profile heavy --profile all up -d
+infra-up-heavy: ## Sobe tudo + OpenSearch (~2GB RAM extra)
+	$(COMPOSE) --profile all --profile heavy up -d
 
 .PHONY: infra-up-obs
-infra-up-obs: ## Sobe infraestrutura + Prometheus + Grafana
-	$(COMPOSE) --profile obs --profile all up -d
+infra-up-obs: ## Sobe tudo + Prometheus + Grafana
+	$(COMPOSE) --profile all --profile obs up -d
 
-.PHONY: infra-up-all
-infra-up-all: ## Sobe tudo: app + OpenSearch + Prometheus + Grafana
+.PHONY: infra-up-full
+infra-up-full: ## Sobe tudo: app + heavy + obs (uso completo)
 	$(COMPOSE) --profile all --profile heavy --profile obs up -d
 
 .PHONY: infra-down
 infra-down: ## Para e remove todos os containers
-	$(COMPOSE) --profile all --profile heavy --profile obs down
+	$(COMPOSE) --profile dev --profile all --profile heavy --profile obs down
 
 .PHONY: infra-stop
 infra-stop: ## Para containers sem os remover
-	$(COMPOSE) --profile all --profile heavy --profile obs stop
+	$(COMPOSE) --profile dev --profile all --profile heavy --profile obs stop
 
 .PHONY: infra-logs
 infra-logs: ## Mostra logs de todos os containers
-	$(COMPOSE) --profile all --profile heavy --profile obs logs -f
+	$(COMPOSE) --profile dev --profile all --profile heavy --profile obs logs -f
 
 .PHONY: infra-ps
 infra-ps: ## Lista containers e estado
-	$(COMPOSE) --profile all --profile heavy --profile obs ps
+	$(COMPOSE) --profile dev --profile all --profile heavy --profile obs ps
 
 .PHONY: infra-build
 infra-build: ## Reconstrói imagens Docker
-	$(COMPOSE) --profile all --profile heavy --profile obs build --no-cache
+	$(COMPOSE) --profile dev --profile all --profile heavy --profile obs build --no-cache
 
 .PHONY: infra-pull
 infra-pull: ## Pull das imagens base
-	$(COMPOSE) --profile all --profile heavy --profile obs pull
+	$(COMPOSE) --profile dev --profile all --profile heavy --profile obs pull
+
+.PHONY: infra-clean
+infra-clean: ## Limpa imagens, volumes e build cache não utilizados
+	docker system prune -f
+	docker volume prune -f
 
 # ──────────────────────────────────────────────
 # Dev (local)
@@ -89,7 +98,7 @@ infra-pull: ## Pull das imagens base
 
 .PHONY: dev-backend
 dev-backend: ## Corre o backend localmente (uvicorn --reload)
-	cd backend && backend/.venv/bin/uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+	cd backend && .venv/bin/uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 
 .PHONY: dev-frontend
 dev-frontend: ## Corre o frontend localmente (next dev)

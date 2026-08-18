@@ -1,5 +1,6 @@
 ====================================================================
-PROMPT 01 — SIP | IDENTIDADE, AUTENTICAÇÃO E AUTORIZAÇÃO
+SIP — SPRINT 01
+IDENTIDADE, AUTENTICAÇÃO, AUTORIZAÇÃO E RBAC
 ====================================================================
 
 PROJECT:
@@ -9,87 +10,211 @@ SPRINT:
 SPRINT-01
 
 OBJECTIVE:
-Implementar a fundação completa de identidade, autenticação,
-autorização, perfis, permissões e controlo de acesso do SIP.
+
+Implementar a fundação de identidade e controlo de acesso do SIP.
+
+Esta Sprint deverá estabelecer a base sobre a qual todos os módulos
+posteriores irão funcionar.
+
+IMPORTANTE:
+
+O agente deve utilizar obrigatoriamente o sistema Agent Skills já
+integrado no projecto.
+
+Antes de executar qualquer tarefa:
+
+1. analisar a intenção;
+2. verificar as skills disponíveis;
+3. seleccionar automaticamente as skills aplicáveis;
+4. invocar a skill apropriada;
+5. seguir o lifecycle definido no AGENTS.md;
+6. testar;
+7. rever;
+8. criar commit.
+
+NÃO saltar directamente para implementação.
 
 ====================================================================
-1. PRÉ-CONDIÇÕES
+1. CICLO OBRIGATÓRIO
 ====================================================================
 
-ANTES DE COMEÇAR:
+Para esta Sprint utilizar o ciclo:
 
-1. Ler AGENTS.md.
-2. Ler README.md.
-3. Ler docs/architecture/system-architecture.md.
-4. Ler todos os ADRs relacionados.
-5. Ler docs/sprints/SPRINT-00.
-6. Ler as Tasks concluídas da SPRINT-00.
-7. Inspeccionar o código realmente existente.
-8. Confirmar que a SPRINT-00 está funcional.
-9. Executar os testes existentes.
+DEFINE
+ ↓
+PLAN
+ ↓
+BUILD
+ ↓
+VERIFY
+ ↓
+REVIEW
+ ↓
+SHIP
 
-NÃO assumir que algo foi implementado apenas porque está documentado.
+Skills esperadas quando aplicáveis:
 
-Se alguma dependência da SPRINT-00 estiver quebrada:
+DEFINE:
+spec-driven-development
 
-- identificar;
-- corrigir;
-- testar;
-- criar commit;
-- só depois continuar.
+PLAN:
+planning-and-task-breakdown
 
-====================================================================
-2. PERFIS OFICIAIS
-====================================================================
+BUILD:
+incremental-implementation
+test-driven-development
 
-O SIP terá os seguintes perfis:
+VERIFY:
+debugging-and-error-recovery
 
-ADMINISTRADOR_SISTEMA
-DIRECTOR
-SECRETARIA_GERAL
-CHEFE_DEPARTAMENTO
-CHEFE_SECCAO
-INSTRUTOR_PROCESSUAL
-AGENTE_PIQUETE
-EDITOR_DOCUMENTAL
-AGENTE_PGR
+REVIEW:
+code-review-and-quality
 
-Os códigos acima são identificadores técnicos.
+SECURITY:
+security-and-hardening
 
-Na interface devem ser apresentados de forma humanizada:
+SHIP:
+shipping-and-launch
 
-Administrador do Sistema
-Director
-Secretaria Geral
-Chefe de Departamento
-Chefe de Secção
-Instrutor Processual
-Agente de Piquete
-Editor Documental
-Agente PGR
+Utilizar apenas as skills realmente aplicáveis.
 
-Nunca mostrar enums técnicos directamente na interface.
+Não executar skills artificialmente apenas para cumprir uma lista.
 
 ====================================================================
-3. PRINCÍPIO FUNDAMENTAL DE AUTORIZAÇÃO
+2. PRÉ-CONDIÇÕES
 ====================================================================
 
-NÃO implementar segurança apenas no frontend.
+Antes de começar:
 
-O frontend pode:
+LER:
 
-- ocultar menus;
-- ocultar botões;
-- proteger rotas;
-- melhorar UX.
+AGENTS.md
 
-Mas a segurança real deve estar no backend.
+README.md
 
-Toda operação protegida deve ser validada no backend.
+docs/architecture/system-architecture.md
 
-Fluxo:
+docs/architecture/agent-skills.md
 
-USER
+docs/architecture/agent-skills.md
+
+ADRs existentes
+
+docs/sprints/
+
+prompts/tasks/
+
+Verificar a SPRINT-00.
+
+Executar:
+
+- testes;
+- lint;
+- typecheck;
+- build.
+
+Se a SPRINT-00 estiver quebrada:
+
+PARAR.
+
+Corrigir primeiro a fundação quebrada.
+
+Não construir funcionalidades sobre uma base instável.
+
+====================================================================
+3. CRIAR SPRINT
+====================================================================
+
+Criar:
+
+docs/sprints/SPRINT-01.md
+
+Conteúdo mínimo:
+
+# SPRINT-01
+## Identidade, Autenticação, Autorização e RBAC
+
+Status:
+IN_PROGRESS
+
+Objetivo:
+...
+
+Tasks:
+...
+
+Skills:
+...
+
+Acceptance Criteria:
+...
+
+Definition of Done:
+...
+
+====================================================================
+4. TASKS
+====================================================================
+
+Criar:
+
+prompts/tasks/sprint-01/
+
+Criar inicialmente:
+
+TASK-001-user-domain.md
+TASK-002-profile-domain.md
+TASK-003-permission-domain.md
+TASK-004-rbac.md
+TASK-005-authentication.md
+TASK-006-session-management.md
+TASK-007-authorization-engine.md
+TASK-008-frontend-auth.md
+TASK-009-protected-routes.md
+TASK-010-authorized-navigation.md
+TASK-011-security-audit.md
+TASK-012-tests.md
+TASK-013-documentation.md
+
+Cada Task deve possuir:
+
+Objective
+Context
+Scope
+Dependencies
+Skills
+Implementation
+Acceptance Criteria
+Tests
+Definition of Done
+
+====================================================================
+5. PRINCÍPIO FUNDAMENTAL
+====================================================================
+
+NÃO confundir:
+
+AUTENTICAÇÃO
+
+com:
+
+AUTORIZAÇÃO.
+
+Autenticação responde:
+
+"Quem é este utilizador?"
+
+Autorização responde:
+
+"O que este utilizador pode fazer?"
+
+E o SIP necessita ainda de:
+
+"Em que contexto organizacional ele pode fazer isso?"
+
+Portanto:
+
+IDENTITY
  ↓
 PROFILE
  ↓
@@ -102,29 +227,37 @@ RESOURCE
 ACTION
 
 ====================================================================
-4. MODELO DE IDENTIDADE
+6. PERFIS OFICIAIS
 ====================================================================
 
-Criar os conceitos:
+Criar os seguintes perfis:
 
-User
-Profile
-Permission
-Role/Profile Assignment
-Organization Scope
-User Session
+ADMINISTRADOR_SISTEMA
+DIRECTOR
+SECRETARIA_GERAL
+CHEFE_DEPARTAMENTO
+CHEFE_SECCAO
+INSTRUTOR_PROCESSUAL
+AGENTE_PIQUETE
+EDITOR_DOCUMENTAL
+AGENTE_PGR
 
-O modelo deve permitir que um utilizador possa futuramente possuir
-mais de um contexto/perfil quando o negócio exigir.
+Humanização:
 
-Não assumir que:
+Administrador do Sistema
+Director
+Secretaria Geral
+Chefe de Departamento
+Chefe de Secção
+Instrutor Processual
+Agente de Piquete
+Editor Documental
+Agente PGR
 
-User → apenas um Profile
-
-se isso limitar a evolução futura.
+Nunca apresentar os identificadores técnicos na interface.
 
 ====================================================================
-5. USER
+7. USER
 ====================================================================
 
 Criar entidade User.
@@ -136,87 +269,70 @@ username
 email
 password_hash
 full_name
-employee_number quando aplicável
+employee_number
 status
 is_active
 created_at
 updated_at
 last_login_at
 
-Não armazenar passwords em texto puro.
+Adicionar apenas campos que façam sentido arquitecturalmente.
 
-Nunca devolver password_hash nas respostas da API.
-
-Utilizar UUID quando apropriado.
+Não criar campos fictícios sem utilização prevista.
 
 ====================================================================
-6. USER STATUS
+8. USER STATUS
 ====================================================================
 
-Criar estados adequados.
-
-Exemplo:
+Utilizar estados:
 
 ACTIVE
 INACTIVE
 BLOCKED
 PENDING
 
-Não utilizar booleanos espalhados para representar estados complexos.
+Humanizar na interface.
 
-A interface deve humanizar os estados.
+Não utilizar múltiplos booleanos para representar estados complexos.
 
 ====================================================================
-7. PASSWORD SECURITY
+9. PASSWORD
 ====================================================================
 
-Utilizar algoritmo seguro de password hashing.
+Implementar password hashing seguro.
 
-Nunca:
+NUNCA:
 
 - guardar password em texto;
 - devolver password;
-- escrever password nos logs;
-- incluir password em auditoria.
-
-Criar política mínima de password.
-
-Preparar arquitectura para futura alteração da política sem alterar
-todo o sistema.
+- escrever password em logs;
+- guardar password em auditoria;
+- colocar password em seeds de produção.
 
 ====================================================================
-8. AUTENTICAÇÃO
+10. AUTHENTICATION
 ====================================================================
 
-Implementar autenticação baseada em JWT.
+Implementar:
 
-Criar:
+JWT Access Token
 
-Access Token
-
-e preparar:
+Preparar arquitectura para:
 
 Refresh Token
 
-A arquitectura deve permitir revogação de sessões quando necessário.
+sem introduzir complexidade desnecessária.
 
-Não guardar tokens sensíveis de forma insegura.
+Claims devem ser mínimos.
 
-Definir correctamente:
-
-- expiração;
-- issuer;
-- audience quando aplicável;
-- subject;
-- claims mínimos.
-
-Não colocar dados excessivos no JWT.
+Não colocar permissões completas dentro do JWT se isso criar problemas
+de invalidação ou consistência.
 
 ====================================================================
-9. LOGIN
+11. LOGIN
 ====================================================================
 
-Criar endpoint:
+Criar:
 
 POST /api/v1/auth/login
 
@@ -224,145 +340,123 @@ Fluxo:
 
 credentials
  ↓
-validate user
+find user
  ↓
-validate password
+validate status
  ↓
-validate account status
+verify password
  ↓
-create session/token
+create authentication session
  ↓
-return authentication result
+issue token
+ ↓
+return authenticated user context
 
-Em caso de credenciais inválidas:
-
-não revelar se:
-
-- username existe;
-- email existe;
-- password está errada.
-
-Evitar user enumeration.
+Não revelar se o username/email existe.
 
 ====================================================================
-10. CURRENT USER
+12. CURRENT USER
 ====================================================================
 
 Criar:
 
 GET /api/v1/auth/me
 
-Deve devolver dados seguros do utilizador autenticado.
+Retornar:
 
-Exemplo conceptual:
+id
+username
+full_name
+profiles
+permissions relevantes
+status
+contexto necessário
 
-{
-    "id": "...",
-    "username": "...",
-    "full_name": "...",
-    "profiles": [],
-    "permissions": [],
-    "organization_scope": []
-}
-
-Nunca devolver:
+Nunca retornar:
 
 password_hash
-refresh secrets
-internal security secrets
+secrets
+tokens internos
 
 ====================================================================
-11. LOGOUT
+13. LOGOUT
 ====================================================================
 
-Implementar logout de forma coerente com a estratégia de tokens.
+Criar:
 
-Se Refresh Tokens forem utilizados:
+POST /api/v1/auth/logout
 
-- permitir revogação;
-- invalidar sessão;
-- limpar estado necessário.
+Implementar de acordo com a estratégia de sessão/token escolhida.
 
-Não assumir que simplesmente apagar o token do frontend é suficiente
-para toda a arquitectura.
+Documentar a decisão arquitectural.
 
 ====================================================================
-12. SESSÕES
+14. SESSION
 ====================================================================
 
-Criar modelo de sessão quando necessário.
+Criar fundação para sessões.
 
-Registar:
+Registrar, quando apropriado:
 
-- session id;
-- user;
-- created_at;
-- expires_at;
-- revoked_at;
-- ip quando permitido;
-- user_agent quando necessário.
+session_id
+user_id
+created_at
+expires_at
+revoked_at
+ip
+user_agent
 
-Evitar armazenar dados desnecessários.
-
-====================================================================
-13. PROFILES
-====================================================================
-
-Criar entidade/enum para perfis.
-
-Perfis:
-
-ADMINISTRADOR_SISTEMA
-DIRECTOR
-SECRETARIA_GERAL
-CHEFE_DEPARTAMENTO
-CHEFE_SECCAO
-INSTRUTOR_PROCESSUAL
-AGENTE_PIQUETE
-EDITOR_DOCUMENTAL
-AGENTE_PGR
-
-Os perfis devem possuir:
-
-- código;
-- nome humanizado;
-- descrição;
-- status.
+Evitar armazenamento de informação desnecessária.
 
 ====================================================================
-14. PERMISSIONS
+15. PROFILE
 ====================================================================
 
-Não utilizar apenas permissões genéricas como:
+Criar Profile.
 
-ADMIN
-USER
-READ
-WRITE
+Cada profile deve possuir:
 
-Criar um modelo preparado para permissões de negócio.
+id
+code
+name
+description
+is_active
 
-Estrutura conceptual:
+Garantir unicidade do code.
 
-RESOURCE
-+
-ACTION
+====================================================================
+16. PERMISSION
+====================================================================
 
-Exemplo:
+Criar modelo:
 
-process.read
-process.create
-process.update
-process.assign
+Permission
+
+Formato conceptual:
+
+resource.action
+
+Exemplos:
+
+user.read
+user.create
+user.update
+
+profile.read
+profile.manage
+
+permission.read
+permission.manage
 
 document.read
 document.create
 document.edit
 document.publish
 
-user.read
-user.create
-user.update
+process.read
+process.create
+process.update
+process.assign
 
 notification.read
 notification.manage
@@ -370,504 +464,453 @@ notification.manage
 organization.read
 organization.manage
 
-As permissões devem ser extensíveis.
+Não implementar ainda todas as permissões dos módulos futuros.
+
+Criar apenas a estrutura extensível.
 
 ====================================================================
-15. RBAC
+17. RBAC
 ====================================================================
 
-Implementar:
+Criar:
 
-Profile → Permissions
+Profile
+    ↓
+ProfilePermission
+    ↓
+Permission
 
-Um perfil poderá possuir várias permissões.
+Não espalhar regras:
 
-Uma permissão poderá estar associada a vários perfis.
+if user.profile == ...
 
-Não espalhar regras de autorização directamente pelos controllers.
+por todo o código.
 
-Criar mecanismo centralizado.
+Criar um mecanismo centralizado.
+
+====================================================================
+18. AUTHORIZATION SERVICE
+====================================================================
+
+Criar serviço central de autorização.
 
 Exemplo conceptual:
 
 AuthorizationService
 
-ou equivalente adequado à arquitectura.
+Deve permitir:
+
+has_permission()
+require_permission()
+has_profile()
+require_profile()
+
+A implementação concreta pode utilizar outro nome caso seja
+arquitecturalmente melhor.
 
 ====================================================================
-16. RESOURCE SCOPE
+19. ORGANIZATIONAL SCOPE
 ====================================================================
 
-O SIP possui responsabilidade organizacional.
-
-Portanto:
-
-PERMISSION ≠ acesso universal.
-
-Um utilizador pode possuir:
-
-process.read
-
-mas isso NÃO significa que possa ler todos os processos.
-
-Preparar o modelo para:
+Preparar suporte para:
 
 GLOBAL
-ORGANIZATION
 DIRECTION
 DEPARTMENT
 SECTION
 OWN
 ASSIGNED
-PGR
 PIQUETE
+PGR
 
-A implementação completa dos scopes organizacionais será aprofundada
-na SPRINT-02.
+IMPORTANTE:
 
-Nesta Sprint deve existir a fundação necessária.
+Nesta Sprint não implementar toda a estrutura organizacional.
+
+Apenas criar a fundação necessária.
+
+A SPRINT-02 irá implementar:
+
+Direção
+Departamento
+Secção
+Unidade
+Lotação
+Responsabilidade
+Hierarquia organizacional.
 
 ====================================================================
-17. OWN / ASSIGNED
+20. OWNERSHIP
 ====================================================================
 
-Preparar suporte para regras como:
+A arquitectura deve permitir futuramente:
 
 Instrutor A
-→ vê apenas processos autorizados/atribuídos ao Instrutor A.
+→ processos atribuídos/autorizados ao Instrutor A.
 
 Instrutor B
 → não vê os processos do Instrutor A.
 
-Não implementar isto com:
+NÃO implementar:
 
-if current_user.username == ...
+if user.id == ...
 
-Criar uma arquitectura baseada em scopes e ownership.
+espalhado pelos endpoints.
+
+Criar fundação para políticas de acesso por ownership.
 
 ====================================================================
-18. ADMINISTRADOR
+21. ADMINISTRADOR
 ====================================================================
 
-ADMINISTRADOR_SISTEMA possui privilégios elevados para administração
-da plataforma.
+ADMINISTRADOR_SISTEMA terá permissões administrativas elevadas.
 
 Porém:
 
-NÃO utilizar "if admin" espalhado pelo código.
+NÃO criar:
 
-As permissões devem continuar a ser avaliadas pelo mecanismo de
-autorização.
+if admin:
 
-====================================================================
-19. EDITOR DOCUMENTAL
-====================================================================
+em todos os endpoints.
 
-EDITOR_DOCUMENTAL terá posteriormente acesso ao:
-
-- Form Builder;
-- Templates;
-- Componentes;
-- Assets;
-- Document Types;
-- publicação de templates.
-
-Nesta Sprint criar apenas o perfil e as permissões-base.
-
-NÃO implementar ainda o Form Builder.
+Usar o AuthorizationService.
 
 ====================================================================
-20. AGENTE PIQUETE
+22. EDITOR DOCUMENTAL
 ====================================================================
 
-AGENTE_PIQUETE terá posteriormente acesso às funcionalidades do Piquete.
+Criar o perfil:
 
-Nesta Sprint apenas preparar:
+EDITOR_DOCUMENTAL
+
+Preparar permissões relacionadas com:
+
+document templates
+document types
+components
+assets
+
+NÃO implementar o Form Builder nesta Sprint.
+
+====================================================================
+23. AGENTE PIQUETE
+====================================================================
+
+Criar:
 
 AGENTE_PIQUETE
 
 Não implementar ainda:
 
-- Entrada de Peças;
-- Participações;
-- Autos;
-- Denúncias;
-- Ocorrências;
-- documentos do Piquete.
+- participação;
+- denúncia;
+- auto;
+- peça;
+- piquete;
+- processo.
 
-Isso será feito em Sprints posteriores.
+Isso será feito posteriormente.
 
 ====================================================================
-21. AGENTE PGR
+24. AGENTE PGR
 ====================================================================
 
-Criar o perfil:
+Criar:
 
 AGENTE_PGR
 
-Este perfil terá posteriormente um contexto específico de acesso à
-informação disponibilizada para a PGR.
+Não conceder acesso global.
 
-NÃO conceder acesso global aos processos.
+O acesso específico da PGR será baseado em:
 
-A autorização específica PGR será implementada posteriormente.
-
-====================================================================
-22. API AUTH
-====================================================================
-
-Criar endpoints adequados.
-
-Mínimo:
-
-POST /api/v1/auth/login
-POST /api/v1/auth/logout
-GET  /api/v1/auth/me
-
-Preparar arquitectura para:
-
-POST /api/v1/auth/refresh
-
-quando Refresh Token estiver implementado.
+permissions
++
+organizational scope
++
+process/document rules
 
 ====================================================================
-23. AUTH DEPENDENCY
+25. FASTAPI DEPENDENCIES
 ====================================================================
 
-Criar dependência FastAPI para obter utilizador autenticado.
-
-Exemplo conceptual:
+Criar mecanismo equivalente a:
 
 get_current_user()
 
-Criar mecanismos:
-
 require_authenticated_user()
+
 require_permission()
+
 require_profile()
 
-Evitar duplicação nos endpoints.
+Não duplicar lógica de autenticação nos routers.
 
 ====================================================================
-24. AUTHORIZATION DECORATORS / DEPENDENCIES
-====================================================================
-
-Permitir algo conceptual como:
-
-require_permission("process.read")
-
-ou equivalente idiomático para FastAPI.
-
-Não implementar autorização com strings duplicadas espalhadas pelo
-código.
-
-Criar constantes ou registry central quando apropriado.
-
-====================================================================
-25. FRONTEND AUTH
+26. FRONTEND
 ====================================================================
 
 Implementar arquitectura de autenticação no Next.js.
 
 Criar:
 
-AuthProvider
-AuthContext ou equivalente
-ProtectedRoute quando necessário
 auth client
-API client
+session handling
+authenticated application shell
+protected areas
 
-A solução deve funcionar correctamente com Server Components e
-Client Components do Next.js.
+Manter compatibilidade com:
 
-Não transformar toda a aplicação em Client Components apenas por causa
-da autenticação.
+Next.js App Router
+Server Components
+Client Components
+
+Não transformar toda a aplicação em Client Components.
 
 ====================================================================
-26. API CLIENT
+27. API CLIENT
 ====================================================================
 
-Criar cliente HTTP centralizado.
+Criar cliente HTTP central.
 
-Responsabilidades:
+Responsável por:
 
 - base URL;
-- headers;
 - authentication;
-- tratamento de erros;
 - correlation ID;
-- refresh quando aplicável.
+- error handling;
+- session handling.
 
-Não criar fetch duplicado em cada página.
+Não duplicar fetch logic em todas as páginas.
 
 ====================================================================
-27. ROUTE PROTECTION
+28. PROTECTED ROUTES
 ====================================================================
 
-Proteger áreas autenticadas.
-
-Exemplo conceptual:
-
-/login
+Criar protecção para:
 
 /app
-/app/dashboard
-/app/profile
 
-Não depender apenas da protecção frontend.
+e futuras áreas autenticadas.
 
-O backend continuará sendo a autoridade.
+A protecção do frontend é apenas UX.
 
-====================================================================
-28. SIDEBAR
-====================================================================
-
-Nesta Sprint criar a base dinâmica do Sidebar.
-
-O Sidebar deverá futuramente receber:
-
-user
-+
-profiles
-+
-permissions
-+
-scope
-
-e construir o menu.
-
-Exemplo conceptual:
-
-navigationItems.filter(canAccess)
-
-NÃO duplicar regras de autorização.
-
-Não permitir que o Sidebar seja a fonte de verdade de segurança.
+A segurança real permanece no backend.
 
 ====================================================================
-29. HUMANIZAÇÃO
+29. SIDEBAR
 ====================================================================
 
-Criar mecanismo central para humanização de:
+Implementar a arquitectura dinâmica do Sidebar.
 
-- perfis;
-- permissões;
-- estados;
-- labels;
-- enums.
+O Sidebar deverá posteriormente considerar:
 
-Nunca mostrar:
+User
+Profile
+Permission
+Scope
+
+Não hardcodar:
+
+"se perfil X mostrar menu Y"
+
+sem uma camada de autorização/navegação bem definida.
+
+Separar:
+
+Navigation metadata
+
+de:
+
+Security authorization.
+
+O Sidebar nunca é mecanismo de segurança.
+
+====================================================================
+30. HUMANIZATION
+====================================================================
+
+Criar mecanismo central para humanização.
+
+Exemplos:
 
 CHEFE_SECCAO
+→ Chefe de Secção
 
-ao utilizador.
+AGENTE_PGR
+→ Agente PGR
 
-Mostrar:
-
-Chefe de Secção
-
-Nunca mostrar:
+DOCUMENT_PUBLISH
+→ Publicar documento
 
 PROCESS_READ
+→ Consultar processos
 
-Mostrar:
-
-Consultar Processos
-
-Evitar também textos como:
-
-MEU_PROCESSO_STATUS
-
-ou:
-
-DOCUMENT_TYPE_AUTO_APREENSAO
-
-na interface.
+Nunca exibir enums técnicos.
 
 ====================================================================
-30. AUDITORIA
+31. SECURITY AUDIT
 ====================================================================
 
-Criar fundação para auditoria de segurança.
-
-Registar eventos importantes:
+Preparar auditoria para:
 
 LOGIN_SUCCESS
 LOGIN_FAILED
 LOGOUT
+SESSION_REVOKED
+PERMISSION_DENIED
 ACCOUNT_BLOCKED
 PASSWORD_CHANGED
-PERMISSION_DENIED
-SESSION_REVOKED
 
-A auditoria deve permitir futuramente:
+A auditoria deve registrar:
 
-quem;
-quando;
-o quê;
-origem;
-resultado.
+actor
+timestamp
+action
+resource quando aplicável
+result
+request/correlation id quando aplicável
 
-Não guardar passwords ou tokens.
+Nunca registrar:
 
-====================================================================
-31. RATE LIMITING
-====================================================================
-
-Preparar rate limiting para endpoints sensíveis.
-
-Especialmente:
-
-login;
-refresh;
-password operations.
-
-Utilizar Redis quando apropriado.
-
-Não criar uma solução complexa nesta Sprint.
+password
+access token
+refresh token
 
 ====================================================================
-32. SECURITY HEADERS
+32. RATE LIMITING
 ====================================================================
 
-Configurar headers de segurança adequados.
+Preparar rate limiting para:
 
-Rever:
+login
+refresh
+password operations
 
-CORS
-Content-Type
-X-Content-Type-Options
-Content-Security-Policy quando aplicável
-Referrer-Policy
-Frame protections
+Utilizar Redis quando necessário.
 
-Não introduzir configurações que quebrem o Next.js sem validação.
+Não criar uma arquitectura excessivamente complexa.
 
 ====================================================================
 33. DATABASE
 ====================================================================
 
-Criar migrations para as entidades desta Sprint.
+Criar migrations com Alembic.
 
-As migrations devem ser:
+Não modificar PostgreSQL manualmente.
 
-- versionadas;
-- reversíveis quando possível;
-- testáveis.
-
-Nunca alterar schema manualmente sem migration.
+Toda alteração estrutural deve possuir migration.
 
 ====================================================================
-34. SEED
+34. DEVELOPMENT SEED
 ====================================================================
 
 Criar seed de desenvolvimento.
 
-Criar:
+Criar um utilizador de desenvolvimento para cada perfil:
 
-1 Administrador
-1 Director
-1 Secretaria Geral
-1 Chefe de Departamento
-1 Chefe de Secção
-1 Instrutor Processual
-1 Agente de Piquete
-1 Editor Documental
-1 Agente PGR
+Administrador
+Director
+Secretaria Geral
+Chefe de Departamento
+Chefe de Secção
+Instrutor
+Agente Piquete
+Editor Documental
+Agente PGR
 
-IMPORTANTE:
+Credenciais DEV devem:
 
-Credenciais de desenvolvimento devem estar claramente identificadas
-como DEV ONLY.
-
-Não utilizar credenciais reais.
+- estar documentadas;
+- não ser credenciais reais;
+- nunca ser utilizadas em produção.
 
 ====================================================================
-35. TESTES BACKEND
+35. TESTES
 ====================================================================
 
-Criar testes para:
+Implementar TDD quando aplicável.
+
+Testar:
+
+AUTHENTICATION
 
 - login válido;
-- login inválido;
+- password inválida;
+- utilizador inexistente;
 - utilizador inactivo;
 - utilizador bloqueado;
-- password incorrecta;
 - token inválido;
-- token expirado;
-- endpoint protegido;
-- endpoint sem autenticação;
+- token expirado.
+
+AUTHORIZATION
+
+- permission granted;
 - permission denied;
-- permission allowed;
-- profile validation;
-- /auth/me;
+- profile granted;
+- profile denied.
+
+SESSION
+
+- login;
 - logout;
-- sessão.
+- revoked session;
+- expired session.
+
+API
+
+- /auth/login;
+- /auth/me;
+- /auth/logout;
+- endpoint protegido.
 
 ====================================================================
-36. TESTES DE AUTORIZAÇÃO
-====================================================================
-
-Testar explicitamente:
-
-ADMINISTRADOR_SISTEMA
-
-DIRECTOR
-
-SECRETARIA_GERAL
-
-CHEFE_DEPARTAMENTO
-
-CHEFE_SECCAO
-
-INSTRUTOR_PROCESSUAL
-
-AGENTE_PIQUETE
-
-EDITOR_DOCUMENTAL
-
-AGENTE_PGR
-
-Verificar que:
-
-um perfil não recebe permissões de outro sem configuração.
-
-====================================================================
-37. TESTES FRONTEND
+36. FRONTEND TESTS
 ====================================================================
 
 Testar:
 
 - login;
 - logout;
-- estado autenticado;
-- estado não autenticado;
+- sessão;
+- utilizador autenticado;
+- utilizador não autenticado;
 - route protection;
-- rendering do utilizador;
-- rendering dos perfis;
-- Sidebar baseado em permissões;
-- tratamento de sessão expirada.
+- sidebar;
+- permission-based navigation.
 
 ====================================================================
-38. TESTES E2E
+37. E2E
 ====================================================================
 
-Criar pelo menos um fluxo:
+Criar:
+
+E2E-001
 
 Login
  ↓
 Dashboard
  ↓
-Utilizador autenticado
+/auth/me
  ↓
+Logout
 
-E um fluxo de acesso negado.
+Criar também:
+
+E2E-002
+
+Login
+ ↓
+Acesso a recurso permitido
+ ↓
+Acesso a recurso proibido
+ ↓
+403
 
 ====================================================================
-39. DOCUMENTAÇÃO
+38. DOCUMENTAÇÃO
 ====================================================================
 
-Criar/actualizar:
+Criar:
 
 docs/architecture/authentication.md
 
@@ -875,149 +918,153 @@ docs/architecture/authorization.md
 
 docs/architecture/rbac.md
 
-Criar ADR se houver decisão arquitectural relevante.
+docs/architecture/security-model.md
 
-Actualizar README quando necessário.
-
-====================================================================
-40. TASKS
-====================================================================
-
-Criar:
-
-prompts/tasks/sprint-01/
-
-Com Tasks:
-
-TASK-001-auth-domain
-TASK-002-user-model
-TASK-003-profile-model
-TASK-004-permission-model
-TASK-005-rbac
-TASK-006-jwt-authentication
-TASK-007-session-management
-TASK-008-authorization-engine
-TASK-009-frontend-auth
-TASK-010-sidebar-authorization
-TASK-011-security-audit
-TASK-012-tests
-TASK-013-documentation
-
-As Tasks podem ser subdivididas se necessário.
-
-Cada Task deve possuir:
-
-Objective
-Scope
-Dependencies
-Implementation
-Acceptance Criteria
-Tests
-Definition of Done
+Criar ADRs para decisões relevantes.
 
 ====================================================================
-41. EXECUÇÃO
+39. TASK EXECUTION
 ====================================================================
-
-Executar uma Task por vez.
 
 Para cada Task:
 
-1. Ler Task.
-2. Analisar código.
-3. Implementar.
-4. Testar.
-5. Corrigir.
-6. Lint.
-7. Typecheck.
-8. Rever segurança.
-9. Actualizar documentação.
-10. Marcar DONE.
-11. Commit.
+DEFINE
+→ seleccionar skills aplicáveis
 
-Não acumular várias Tasks num único commit quando forem
-independentemente concluíveis.
+PLAN
+→ decompor
+
+BUILD
+→ implementar incrementalmente
+
+VERIFY
+→ executar testes
+
+REVIEW
+→ revisão técnica e segurança
+
+SHIP
+→ commit
+
+Uma Task só pode ser marcada:
+
+DONE
+
+quando:
+
+- implementação concluída;
+- testes passam;
+- lint passa;
+- typecheck passa;
+- documentação actualizada;
+- review concluído;
+- commit criado.
 
 ====================================================================
-42. COMMITS
+40. COMMITS
 ====================================================================
 
 Utilizar Conventional Commits.
 
 Exemplos:
 
-feat(auth): add user identity model
+feat(auth): add user domain
 
-feat(auth): implement JWT authentication
+feat(auth): implement jwt authentication
 
-feat(auth): add RBAC authorization
+feat(auth): add permission model
 
-feat(frontend): add authenticated application shell
+feat(auth): implement authorization service
+
+feat(frontend): add authenticated shell
+
+test(auth): add authentication tests
 
 test(auth): add authorization tests
 
-docs(auth): document authorization architecture
+docs(auth): document security model
 
 ====================================================================
-43. DEFINITION OF DONE
+41. DEFINITION OF DONE
 ====================================================================
 
-SPRINT-01 somente estará concluída quando:
+SPRINT-01 só pode ser concluída quando:
 
-[ ] User model
-[ ] Profile model
-[ ] Permission model
+[ ] User
+[ ] Profile
+[ ] Permission
 [ ] RBAC
+[ ] Authentication
 [ ] JWT
-[ ] Login
-[ ] Logout
-[ ] Current user
-[ ] Session foundation
-[ ] Authorization engine
-[ ] Permission checks
-[ ] Profile checks
+[ ] Session
+[ ] Authorization Service
+[ ] Permission dependencies
 [ ] Frontend authentication
 [ ] Protected routes
-[ ] Dynamic Sidebar foundation
-[ ] Humanized labels
+[ ] Dynamic navigation foundation
+[ ] Humanized permissions/profiles
 [ ] Security audit foundation
 [ ] Rate limiting foundation
-[ ] Database migrations
-[ ] Development seed
+[ ] Migrations
+[ ] DEV seed
 [ ] Backend tests
 [ ] Frontend tests
 [ ] E2E tests
 [ ] Documentation
-[ ] All Tasks DONE
-[ ] All tests passing
-[ ] Lint passing
-[ ] Typecheck passing
-[ ] Build passing
-[ ] Commits created
+[ ] Skills utilizadas correctamente
+[ ] Todas Tasks DONE
+[ ] Lint PASS
+[ ] Typecheck PASS
+[ ] Tests PASS
+[ ] Build PASS
+[ ] Commits realizados
 
 ====================================================================
-44. REGRA FINAL
+42. REGRA ABSOLUTA
 ====================================================================
 
 NÃO iniciar SPRINT-02 automaticamente.
 
-Quando esta Sprint terminar:
+NÃO implementar:
 
-1. Executar todos os testes.
-2. Executar build.
-3. Rever segurança.
-4. Rever permissões.
-5. Rever migrations.
-6. Rever documentação.
-7. Confirmar Tasks.
-8. Criar commit final da Sprint.
-9. Apresentar relatório final.
+- estrutura organizacional completa;
+- processos;
+- piquete;
+- documentos;
+- Form Builder;
+- notificações;
+- PGR.
+
+Esses módulos pertencem a Sprints posteriores.
+
+====================================================================
+43. RELATÓRIO FINAL
+====================================================================
+
+Ao terminar:
+
+Apresentar:
+
+1. Tasks concluídas.
+2. Skills utilizadas por Task.
+3. Arquitectura criada.
+4. Endpoints.
+5. Models.
+6. Migrations.
+7. Testes.
+8. E2E.
+9. Problemas encontrados.
+10. ADRs.
+11. Commits.
+12. Estado da Sprint.
+
+Depois:
 
 PARAR.
 
-Aguardar autorização explícita para iniciar:
+Aguardar autorização para:
 
-SPRINT-02 — ESTRUTURA ORGANIZACIONAL E UTILIZADORES.
+SPRINT-02 — ESTRUTURA ORGANIZACIONAL E CONTEXTO DE RESPONSABILIDADE.
 
 ====================================================================
 FIM DO PROMPT 01

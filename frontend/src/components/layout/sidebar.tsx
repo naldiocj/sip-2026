@@ -22,7 +22,6 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { useAuth } from "@/hooks/use-auth";
-import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import {
   DropdownMenu,
@@ -95,19 +94,21 @@ export function AppSidebar() {
       {user && (
         <SidebarFooter className="border-t px-4 py-3">
           <DropdownMenu>
-            <DropdownMenuTrigger render={<Button variant="ghost" className="w-full justify-start gap-2 px-2" />}>
-              <Avatar className="size-6">
-                <AvatarFallback className="text-xs">
-                  {getInitials(user.full_name)}
-                </AvatarFallback>
-              </Avatar>
-              <div className="flex flex-col items-start text-left">
-                <span className="text-sm font-medium">{user.full_name}</span>
-                <span className="text-xs text-muted-foreground">
-                  {user.profiles[0]
-                    ? humanizeProfile(user.profiles[0].code)
-                    : "Sem perfil"}
-                </span>
+            <DropdownMenuTrigger className="w-full">
+              <div className="flex items-center gap-2 px-2">
+                <Avatar className="size-6">
+                  <AvatarFallback className="text-xs">
+                    {getInitials(user.full_name)}
+                  </AvatarFallback>
+                </Avatar>
+                <div className="flex flex-col items-start text-left">
+                  <span className="text-sm font-medium">{user.full_name}</span>
+                  <span className="text-xs text-muted-foreground">
+                    {user.profiles[0]
+                      ? humanizeProfile(user.profiles[0].code)
+                      : "Sem perfil"}
+                  </span>
+                </div>
               </div>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="start" className="w-56">

@@ -39,7 +39,7 @@ describe("LoginPage", () => {
 
   it("renders login form", () => {
     renderLoginPage();
-    expect(screen.getByText("SIP")).toBeTruthy();
+    expect(screen.getAllByText("SIP").length).toBeGreaterThanOrEqual(1);
     expect(screen.getByLabelText("Utilizador")).toBeTruthy();
     expect(screen.getByLabelText("Palavra-passe")).toBeTruthy();
     expect(screen.getByRole("button", { name: "Entrar" })).toBeTruthy();
@@ -47,7 +47,7 @@ describe("LoginPage", () => {
 
   it("renders project description", () => {
     renderLoginPage();
-    expect(screen.getByText("Sistema de Instrução Processual")).toBeTruthy();
+    expect(screen.getAllByText("Sistema de Instrução Processual").length).toBeGreaterThan(0);
   });
 
   it("submits credentials on form submit", async () => {
@@ -73,7 +73,7 @@ describe("LoginPage", () => {
     renderLoginPage({ login: loginMock });
 
     await user.type(screen.getByLabelText("Utilizador"), "admin");
-    await user.type(screen.getByLabelText("Palavra-passe"), "wrong");
+    await user.type(screen.getByLabelText("Palavra-passe"), "admin123");
     await user.click(screen.getByRole("button", { name: "Entrar" }));
 
     await waitFor(() => {
@@ -100,5 +100,30 @@ describe("LoginPage", () => {
   it("redirects to dashboard if already authenticated", async () => {
     const { container } = renderLoginPage({ isAuthenticated: true, isLoading: false });
     expect(container.innerHTML).toBe("");
+  });
+
+  it("shows validation error for short password", async () => {
+    const user = userEvent.setup();
+    renderLoginPage();
+
+    await user.type(screen.getByLabelText("Utilizador"), "admin");
+    await user.type(screen.getByLabelText("Palavra-passe"), "12345");
+    await user.click(screen.getByRole("button", { name: "Entrar" }));
+
+    await waitFor(() => {
+      expect(screen.getByText("Palavra-passe deve ter pelo menos 6 caracteres")).toBeTruthy();
+    });
+  });
+
+  it("shows validation error for empty username", async () => {
+    const user = userEvent.setup();
+    renderLoginPage();
+
+    await user.type(screen.getByLabelText("Palavra-passe"), "admin123");
+    await user.click(screen.getByRole("button", { name: "Entrar" }));
+
+    await waitFor(() => {
+      expect(screen.getByText("Utilizador é obrigatório")).toBeTruthy();
+    });
   });
 });
