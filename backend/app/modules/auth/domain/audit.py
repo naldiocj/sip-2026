@@ -28,6 +28,7 @@ from app.db.base import Base, TimestampMixin, UUIDPrimaryKeyMixin
 class AuditEventType(enum.StrEnum):
     """Tipos de eventos de segurança auditáveis."""
 
+    # Auth events
     LOGIN_SUCCESS = "LOGIN_SUCCESS"
     LOGIN_FAILED = "LOGIN_FAILED"
     LOGOUT = "LOGOUT"
@@ -35,6 +36,17 @@ class AuditEventType(enum.StrEnum):
     PASSWORD_CHANGED = "PASSWORD_CHANGED"
     PERMISSION_DENIED = "PERMISSION_DENIED"
     SESSION_REVOKED = "SESSION_REVOKED"
+
+    # Organization events
+    ORGANIZATION_CREATED = "ORGANIZATION_CREATED"
+    ORGANIZATION_UPDATED = "ORGANIZATION_UPDATED"
+    UNIT_CREATED = "UNIT_CREATED"
+    UNIT_UPDATED = "UNIT_UPDATED"
+    UNIT_MOVED = "UNIT_MOVED"
+    UNIT_DEACTIVATED = "UNIT_DEACTIVATED"
+    USER_ASSIGNED = "USER_ASSIGNED"
+    USER_UNASSIGNED = "USER_UNASSIGNED"
+    SCOPE_CHANGED = "SCOPE_CHANGED"
 
 
 class AuditResult(enum.StrEnum):

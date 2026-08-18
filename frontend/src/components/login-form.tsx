@@ -3,12 +3,7 @@
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import {
-  Field,
-  FieldGroup,
-  FieldLabel,
-  FieldDescription,
-} from "@/components/ui/field";
+import { Field, FieldGroup, FieldLabel, FieldDescription } from "@/components/ui/field";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Loader2 } from "lucide-react";
 import { useForm } from "react-hook-form";
@@ -77,9 +72,7 @@ export function LoginForm({
             disabled={isSubmitting}
             {...form.register("username")}
           />
-          {usernameError && (
-            <p className="text-sm text-destructive">{usernameError}</p>
-          )}
+          {usernameError && <p className="text-sm text-destructive">{usernameError}</p>}
         </Field>
 
         <Field>
@@ -92,17 +85,14 @@ export function LoginForm({
             disabled={isSubmitting}
             {...form.register("password")}
           />
-          {passwordError && (
-            <p className="text-sm text-destructive">{passwordError}</p>
-          )}
+          {passwordError && <p className="text-sm text-destructive">{passwordError}</p>}
         </Field>
 
         <Field>
           <Button type="submit" className="w-full" disabled={isSubmitting}>
             {isSubmitting ? (
               <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                A entrar...
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />A entrar...
               </>
             ) : (
               "Entrar"

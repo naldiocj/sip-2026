@@ -22,7 +22,9 @@ const mockAuthValue = {
     employee_number: null,
     status: "ACTIVE",
     status_label: "Ativo",
-    profiles: [{ id: "1", code: "ADMINISTRADOR_SISTEMA", name: "Admin", label: "Administrador do Sistema" }],
+    profiles: [
+      { id: "1", code: "ADMINISTRADOR_SISTEMA", name: "Admin", label: "Administrador do Sistema" },
+    ],
     permissions: ["system.admin"],
     organization_scope: [],
   },
@@ -38,10 +40,8 @@ function renderWithProviders(ui: React.ReactNode) {
   });
   return render(
     <QueryClientProvider client={qc}>
-      <AuthContext.Provider value={mockAuthValue}>
-        {ui}
-      </AuthContext.Provider>
-    </QueryClientProvider>
+      <AuthContext.Provider value={mockAuthValue}>{ui}</AuthContext.Provider>
+    </QueryClientProvider>,
   );
 }
 

@@ -253,6 +253,127 @@ def seed(session: Session, hasher: PasswordHasher | None = None) -> dict[str, in
             session.flush()
             user.profiles.append(profiles[ProfileEnum(str(user_data["profile"]))])
 
+    # Organização e unidades (DEV ONLY)
+    from app.modules.organization.domain.organization import Organization, OrganizationStatus
+    from app.modules.organization.domain.unit import OrganizationalUnit, UnitStatus
+    from app.modules.organization.domain.unit_type import UnitType
+    from app.modules.organization.domain.user_assignment import (
+        AssignmentStatus,
+        AssignmentType,
+        UserAssignment,
+    )
+
+    org = session.scalar(select(Organization).where(Organization.code == "SIC"))
+    if org is None:
+        org = Organization(
+            code="SIC",
+            name="Serviço de Investigação Criminal",
+            short_name="SIC",
+            description="Organização principal do SIP",
+            status=OrganizationStatus.ACTIVE,
+            is_active=True,
+        )
+        session.add(org)
+        created["organizations"] = 1
+        session.flush()
+
+        # Direcção de Investigação
+        dir_inv = OrganizationalUnit(
+            organization_id=org.id,
+            type_id=UnitType.DIRECTION,
+            code="DIR-INV",
+            name="Direcção de Investigação",
+            short_name="DI",
+            status=UnitStatus.ACTIVE,
+            is_active=True,
+        )
+        session.add(dir_inv)
+        session.flush()
+
+        # Departamento de Investigação Criminal
+        dep_inv = OrganizationalUnit(
+            organization_id=org.id,
+            parent_id=dir_inv.id,
+            type_id=UnitType.DEPARTMENT,
+            code="DEP-IC",
+            name="Departamento de Investigação Criminal",
+            short_name="DIC",
+            status=UnitStatus.ACTIVE,
+            is_active=True,
+        )
+        session.add(dep_inv)
+        session.flush()
+
+        # Secção de Investigação
+        sec_inv = OrganizationalUnit(
+            organization_id=org.id,
+            parent_id=dep_inv.id,
+            type_id=UnitType.SECTION,
+            code="SEC-INV",
+            name="Secção de Investigação",
+            short_name="SI",
+            status=UnitStatus.ACTIVE,
+            is_active=True,
+        )
+        session.add(sec_inv)
+        session.flush()
+
+        # Secretaria Geral
+        sec_geral = OrganizationalUnit(
+            organization_id=org.id,
+            type_id=UnitType.UNIT,
+            code="SEC-GERAL",
+            name="Secretaria Geral",
+            short_name="SG",
+            status=UnitStatus.ACTIVE,
+            is_active=True,
+        )
+        session.add(sec_geral)
+        session.flush()
+
+        # Direcções
+        directions = [
+            ("DIACID", "Direção de Investigação de Acidentes", "Inv. Acidentes"),
+            ("DCCCPES", "Direção de Combate aos Crimes Contra as Pessoas", "Crimes Pessoas"),
+            ("DCCCPAT", "Direção de Combate aos Crimes Contra O Património", "Crimes Património"),
+            ("DCCFF", "Direção de Combate aos Crimes Financeiros e Fiscais", "Crimes Financeiros"),
+            ("DCCORG", "Direção de Combate ao Crime Organizado", "Crime Organizado"),
+            ("DCOP", "Direção de Central de Operações", "Central Operações"),
+            ("DCN", "Direção de Combate ao Narcotráfico", "Narcotráfico"),
+            ("DCTPMCCA", "Direção de Combate ao Tráfico de Pedras, Metais e Crime Contra o Ambiente", "Tráfico Ambiente"),
+            ("DCCCESP", "Direção de Combate ao Crime Contra Economia e Saúde Pública", "Economia Saúde"),
+            ("DAMCL", "Direção de Atendimento ao Menor em Conflito com a Lei", "Menor Conflito"),
+            ("DCCCI", "Direção de Combate ao Crime Cibernético", "Crime Cibernético"),
+            ("DCCC", "Direção de Combate ao Crime de Corrupção", "Corrupção"),
+            ("DICA", "Departamento de Investigação Criminal no Aeroporto", "Inv. Aeroporto"),
+            ("DICP", "Departamento de Investigação Criminal no Porto", "Inv. Porto"),
+        ]
+        for code, name, short_name in directions:
+            unit = OrganizationalUnit(
+                organization_id=org.id,
+                type_id=UnitType.DIRECTION,
+                code=code,
+                name=name,
+                short_name=short_name,
+                status=UnitStatus.ACTIVE,
+                is_active=True,
+            )
+            session.add(unit)
+        session.flush()
+
+        # Atribuir admin à Direcção de Investigação
+        admin_user = session.scalar(select(User).where(User.username == "admin"))
+        if admin_user is not None:
+            assignment = UserAssignment(
+                user_id=admin_user.id,
+                organizational_unit_id=dir_inv.id,
+                assignment_type=AssignmentType.PRIMARY,
+                is_primary=True,
+                status=AssignmentStatus.ACTIVE,
+            )
+            session.add(assignment)
+            created["assignments"] = 1
+
     session.commit()
     return created
 
@@ -266,6 +387,8 @@ def main() -> None:
     print(f"Perfis criados: {created['profiles']}")
     print(f"Permissões criadas: {created['permissions']}")
     print(f"Utilizadores criados: {created['users']}")
+    print(f"Organizações criadas: {created.get('organizations', 0)}")
+    print(f"Atribuições criadas: {created.get('assignments', 0)}")
     print()
     print(DEV_CREDENTIALS_NOTICE)
     for user_data in DEV_USERS:

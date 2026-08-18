@@ -11,10 +11,7 @@ vi.mock("next/navigation", () => ({
   usePathname: () => "/",
 }));
 
-function renderWithAuth(
-  ui: React.ReactNode,
-  authOverrides: Partial<AuthContextType> = {},
-) {
+function renderWithAuth(ui: React.ReactNode, authOverrides: Partial<AuthContextType> = {}) {
   const qc = new QueryClient({
     defaultOptions: { queries: { retry: false, gcTime: 0 } },
   });
@@ -28,9 +25,7 @@ function renderWithAuth(
   };
   return render(
     <QueryClientProvider client={qc}>
-      <AuthContext.Provider value={value}>
-        {ui}
-      </AuthContext.Provider>
+      <AuthContext.Provider value={value}>{ui}</AuthContext.Provider>
     </QueryClientProvider>,
   );
 }

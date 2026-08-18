@@ -12,9 +12,7 @@ function DashboardContent() {
     <PageContainer>
       <PageHeader
         title="Dashboard"
-        description={
-          user ? `Bem-vindo, ${user.full_name}` : "Estado do sistema SIP"
-        }
+        description={user ? `Bem-vindo, ${user.full_name}` : "Estado do sistema SIP"}
       />
       <PageContent>
         <HealthStatus />

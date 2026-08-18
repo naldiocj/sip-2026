@@ -6,6 +6,7 @@ import {
   BreadcrumbLink,
   BreadcrumbList,
   BreadcrumbPage,
+  BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { usePathname } from "next/navigation";
 
@@ -14,6 +15,26 @@ const segmentLabels: Record<string, string> = {
   documents: "Documentos",
   security: "Segurança",
   settings: "Definições",
+  processos: "Processos",
+  ocorrencias: "Ocorrências",
+  mandados: "Mandados",
+  despachos: "Despachos",
+  detidos: "Detidos",
+  piquete: "Piquete",
+  pgr: "PGR",
+  relatorios: "Relatórios",
+  notificacoes: "Notificações",
+  organizacao: "Organização",
+  utilizadores: "Utilizadores",
+  auditoria: "Auditoria",
+  templates: "Templates",
+  definicoes: "Definições",
+  novo: "Novo",
+  estrutura: "Estrutura",
+  unidades: "Unidades",
+  pessoas: "Pessoas",
+  atribuicoes: "Atribuições",
+  historico: "Histórico",
 };
 
 export function BreadcrumbNav() {
@@ -44,6 +65,7 @@ export function BreadcrumbNav() {
           const isLast = index === segments.length - 1;
           return (
             <BreadcrumbItem key={href}>
+              <BreadcrumbSeparator />
               {isLast ? (
                 <BreadcrumbPage>{label}</BreadcrumbPage>
               ) : (

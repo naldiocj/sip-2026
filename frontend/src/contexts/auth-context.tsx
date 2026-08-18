@@ -1,20 +1,8 @@
 "use client";
 
-import {
-  createContext,
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-  type ReactNode,
-} from "react";
+import { createContext, useCallback, useEffect, useMemo, useState, type ReactNode } from "react";
 import { useRouter } from "next/navigation";
-import type {
-  AuthUser,
-  LoginCredentials,
-  LoginResponse,
-  MeResponse,
-} from "@/lib/auth-types";
+import type { AuthUser, LoginCredentials, LoginResponse, MeResponse } from "@/lib/auth-types";
 import { apiClient } from "@/lib/api-client";
 
 export interface AuthContextType {
@@ -25,9 +13,7 @@ export interface AuthContextType {
   isLoading: boolean;
 }
 
-export const AuthContext = createContext<AuthContextType | undefined>(
-  undefined,
-);
+export const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<AuthUser | null>(null);
@@ -79,16 +65,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
 
     window.addEventListener("auth:session-expired", handleSessionExpired);
-    return () =>
-      window.removeEventListener("auth:session-expired", handleSessionExpired);
+    return () => window.removeEventListener("auth:session-expired", handleSessionExpired);
   }, [router]);
 
   const login = useCallback(
     async (credentials: LoginCredentials) => {
-      await apiClient.post<LoginResponse>(
-        "/api/v1/auth/login",
-        credentials,
-      );
+      await apiClient.post<LoginResponse>("/api/v1/auth/login", credentials);
 
       const currentUser = await fetchCurrentUser();
       setUser(currentUser);

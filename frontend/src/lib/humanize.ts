@@ -57,6 +57,119 @@ const USER_STATUS_LABELS: Record<string, string> = {
   PENDING: "Pendente",
 };
 
+const PROCESS_STATUS_LABELS: Record<string, string> = {
+  RECEBIDO: "Recebido",
+  EM_ANALISE: "Em análise",
+  EM_INSTRUCAO: "Em instrução",
+  AGUARDANDO_DESPACHO: "Aguardando despacho",
+  DESPACHADO: "Despachado",
+  CONCLUIDO: "Concluído",
+  ARQUIVADO: "Arquivado",
+  SUSPENSO: "Suspenso",
+  REABERTO: "Reaberto",
+  DEVOLVIDO: "Devolvido",
+  TRANSFERIDO: "Transferido",
+};
+
+const DOCUMENT_TYPE_LABELS: Record<string, string> = {
+  DENUNCIA: "Denúncia",
+  PARTICIPACAO: "Participação",
+  QUEIXA: "Queixa",
+  AUTO: "Auto",
+  DESPACHO: "Despacho",
+  MANDADO: "Mandado",
+  RELATORIO: "Relatório",
+  TERMOS: "Termos",
+  DECLARACAO: "Declaração",
+  OFICIO: "Ofício",
+  NOTIFICACAO: "Notificação",
+  REQUERIMENTO: "Requerimento",
+  RECIBO: "Recibo",
+  CAPA: "Capa do Processo",
+  PARECER: "Parecer",
+};
+
+const OCCURRENCE_TYPE_LABELS: Record<string, string> = {
+  CRIME: "Crime",
+  CONTRAVENCAO: "Contra-ordenação",
+  INFRACAO: "Infração",
+  OCORRENCIA: "Ocorrência",
+  PARTICIPACAO: "Participação",
+  DENUNCIA: "Denúncia",
+  QUEIXA: "Queixa",
+};
+
+const MANDATE_STATUS_LABELS: Record<string, string> = {
+  EMITIDO: "Emitido",
+  PENDENTE: "Pendente",
+  EM_EXECUCAO: "Em execução",
+  CUMPRIDO: "Cumprido",
+  DEVOLVIDO: "Devolvido",
+  ANULADO: "Anulado",
+  REVOGADO: "Revogado",
+};
+
+const NOTIFICATION_TYPE_LABELS: Record<string, string> = {
+  PROCESSO_ATRIBUIDO: "Processo atribuído",
+  NOVO_DESPACHO: "Novo despacho",
+  PRAZO_PROXIMO: "Prazo próximo",
+  DOCUMENTO_RECEBIDO: "Documento recebido",
+  PROCESSO_DEVOLVIDO: "Processo devolvido",
+  SOLICITACAO_PGR: "Solicitação PGR",
+  MANDADO_PENDENTE: "Mandado pendente",
+  DILIGENCIA_PENDENTE: "Diligência pendente",
+};
+
+const UNIT_TYPE_LABELS: Record<string, string> = {
+  ORGANIZATION: "Organização",
+  DIRECTION: "Direcção",
+  DEPARTMENT: "Departamento",
+  SECTION: "Secção",
+  UNIT: "Unidade",
+  PIQUETE: "Piquete",
+  OTHER: "Outra Unidade",
+};
+
+const ASSIGNMENT_TYPE_LABELS: Record<string, string> = {
+  PRIMARY: "Principal",
+  SECONDARY: "Secundária",
+  TEMPORARY: "Temporária",
+  ACTING: "Interino",
+  DELEGATED: "Delegada",
+};
+
+const RESPONSIBILITY_SCOPE_LABELS: Record<string, string> = {
+  GLOBAL: "Global",
+  ORGANIZATION: "Organização",
+  DIRECTION: "Direcção",
+  DEPARTMENT: "Departamento",
+  SECTION: "Secção",
+  OWN: "Próprio",
+  ASSIGNED: "Atribuído",
+  PIQUETE: "Piquete",
+  PGR: "PGR",
+};
+
+const AUDIT_ACTION_LABELS: Record<string, string> = {
+  CREATED: "Criado",
+  UPDATED: "Alterado",
+  TRANSFERRED: "Transferido",
+  DISPATCHED: "Despachado",
+  SIGNED: "Assinado",
+  CANCELLED: "Anulado",
+  ARCHIVED: "Arquivado",
+  REOPENED: "Reaberto",
+};
+
+const DOMAIN_LABEL_MAPS: Record<string, Record<string, string>> = {
+  process: PROCESS_STATUS_LABELS,
+  document: DOCUMENT_TYPE_LABELS,
+  occurrence: OCCURRENCE_TYPE_LABELS,
+  mandate: MANDATE_STATUS_LABELS,
+  notification: NOTIFICATION_TYPE_LABELS,
+  audit: AUDIT_ACTION_LABELS,
+};
+
 export function humanizePermission(code: string): string {
   const label = PERMISSION_LABELS[code];
   if (label) {
@@ -77,7 +190,68 @@ export function humanizeUserStatus(status: string): string {
   return USER_STATUS_LABELS[status] ?? titleCase(status);
 }
 
-function titleCase(value: string): string {
+export function humanizeUnitType(code: string): string {
+  return UNIT_TYPE_LABELS[code] ?? titleCase(code);
+}
+
+export function humanizeAssignmentType(code: string): string {
+  return ASSIGNMENT_TYPE_LABELS[code] ?? titleCase(code);
+}
+
+export function humanizeResponsibilityScope(scope: string): string {
+  return RESPONSIBILITY_SCOPE_LABELS[scope] ?? titleCase(scope);
+}
+
+export function humanizeProcessStatus(status: string): string {
+  return PROCESS_STATUS_LABELS[status] ?? titleCase(status);
+}
+
+export function humanizeDocumentType(type: string): string {
+  return DOCUMENT_TYPE_LABELS[type] ?? titleCase(type);
+}
+
+export function humanizeOccurrenceType(type: string): string {
+  return OCCURRENCE_TYPE_LABELS[type] ?? titleCase(type);
+}
+
+export function humanizeMandateStatus(status: string): string {
+  return MANDATE_STATUS_LABELS[status] ?? titleCase(status);
+}
+
+export function humanizeNotificationType(type: string): string {
+  return NOTIFICATION_TYPE_LABELS[type] ?? titleCase(type);
+}
+
+export function humanizeAuditAction(action: string): string {
+  return AUDIT_ACTION_LABELS[action] ?? titleCase(action);
+}
+
+export function humanizeStatus(status: string, domain?: string): string {
+  if (domain && DOMAIN_LABEL_MAPS[domain]) {
+    return DOMAIN_LABEL_MAPS[domain][status] ?? titleCase(status);
+  }
+  return titleCase(status);
+}
+
+export function humanizeEntity(type: string, code: string): string {
+  const maps: Record<string, Record<string, string>> = {
+    permission: PERMISSION_LABELS,
+    profile: PROFILE_LABELS,
+    userStatus: USER_STATUS_LABELS,
+    process: PROCESS_STATUS_LABELS,
+    document: DOCUMENT_TYPE_LABELS,
+    occurrence: OCCURRENCE_TYPE_LABELS,
+    mandate: MANDATE_STATUS_LABELS,
+    notification: NOTIFICATION_TYPE_LABELS,
+    unitType: UNIT_TYPE_LABELS,
+    assignmentType: ASSIGNMENT_TYPE_LABELS,
+    scope: RESPONSIBILITY_SCOPE_LABELS,
+    audit: AUDIT_ACTION_LABELS,
+  };
+  return maps[type]?.[code] ?? titleCase(code);
+}
+
+export function titleCase(value: string): string {
   return value
     .split(/[_.-]+/)
     .filter(Boolean)

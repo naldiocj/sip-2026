@@ -14,7 +14,7 @@ RUN pip install --upgrade pip && \
     pip install -e ".[dev]"
 
 # ─── Stage 2: Runtime (só deps de produção) ───
-FROM python:3.12-alpine AS production
+FROM python:3.12-slim AS production
 
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1

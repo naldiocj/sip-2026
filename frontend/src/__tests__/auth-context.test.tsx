@@ -39,7 +39,9 @@ describe("AuthProvider", () => {
   });
 
   it("calls /api/v1/auth/me on mount", async () => {
-    const fetchSpy = vi.spyOn(globalThis, "fetch").mockRejectedValue(new Error("Not authenticated"));
+    const fetchSpy = vi
+      .spyOn(globalThis, "fetch")
+      .mockRejectedValue(new Error("Not authenticated"));
 
     renderAuthProvider(
       <AuthContext.Consumer>

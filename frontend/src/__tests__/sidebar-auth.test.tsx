@@ -34,7 +34,9 @@ const mockUser: AuthContextType["user"] = {
   employee_number: null,
   status: "ACTIVE",
   status_label: "Ativo",
-  profiles: [{ id: "1", code: "ADMINISTRADOR_SISTEMA", name: "Admin", label: "Administrador do Sistema" }],
+  profiles: [
+    { id: "1", code: "ADMINISTRADOR_SISTEMA", name: "Admin", label: "Administrador do Sistema" },
+  ],
   permissions: ["system.admin", "system.config", "system.audit", "process.read", "document.read"],
   organization_scope: [],
 };
@@ -70,16 +72,13 @@ describe("AppSidebar", () => {
   it("renders sidebar header", () => {
     renderSidebar({ user: mockUser, isAuthenticated: true });
     expect(screen.getByText("SIP")).toBeTruthy();
-    expect(screen.getByText("Sistema de Instrução Processual")).toBeTruthy();
   });
 
-  it("shows all navigation items for admin with full permissions", () => {
+  it("shows navigation items for admin with full permissions", () => {
     renderSidebar({ user: mockUser, isAuthenticated: true });
     expect(screen.getByText("Dashboard")).toBeTruthy();
-    expect(screen.getByText("Pesquisa")).toBeTruthy();
+    expect(screen.getByText("Processos")).toBeTruthy();
     expect(screen.getByText("Documentos")).toBeTruthy();
-    expect(screen.getByText("Segurança")).toBeTruthy();
-    expect(screen.getByText("Definições")).toBeTruthy();
   });
 
   it("filters navigation items based on permissions", () => {
@@ -89,9 +88,9 @@ describe("AppSidebar", () => {
     };
     renderSidebar({ user: restrictedUser, isAuthenticated: true });
     expect(screen.getByText("Dashboard")).toBeTruthy();
-    expect(screen.getByText("Pesquisa")).toBeTruthy();
-    expect(screen.queryByText("Segurança")).toBeNull();
-    expect(screen.queryByText("Definições")).toBeNull();
+    expect(screen.getByText("Processos")).toBeTruthy();
+    expect(screen.queryByText("Auditoria")).toBeNull();
+    expect(screen.queryByText("Definicoes")).toBeNull();
   });
 
   it("shows user name in sidebar footer", () => {

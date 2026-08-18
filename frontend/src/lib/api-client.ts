@@ -43,14 +43,13 @@ function errorFromResponse(response: Response, payload: unknown): ApiError {
   }
   if (payload && typeof payload === "object" && "message" in payload) {
     const apiError = payload as ApiErrorResponse;
-    return new ApiError(
-      apiError.message,
-      response.status,
-      apiError.code,
-      apiError.details ?? [],
-    );
+    return new ApiError(apiError.message, response.status, apiError.code, apiError.details ?? []);
   }
-  return new ApiError(`Request failed with status ${response.status}`, response.status, "HTTP_ERROR");
+  return new ApiError(
+    `Request failed with status ${response.status}`,
+    response.status,
+    "HTTP_ERROR",
+  );
 }
 
 async function request<T>(path: string, init?: RequestInit): Promise<T> {

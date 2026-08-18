@@ -73,8 +73,8 @@ export default function LoginPage() {
               Sistema de Instrução Processual
             </h2>
             <p className="text-sm text-muted-foreground max-w-sm">
-              Plataforma integrada de gestão processual, documental e de
-              segurança para organizações modernas.
+              Plataforma integrada de gestão processual, documental e de segurança para organizações
+              modernas.
             </p>
           </div>
 
@@ -106,11 +106,7 @@ export default function LoginPage() {
 
           <Card className="border-0 shadow-none lg:border lg:shadow-sm">
             <CardContent>
-              <LoginForm
-                onSubmit={handleSubmit}
-                error={error}
-                isSubmitting={isSubmitting}
-              />
+              <LoginForm onSubmit={handleSubmit} error={error} isSubmitting={isSubmitting} />
             </CardContent>
             <CardFooter className="flex justify-center border-t py-4">
               <p className="text-xs text-muted-foreground">

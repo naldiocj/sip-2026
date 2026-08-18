@@ -17,15 +17,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { humanizeProfile } from "@/lib/humanize";
-
-function getInitials(name: string): string {
-  return name
-    .split(" ")
-    .map((part) => part[0])
-    .slice(0, 2)
-    .join("")
-    .toUpperCase();
-}
+import { getInitials } from "@/lib/utils";
 
 export function Header() {
   const { user, logout } = useAuth();
@@ -43,9 +35,7 @@ export function Header() {
           <DropdownMenu>
             <DropdownMenuTrigger>
               <Avatar className="size-6">
-                <AvatarFallback className="text-xs">
-                  {getInitials(user.full_name)}
-                </AvatarFallback>
+                <AvatarFallback className="text-xs">{getInitials(user.full_name)}</AvatarFallback>
               </Avatar>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-56">
@@ -54,9 +44,7 @@ export function Header() {
                   <div className="flex flex-col space-y-1">
                     <p className="text-sm font-medium">{user.full_name}</p>
                     <p className="text-xs text-muted-foreground">
-                      {user.profiles[0]
-                        ? humanizeProfile(user.profiles[0].code)
-                        : "Sem perfil"}
+                      {user.profiles[0] ? humanizeProfile(user.profiles[0].code) : "Sem perfil"}
                     </p>
                   </div>
                 </DropdownMenuLabel>

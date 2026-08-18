@@ -82,9 +82,9 @@ describe("LoginPage", () => {
   });
 
   it("shows loading state during submission", async () => {
-    const loginMock = vi.fn().mockImplementation(
-      () => new Promise<void>((resolve) => setTimeout(resolve, 100)),
-    );
+    const loginMock = vi
+      .fn()
+      .mockImplementation(() => new Promise<void>((resolve) => setTimeout(resolve, 100)));
     const user = userEvent.setup();
     renderLoginPage({ login: loginMock });
 
