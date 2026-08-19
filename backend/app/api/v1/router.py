@@ -10,6 +10,7 @@ from app.modules.organization.api.management import (
 from app.modules.organization.api.management import (
     delegations_router,
     responsibilities_router,
+    substitutions_router,
 )
 from app.modules.organization.api.router import (
     assignments_router,
@@ -33,5 +34,6 @@ api_router.include_router(assignments_router)
 api_router.include_router(assignments_management_router)
 api_router.include_router(responsibilities_router)
 api_router.include_router(delegations_router)
+api_router.include_router(substitutions_router)
 api_router.include_router(me_router)
 api_router.include_router(persons_router)

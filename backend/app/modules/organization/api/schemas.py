@@ -289,3 +289,36 @@ class DelegationResponse(BaseModel):
     created_at: datetime | None = None
 
     model_config = {"from_attributes": True}
+
+
+# --- Substitution ---
+
+
+class SubstitutionCreate(BaseModel):
+    """Schema para criar uma substituição temporária de função."""
+
+    substituted_user_id: UUID
+    substitute_user_id: UUID
+    organizational_unit_id: UUID | None = None
+    functional_role: str | None = Field(None, max_length=50)
+    start_date: str | None = None
+    end_date: str | None = None
+    reason: str | None = Field(None, max_length=500)
+
+
+class SubstitutionResponse(BaseModel):
+    """Resposta de substituição."""
+
+    id: UUID
+    substituted_user_id: UUID
+    substitute_user_id: UUID
+    organizational_unit_id: UUID | None = None
+    functional_role: str | None = None
+    start_date: str | None = None
+    end_date: str | None = None
+    reason: str | None = None
+    status: str
+    is_active: bool
+    created_at: datetime | None = None
+
+    model_config = {"from_attributes": True}

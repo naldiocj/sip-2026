@@ -186,14 +186,12 @@ def test_authorization_matrix(client: TestClient, db_session: Session) -> None:
 
 def test_assignment_ownership_other_user_404(client: TestClient, db_session: Session) -> None:
     """Ownership: terminar atribuição de OUTRO utilizador -> 404 (não 403/200)."""
-    from app.modules.auth.application.password import PasswordService
     from app.modules.organization.domain.user_assignment import (
         AssignmentStatus,
         AssignmentType,
         UserAssignment,
     )
 
-    hasher = PasswordService()
     owner = _find_user(db_session, "instrutor")
     other = _find_user(db_session, "director")
     unit = db_session.scalar(select(OrganizationalUnit).limit(1))

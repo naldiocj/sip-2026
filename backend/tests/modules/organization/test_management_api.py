@@ -109,7 +109,6 @@ def test_responsibility_crud(client: TestClient, db_session: Session) -> None:
     """Criar, listar, obter e terminar uma responsabilidade."""
     user = _create_user(db_session, f"responsavel_{uuid.uuid4().hex[:6]}")
     headers = _auth_headers(client)
-    unit_id = _get_unit_id(db_session)
 
     created = client.post(
         "/api/v1/responsibilities",
@@ -215,8 +214,58 @@ def test_delegation_self_delegation_rejected(client: TestClient, db_session: Ses
     assert response.status_code == 422
 
 
+def test_substitution_flow(client: TestClient, db_session: Session) -> None:
+    """Criar, listar, obter e terminar uma substituição."""
+    substituted = _create_user(db_session, f"substituido_{uuid.uuid4().hex[:6]}")
+    substitute = _create_user(db_session, f"substituto_{uuid.uuid4().hex[:6]}")
+    headers = _auth_headers(client)
+    unit_id = _get_unit_id(db_session)
+
+    created = client.post(
+        "/api/v1/substitutions",
+        json={
+            "substituted_user_id": str(substituted.id),
+            "substitute_user_id": str(substitute.id),
+            "organizational_unit_id": str(unit_id),
+            "functional_role": "SECCAO_CHEFE",
+            "start_date": "2026-01-01",
+        },
+        headers=headers,
+    )
+    assert created.status_code == 201, created.text
+    sub_id = created.json()["id"]
+    assert created.json()["status"] == "ACTIVE"
+
+    listed = client.get("/api/v1/substitutions", headers=headers)
+    assert listed.status_code == 200
+    assert any(s["id"] == sub_id for s in listed.json())
+
+    single = client.get(f"/api/v1/substitutions/{sub_id}", headers=headers)
+    assert single.status_code == 200
+    assert single.json()["substitute_user_id"] == str(substitute.id)
+
+    ended = client.post(f"/api/v1/substitutions/{sub_id}/end", headers=headers)
+    assert ended.status_code == 200
+    assert ended.json()["status"] == "ENDED"
+    assert ended.json()["is_active"] is False
+
+
+def test_substitution_self_rejected(client: TestClient, db_session: Session) -> None:
+    """Substituição a si próprio é rejeitada."""
+    user = _create_user(db_session, f"auto_sub_{uuid.uuid4().hex[:6]}")
+    headers = _auth_headers(client)
+    response = client.post(
+        "/api/v1/substitutions",
+        json={
+            "substituted_user_id": str(user.id),
+            "substitute_user_id": str(user.id),
+        },
+        headers=headers,
+    )
+    assert response.status_code == 422
+
+
 def test_audit_events_recorded(client: TestClient, db_session: Session) -> None:
-    """Operações de gestão registam eventos de auditoria."""
     user = _create_user(db_session, f"audit_{uuid.uuid4().hex[:6]}")
     target = _create_user(db_session, f"audit_alvo_{uuid.uuid4().hex[:6]}")
     headers = _auth_headers(client)
@@ -238,6 +287,20 @@ def test_audit_events_recorded(client: TestClient, db_session: Session) -> None:
     assert delegation.status_code == 201
     client.post(f"/api/v1/delegations/{delegation.json()['id']}/revoke", headers=headers)
 
+    substitution = client.post(
+        "/api/v1/substitutions",
+        json={
+            "substituted_user_id": str(user.id),
+            "substitute_user_id": str(target.id),
+        },
+        headers=headers,
+    )
+    assert substitution.status_code == 201
+    client.post(
+        f"/api/v1/substitutions/{substitution.json()['id']}/end",
+        headers=headers,
+    )
+
     events = list(
         db_session.scalars(
             select(AuditEvent).where(
@@ -246,6 +309,8 @@ def test_audit_events_recorded(client: TestClient, db_session: Session) -> None:
                         AuditEventType.RESPONSIBILITY_CREATED,
                         AuditEventType.DELEGATION_CREATED,
                         AuditEventType.DELEGATION_REVOKED,
+                        AuditEventType.SUBSTITUTION_CREATED,
+                        AuditEventType.SUBSTITUTION_ENDED,
                     ]
                 )
             )
@@ -255,3 +320,5 @@ def test_audit_events_recorded(client: TestClient, db_session: Session) -> None:
     assert AuditEventType.RESPONSIBILITY_CREATED.value in types
     assert AuditEventType.DELEGATION_CREATED.value in types
     assert AuditEventType.DELEGATION_REVOKED.value in types
+    assert AuditEventType.SUBSTITUTION_CREATED.value in types
+    assert AuditEventType.SUBSTITUTION_ENDED.value in types
