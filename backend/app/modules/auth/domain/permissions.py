@@ -44,7 +44,29 @@ class PermissionConstants:
 
     # Organization permissions
     ORGANIZATION_READ = "organization.read"
+    ORGANIZATION_CREATE = "organization.create"
+    ORGANIZATION_UPDATE = "organization.update"
     ORGANIZATION_MANAGE = "organization.manage"
+
+    # Person permissions
+    PERSON_READ = "person.read"
+    PERSON_CREATE = "person.create"
+    PERSON_UPDATE = "person.update"
+    PERSON_DEACTIVATE = "person.deactivate"
+
+    # Assignment permissions
+    ASSIGNMENT_READ = "assignment.read"
+    ASSIGNMENT_CREATE = "assignment.create"
+    ASSIGNMENT_UPDATE = "assignment.update"
+    ASSIGNMENT_END = "assignment.end"
+
+    # Responsibility permissions
+    RESPONSIBILITY_READ = "responsibility.read"
+    RESPONSIBILITY_MANAGE = "responsibility.manage"
+
+    # Delegation permissions
+    DELEGATION_READ = "delegation.read"
+    DELEGATION_MANAGE = "delegation.manage"
 
     # System administration permissions
     SYSTEM_ADMIN = "system.admin"

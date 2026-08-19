@@ -1,69 +1,153 @@
-# SPRINT-02 — Estrutura Organizacional e Contexto de Responsabilidade
+# SPRINT-02 — Administração, Gestão de Pessoas, Estrutura Organizacional, Lotação e Atribuições
+
+## Status
+
+**IN_PROGRESS**
 
 ## Objetivo
 
-Implementar a estrutura organizacional do SIP e o contexto de responsabilidade dos utilizadores.
+Implementar a fundação administrativa, organizacional e funcional do SIP:
 
-## Estado
+- pessoas;
+- utilizadores;
+- perfis;
+- permissões;
+- organização;
+- direções;
+- departamentos;
+- secções;
+- unidades;
+- piquetes;
+- lotações;
+- funções;
+- atribuições;
+- responsabilidades;
+- delegações;
+- substituições;
+- contexto organizacional;
+- contexto de acesso;
+- histórico;
+- auditoria.
 
-**DONE**
+Regra arquitectural fundamental: NÃO misturar PERSON, USER, PROFILE, PERMISSION,
+ORGANIZATION, ORGANIZATIONAL UNIT, ASSIGNMENT, RESPONSIBILITY, SCOPE, OWNERSHIP.
+Cada conceito possui responsabilidade própria.
 
 ## Tasks
 
 | ID | Task | Estado |
 |---|---|---|
-| TASK-001 | Organization domain entities | DONE |
-| TASK-002 | Organizational hierarchy + services | DONE |
-| TASK-003 | User assignment + responsibility scope | DONE |
-| TASK-004 | Access context + authorization integration | DONE |
-| TASK-005 | Organization API endpoints | DONE |
-| TASK-006 | Organization UI (frontend) | DONE |
-| TASK-007 | Audit + integrity validation | DONE |
-| TASK-008 | Tests (backend + frontend + E2E) | DONE |
-| TASK-009 | Documentation + seeds + migrations | DONE |
+| TASK-001 | person-domain | PLANNED |
+| TASK-002 | person-functional-data | PLANNED |
+| TASK-003 | user-person-association | PLANNED |
+| TASK-004 | profile-permission-integration | PLANNED |
+| TASK-005 | organization-domain | PLANNED |
+| TASK-006 | organizational-unit | PLANNED |
+| TASK-007 | organizational-hierarchy | PLANNED |
+| TASK-008 | organizational-unit-types | PLANNED |
+| TASK-009 | user-assignment | PLANNED |
+| TASK-010 | lotacao | PLANNED |
+| TASK-011 | functional-role | PLANNED |
+| TASK-012 | responsibility | PLANNED |
+| TASK-013 | delegation | PLANNED |
+| TASK-014 | substitution | PLANNED |
+| TASK-015 | access-context | PLANNED |
+| TASK-016 | scope-engine | PLANNED |
+| TASK-017 | organization-api | PLANNED |
+| TASK-018 | person-management-api | PLANNED |
+| TASK-019 | assignment-api | PLANNED |
+| TASK-020 | organization-ui | PLANNED |
+| TASK-021 | person-management-ui | PLANNED |
+| TASK-022 | assignment-ui | PLANNED |
+| TASK-023 | organization-tree | PLANNED |
+| TASK-024 | audit-integration | PLANNED |
+| TASK-025 | security-review | PLANNED |
+| TASK-026 | backend-tests | PLANNED |
+| TASK-027 | frontend-tests | PLANNED |
+| TASK-028 | e2e-tests | PLANNED |
+| TASK-029 | documentation | PLANNED |
+| TASK-030 | final-review | PLANNED |
 
-## Critérios de Conclusão
+## Dependencies
 
-- [x] Organization entity
-- [x] OrganizationalUnit entity
-- [x] OrganizationalUnitType entity
-- [x] Hierarchy (parent_id)
-- [x] UserAssignment entity
-- [x] ResponsibilityScope
-- [x] AccessContext
-- [x] Organization Service
-- [x] Hierarchy Service
-- [x] APIs
-- [x] Organization UI
-- [x] Organization Tree
-- [x] User Assignment UI
-- [x] Authorization integration
-- [x] Audit
-- [x] Integrity validation
-- [x] Backend tests
-- [x] Frontend tests
-- [x] E2E
-- [x] Documentation
-- [x] Migrations
-- [x] Seeds actualizados
-- [x] Lint PASS
-- [x] Typecheck PASS
-- [x] Tests PASS
-- [x] Build PASS
-- [x] Tasks DONE
-- [x] Commits realizados
+- SPRINT-01 (Identity, Auth, Authorization) — DONE.
+- SPRINT-00 (Bootstrap, Infra, Observability) — DONE.
 
-## Commits
+## Architecture
 
-- feat(org): add organization domain entities
-- feat(org): add organizational hierarchy and services
-- feat(org): add user assignments and responsibility scopes
-- feat(org): add access context and auth integration
-- feat(org): add organization API endpoints
-- feat(org): add organization UI
-- feat(org): add audit events for org operations
-- docs(org): document organizational model
-- test(org): verify all tests pass
+- Modular Monolith (manter).
+- Separação: domain / application / infrastructure / presentation.
+- Módulo `organization` existente será expandido.
+- Novo módulo `person` para o domínio de pessoas.
+- AuthorizationService da SPRINT-01 como base de autorização.
+- AccessContext como objecto de consulta, nunca de negócio.
+- Scope Engine: fundação apenas (sem regras de processos/documentos/piquete).
+
+## Acceptance Criteria
+
+- Representar pessoas reais (Person) independentes de User.
+- person_number interno (ex.: PES-000001); BI nunca é chave primária.
+- Dados pessoais ≠ dados funcionais ≠ dados de autenticação.
+- Um User pode associar-se a uma Person; Person pode existir sem User.
+- Organization (INTERNAL/EXTERNAL), OrganizationalUnit, UnitTypes.
+- Hierarquia por parent_id com serviço central e validação de integridade.
+- UserAssignment com tipos (PRIMARY, SECONDARY, TEMPORARY, ACTING, DELEGATED).
+- Regra: uma atribuição PRIMARY activa por utilizador.
+- Histórico de lotação preservado (start_date/end_date, sem apagar).
+- FunctionalRole distinto de Profile.
+- Responsibility com tipos de âmbito (GLOBAL..PGR).
+- Delegation ≠ Substitution (conceitos separados).
+- AccessContext completo: user, person, profiles, permissions, organization,
+  primary_assignment, assignments, responsibilities, delegations, effective_scopes.
+- GET /api/v1/me/context.
+- APIs: persons, organizations, units, assignments, responsibilities, delegations.
+- Frontend /administracao com rotas humanizadas.
+- Auditoria de todas as operações administrativas (sem passwords/tokens).
+- Backend valida sempre (sidebar NÃO é segurança).
+- Humanização de todos os enums exibidos.
+- Migrations Alembic para toda alteração de schema.
+- Seeds de desenvolvimento (organização, direções, departamentos, secções,
+  piquete, pessoas, utilizadores, atribuições, responsabilidades).
+
+## Definition of Done
+
+- [ ] Person, dados funcionais, User ↔ Person
+- [ ] Profiles/permissions integrados
+- [ ] Organization, Unit, UnitTypes, Hierarchy + HierarchyService
+- [ ] UserAssignment, lotação, histórico
+- [ ] FunctionalRole, Responsibility, Delegation, Substitution
+- [ ] AccessContext, ScopeEngine foundation
+- [ ] Backend APIs
+- [ ] Frontend Administração (pessoas, organização, atribuições, responsabilidades)
+- [ ] Organization Tree
+- [ ] Sidebar actualizado
+- [ ] Humanização
+- [ ] Auditoria
+- [ ] Security review
+- [ ] Migrations
+- [ ] Seeds
+- [ ] Backend tests
+- [ ] Frontend tests
+- [ ] E2E tests
+- [ ] Swagger/OpenAPI
+- [ ] Documentação + ADRs
+- [ ] Lint PASS
+- [ ] Typecheck PASS
+- [ ] Tests PASS
+- [ ] Build PASS
+- [ ] Todas as Tasks DONE
+- [ ] Commits realizados
+
+## Checkpoints
+
+- CHECKPOINT A: Person + User
+- CHECKPOINT B: Organization + Units
+- CHECKPOINT C: Hierarchy
+- CHECKPOINT D: Assignments
+- CHECKPOINT E: Responsibilities
+- CHECKPOINT F: Delegations
+- CHECKPOINT G: Frontend
+- CHECKPOINT H: Security + Tests
 
 ## Regra
 

@@ -14,6 +14,8 @@ from app.db.base import Base
 
 # Importar módulos para registar as tabelas no metadata.
 from app.modules.auth import domain  # noqa: F401  (registers auth tables)
+from app.modules.organization import domain  # noqa: F401  (registers org tables)
+from app.modules.person import domain  # noqa: F401  (registers person tables)
 
 config = context.config
 

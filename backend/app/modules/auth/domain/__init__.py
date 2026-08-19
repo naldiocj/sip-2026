@@ -16,6 +16,9 @@ from app.modules.auth.domain.profile import PROFILE_LABELS, Profile, ProfileEnum
 from app.modules.auth.domain.scope import OrganizationScope
 from app.modules.auth.domain.session import UserSession
 from app.modules.auth.domain.user import User, UserStatus
+from app.modules.person.domain.person import (
+    Person,  # noqa: F401  (registers Person mapper before User)
+)
 
 __all__ = [
     "User",

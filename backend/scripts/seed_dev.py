@@ -27,7 +27,7 @@ from app.modules.auth.domain import (
     UserStatus,
 )
 from argon2 import PasswordHasher
-from sqlalchemy import select
+from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
 DEV_CREDENTIALS_NOTICE = "AVISO: credenciais DEV ONLY. Nunca utilizar em produção.\nCredenciais:"
@@ -47,6 +47,12 @@ PROFILE_PERMISSIONS: dict[ProfileEnum, list[str]] = {
         PermissionConstants.NOTIFICATION_READ,
         PermissionConstants.NOTIFICATION_MANAGE,
         PermissionConstants.ORGANIZATION_READ,
+        PermissionConstants.PERSON_READ,
+        PermissionConstants.ASSIGNMENT_READ,
+        PermissionConstants.ASSIGNMENT_CREATE,
+        PermissionConstants.ASSIGNMENT_UPDATE,
+        PermissionConstants.RESPONSIBILITY_READ,
+        PermissionConstants.DELEGATION_READ,
         PermissionConstants.REPORT_READ,
         PermissionConstants.REPORT_CREATE,
         PermissionConstants.REPORT_EXPORT,
@@ -59,6 +65,15 @@ PROFILE_PERMISSIONS: dict[ProfileEnum, list[str]] = {
         PermissionConstants.NOTIFICATION_READ,
         PermissionConstants.NOTIFICATION_MANAGE,
         PermissionConstants.ORGANIZATION_READ,
+        PermissionConstants.PERSON_READ,
+        PermissionConstants.PERSON_CREATE,
+        PermissionConstants.PERSON_UPDATE,
+        PermissionConstants.ASSIGNMENT_READ,
+        PermissionConstants.ASSIGNMENT_CREATE,
+        PermissionConstants.ASSIGNMENT_UPDATE,
+        PermissionConstants.ASSIGNMENT_END,
+        PermissionConstants.RESPONSIBILITY_READ,
+        PermissionConstants.DELEGATION_READ,
         PermissionConstants.REPORT_READ,
     ],
     ProfileEnum.CHEFE_DEPARTAMENTO: [
@@ -70,6 +85,10 @@ PROFILE_PERMISSIONS: dict[ProfileEnum, list[str]] = {
         PermissionConstants.DOCUMENT_EDIT,
         PermissionConstants.NOTIFICATION_READ,
         PermissionConstants.NOTIFICATION_MANAGE,
+        PermissionConstants.ORGANIZATION_READ,
+        PermissionConstants.PERSON_READ,
+        PermissionConstants.ASSIGNMENT_READ,
+        PermissionConstants.RESPONSIBILITY_READ,
         PermissionConstants.REPORT_READ,
     ],
     ProfileEnum.CHEFE_SECCAO: [
@@ -78,6 +97,10 @@ PROFILE_PERMISSIONS: dict[ProfileEnum, list[str]] = {
         PermissionConstants.PROCESS_UPDATE,
         PermissionConstants.DOCUMENT_READ,
         PermissionConstants.NOTIFICATION_READ,
+        PermissionConstants.ORGANIZATION_READ,
+        PermissionConstants.PERSON_READ,
+        PermissionConstants.ASSIGNMENT_READ,
+        PermissionConstants.RESPONSIBILITY_READ,
         PermissionConstants.REPORT_READ,
     ],
     ProfileEnum.INSTRUTOR_PROCESSUAL: [
@@ -88,6 +111,9 @@ PROFILE_PERMISSIONS: dict[ProfileEnum, list[str]] = {
         PermissionConstants.DOCUMENT_CREATE,
         PermissionConstants.DOCUMENT_EDIT,
         PermissionConstants.NOTIFICATION_READ,
+        PermissionConstants.PERSON_READ,
+        PermissionConstants.ASSIGNMENT_READ,
+        PermissionConstants.RESPONSIBILITY_READ,
     ],
     ProfileEnum.AGENTE_PIQUETE: [
         PermissionConstants.PIQUETE_READ,
@@ -96,6 +122,7 @@ PROFILE_PERMISSIONS: dict[ProfileEnum, list[str]] = {
         PermissionConstants.PROCESS_READ,
         PermissionConstants.DOCUMENT_READ,
         PermissionConstants.NOTIFICATION_READ,
+        PermissionConstants.PERSON_READ,
     ],
     ProfileEnum.EDITOR_DOCUMENTAL: [
         PermissionConstants.TEMPLATE_READ,
@@ -107,12 +134,15 @@ PROFILE_PERMISSIONS: dict[ProfileEnum, list[str]] = {
         PermissionConstants.DOCUMENT_EDIT,
         PermissionConstants.DOCUMENT_PUBLISH,
         PermissionConstants.NOTIFICATION_READ,
+        PermissionConstants.PERSON_READ,
     ],
     # AGENTE_PGR: sem acesso global a processos (SPRINT-02 define o scope PGR).
     ProfileEnum.AGENTE_PGR: [
         PermissionConstants.PGR_READ,
         PermissionConstants.PGR_MANAGE,
         PermissionConstants.NOTIFICATION_READ,
+        PermissionConstants.PERSON_READ,
+        PermissionConstants.ASSIGNMENT_READ,
     ],
 }
 
@@ -187,7 +217,7 @@ DEV_USERS: list[dict[str, object]] = [
 def seed(session: Session, hasher: PasswordHasher | None = None) -> dict[str, int]:
     """Executa o seed (idempotente). Devolve contagem de objectos criados."""
     hasher = hasher or PasswordHasher()
-    created = {"profiles": 0, "permissions": 0, "users": 0}
+    created = {"profiles": 0, "permissions": 0, "users": 0, "persons": 0}
 
     # Perfis
     profiles: dict[ProfileEnum, Profile] = {}
@@ -262,6 +292,7 @@ def seed(session: Session, hasher: PasswordHasher | None = None) -> dict[str, in
         AssignmentType,
         UserAssignment,
     )
+    from app.modules.person.domain.person import Person, PersonNumberGenerator, PersonStatus
 
     org = session.scalar(select(Organization).where(Organization.code == "SIC"))
     if org is None:
@@ -340,8 +371,16 @@ def seed(session: Session, hasher: PasswordHasher | None = None) -> dict[str, in
             ("DCCORG", "Direção de Combate ao Crime Organizado", "Crime Organizado"),
             ("DCOP", "Direção de Central de Operações", "Central Operações"),
             ("DCN", "Direção de Combate ao Narcotráfico", "Narcotráfico"),
-            ("DCTPMCCA", "Direção de Combate ao Tráfico de Pedras, Metais e Crime Contra o Ambiente", "Tráfico Ambiente"),
-            ("DCCCESP", "Direção de Combate ao Crime Contra Economia e Saúde Pública", "Economia Saúde"),
+            (
+                "DCTPMCCA",
+                "Direção de Combate ao Tráfico de Pedras, Metais e Crime Contra o Ambiente",
+                "Tráfico Ambiente",
+            ),
+            (
+                "DCCCESP",
+                "Direção de Combate ao Crime Contra Economia e Saúde Pública",
+                "Economia Saúde",
+            ),
             ("DAMCL", "Direção de Atendimento ao Menor em Conflito com a Lei", "Menor Conflito"),
             ("DCCCI", "Direção de Combate ao Crime Cibernético", "Crime Cibernético"),
             ("DCCC", "Direção de Combate ao Crime de Corrupção", "Corrupção"),
@@ -374,6 +413,39 @@ def seed(session: Session, hasher: PasswordHasher | None = None) -> dict[str, in
             session.add(assignment)
             created["assignments"] = 1
 
+    # Pessoas (DEV ONLY) — ligadas aos utilizadores de dev.
+    person_names = {
+        "admin": "Administrador do Sistema",
+        "director": "Director Geral",
+        "secretaria": "Secretária Geral",
+        "chefe_departamento": "Chefe de Departamento",
+        "chefe_seccao": "Chefe de Secção",
+        "instrutor": "Instrutor Processual",
+        "piquete": "Agente de Piquete",
+        "editor": "Editor Documental",
+        "pgr": "Agente PGR",
+    }
+    for username, full_name in person_names.items():
+        existing = session.scalar(select(Person).where(Person.full_name == full_name))
+        if existing is None:
+            _last_number = session.scalar(func.max(Person.person_number))
+            person = Person(
+                person_number=PersonNumberGenerator.next_number(_last_number),
+                full_name=full_name,
+                preferred_name=full_name.split()[0],
+                status=PersonStatus.ACTIVE,
+                is_active=True,
+                employee_number=str(
+                    next(u["employee_number"] for u in DEV_USERS if u["username"] == username)
+                ),
+            )
+            session.add(person)
+            session.flush()
+            created["persons"] = created.get("persons", 0) + 1
+            user = session.scalar(select(User).where(User.username == username))
+            if user is not None and user.person is None:
+                user.person = person
+
     session.commit()
     return created
 
@@ -389,6 +461,7 @@ def main() -> None:
     print(f"Utilizadores criados: {created['users']}")
     print(f"Organizações criadas: {created.get('organizations', 0)}")
     print(f"Atribuições criadas: {created.get('assignments', 0)}")
+    print(f"Pessoas criadas: {created.get('persons', 0)}")
     print()
     print(DEV_CREDENTIALS_NOTICE)
     for user_data in DEV_USERS:

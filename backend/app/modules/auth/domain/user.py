@@ -1,9 +1,10 @@
 """User entity."""
 
 import enum
+import uuid
 from datetime import datetime
 
-from sqlalchemy import Boolean, DateTime, String, Text
+from sqlalchemy import Boolean, DateTime, ForeignKey, String, Text, Uuid
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.db.base import Base, TimestampMixin, UUIDPrimaryKeyMixin
@@ -65,8 +66,21 @@ class User(UUIDPrimaryKeyMixin, TimestampMixin, Base):
         DateTime(timezone=True),
         nullable=True,
     )
+    person_id: Mapped[uuid.UUID | None] = mapped_column(
+        Uuid,
+        ForeignKey("persons.id", ondelete="SET NULL"),
+        nullable=True,
+        unique=True,
+        index=True,
+    )
 
     # Relationships
+    person = relationship(
+        "Person",
+        back_populates="user",
+        uselist=False,
+        lazy="selectin",
+    )
     profiles = relationship(
         "Profile",
         secondary="user_profiles",

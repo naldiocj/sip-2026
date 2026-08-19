@@ -13,7 +13,7 @@ from app.modules.auth.domain.user import User, UserStatus
 from fastapi.testclient import TestClient
 from sqlalchemy import select
 from sqlalchemy.orm import Session
-from tests.modules.auth.conftest import requires_database
+from tests.conftest import requires_database
 
 pytestmark = requires_database
 

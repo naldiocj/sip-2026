@@ -17,7 +17,7 @@ from app.shared.cache import ping_redis
 from fastapi.testclient import TestClient
 from sqlalchemy import select
 from sqlalchemy.orm import Session
-from tests.modules.auth.conftest import requires_database
+from tests.conftest import requires_database
 
 ADMIN_CREDENTIALS = {"username": "admin", "password": "admin123"}
 LOGIN_URL = "/api/v1/auth/login"

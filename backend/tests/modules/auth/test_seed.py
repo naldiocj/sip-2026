@@ -102,7 +102,12 @@ def test_seed_hashes_passwords(seeded_session: Session) -> None:
 @requires_database
 def test_seed_is_idempotent(seeded_session: Session) -> None:
     created = seed(seeded_session, hasher=PasswordHasher())
-    assert created == {"profiles": 0, "permissions": 0, "users": 0}
+    assert created == {
+        "profiles": 0,
+        "permissions": 0,
+        "users": 0,
+        "persons": 0,
+    }
     assert len(seeded_session.scalars(select(User)).all()) == 9
 
 
