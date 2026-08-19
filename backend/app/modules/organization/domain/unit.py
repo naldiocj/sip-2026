@@ -1,4 +1,4 @@
-"""OrganizationalUnit entity."""
+"""Entidade OrganizationalUnit."""
 
 import enum
 import uuid
@@ -10,17 +10,17 @@ from app.db.base import Base, TimestampMixin, UUIDPrimaryKeyMixin
 
 
 class UnitStatus(enum.StrEnum):
-    """Organizational unit status."""
+    """Estado da unidade organizacional."""
 
     ACTIVE = "ACTIVE"
     INACTIVE = "INACTIVE"
 
 
 class OrganizationalUnit(UUIDPrimaryKeyMixin, TimestampMixin, Base):
-    """Organizational unit entity.
+    """Entidade OrganizationalUnit.
 
-    Represents a unit within the organization hierarchy.
-    Uses parent_id for flexible tree structure.
+    Representa uma unidade dentro da hierarquia organizacional.
+    Utiliza parent_id para uma estrutura de árvore flexível.
     """
 
     __tablename__ = "organizational_units"
@@ -73,7 +73,7 @@ class OrganizationalUnit(UUIDPrimaryKeyMixin, TimestampMixin, Base):
         nullable=True,
     )
 
-    # Relationships
+    # Relacionamentos
     organization = relationship(
         "Organization",
         back_populates="units",

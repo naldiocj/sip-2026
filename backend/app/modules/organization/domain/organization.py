@@ -1,4 +1,4 @@
-"""Organization entity."""
+"""Entidade Organization."""
 
 import enum
 
@@ -9,16 +9,33 @@ from app.db.base import Base, TimestampMixin, UUIDPrimaryKeyMixin
 
 
 class OrganizationStatus(enum.StrEnum):
-    """Organization status."""
+    """Estado da organização."""
 
     ACTIVE = "ACTIVE"
     INACTIVE = "INACTIVE"
 
 
-class Organization(UUIDPrimaryKeyMixin, TimestampMixin, Base):
-    """Organization entity.
+class OrganizationType(enum.StrEnum):
+    """Tipo de organização.
 
-    Represents the main institutional organization.
+    Organizações INTERNAL pertencem à instituição SIP (ex.: SIC).
+    Organizações EXTERNAL são entidades externas (ex.: PGR).
+    """
+
+    INTERNAL = "INTERNAL"
+    EXTERNAL = "EXTERNAL"
+
+
+ORGANIZATION_TYPE_LABELS: dict[OrganizationType, str] = {
+    OrganizationType.INTERNAL: "Interna",
+    OrganizationType.EXTERNAL: "Externa",
+}
+
+
+class Organization(UUIDPrimaryKeyMixin, TimestampMixin, Base):
+    """Entidade Organization.
+
+    Representa a organização institucional principal.
     """
 
     __tablename__ = "organizations"
@@ -41,6 +58,11 @@ class Organization(UUIDPrimaryKeyMixin, TimestampMixin, Base):
         Text,
         nullable=True,
     )
+    organization_type: Mapped[OrganizationType] = mapped_column(
+        String(20),
+        nullable=False,
+        default=OrganizationType.INTERNAL,
+    )
     status: Mapped[OrganizationStatus] = mapped_column(
         String(20),
         nullable=False,
@@ -52,7 +74,7 @@ class Organization(UUIDPrimaryKeyMixin, TimestampMixin, Base):
         default=True,
     )
 
-    # Relationships
+    # Relacionamentos
     units = relationship(
         "OrganizationalUnit",
         back_populates="organization",

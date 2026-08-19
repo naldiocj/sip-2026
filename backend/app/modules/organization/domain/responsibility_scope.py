@@ -1,33 +1,30 @@
-"""Responsibility scope enum."""
+"""ResponsibilityScope enum — âmbito de responsabilidade.
+
+Define o tipo de responsabilidade que um utilizador pode exercer.
+Scopes de direção/gestão exigem unidade organizacional.
+"""
 
 import enum
 
 
 class ResponsibilityScope(enum.StrEnum):
-    """Scope levels for user responsibility.
+    """Tipo de âmbito de responsabilidade."""
 
-    Defines the breadth of data a user can access.
-    """
-
-    GLOBAL = "GLOBAL"
-    ORGANIZATION = "ORGANIZATION"
     DIRECTION = "DIRECTION"
     DEPARTMENT = "DEPARTMENT"
     SECTION = "SECTION"
-    OWN = "OWN"
-    ASSIGNED = "ASSIGNED"
+    UNIT = "UNIT"
     PIQUETE = "PIQUETE"
-    PGR = "PGR"
+    PROCESS_MANAGEMENT = "PROCESS_MANAGEMENT"
+    DOCUMENT_MANAGEMENT = "DOCUMENT_MANAGEMENT"
 
 
 RESPONSIBILITY_SCOPE_LABELS: dict[ResponsibilityScope, str] = {
-    ResponsibilityScope.GLOBAL: "Global",
-    ResponsibilityScope.ORGANIZATION: "Organização",
-    ResponsibilityScope.DIRECTION: "Direcção",
+    ResponsibilityScope.DIRECTION: "Direção",
     ResponsibilityScope.DEPARTMENT: "Departamento",
     ResponsibilityScope.SECTION: "Secção",
-    ResponsibilityScope.OWN: "Próprio",
-    ResponsibilityScope.ASSIGNED: "Atribuído",
+    ResponsibilityScope.UNIT: "Unidade",
     ResponsibilityScope.PIQUETE: "Piquete",
-    ResponsibilityScope.PGR: "PGR",
+    ResponsibilityScope.PROCESS_MANAGEMENT: "Gestão de Processos",
+    ResponsibilityScope.DOCUMENT_MANAGEMENT: "Gestão de Documentos",
 }

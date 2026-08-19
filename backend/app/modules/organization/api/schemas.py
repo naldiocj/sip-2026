@@ -1,16 +1,15 @@
-"""Organization API schemas."""
+"""Schemas da API de organização."""
 
 from datetime import datetime
 from uuid import UUID
 
 from pydantic import BaseModel, Field
 
-
 # --- Organization ---
 
 
 class OrganizationCreate(BaseModel):
-    """Schema for creating an organization."""
+    """Schema para criar uma organização."""
 
     code: str = Field(..., min_length=1, max_length=50)
     name: str = Field(..., min_length=1, max_length=255)
@@ -19,7 +18,7 @@ class OrganizationCreate(BaseModel):
 
 
 class OrganizationResponse(BaseModel):
-    """Schema for organization response."""
+    """Schema para resposta de organização."""
 
     id: UUID
     code: str
@@ -38,7 +37,7 @@ class OrganizationResponse(BaseModel):
 
 
 class UnitCreate(BaseModel):
-    """Schema for creating an organizational unit."""
+    """Schema para criar uma unidade organizacional."""
 
     organization_id: UUID
     type_id: str = Field(..., min_length=1, max_length=30)
@@ -50,7 +49,7 @@ class UnitCreate(BaseModel):
 
 
 class UnitUpdate(BaseModel):
-    """Schema for updating an organizational unit."""
+    """Schema para actualizar uma unidade organizacional."""
 
     name: str | None = Field(None, min_length=1, max_length=255)
     code: str | None = Field(None, max_length=50)
@@ -61,7 +60,7 @@ class UnitUpdate(BaseModel):
 
 
 class UnitResponse(BaseModel):
-    """Schema for organizational unit response."""
+    """Schema para resposta de unidade organizacional."""
 
     id: UUID
     organization_id: UUID
@@ -81,7 +80,7 @@ class UnitResponse(BaseModel):
 
 
 class UnitTreeNode(BaseModel):
-    """Schema for a node in the organizational tree."""
+    """Schema para um nó na árvore organizacional."""
 
     id: UUID
     organization_id: UUID
@@ -100,7 +99,7 @@ class UnitTreeNode(BaseModel):
 
 
 class UnitWithTypeResponse(UnitResponse):
-    """Unit response with resolved type name."""
+    """Resposta de unidade com o nome do tipo resolvido."""
 
     type_name: str = ""
 
@@ -109,7 +108,7 @@ class UnitWithTypeResponse(UnitResponse):
 
 
 class UnitTypeItem(BaseModel):
-    """Schema for a unit type option."""
+    """Schema para uma opção de tipo de unidade."""
 
     value: str
     label: str
@@ -121,7 +120,7 @@ class UnitTypeItem(BaseModel):
 
 
 class UserAssignmentCreate(BaseModel):
-    """Schema for creating a user assignment."""
+    """Schema para criar uma atribuição de utilizador."""
 
     organizational_unit_id: UUID
     assignment_type: str = "PRIMARY"
@@ -131,7 +130,7 @@ class UserAssignmentCreate(BaseModel):
 
 
 class UserAssignmentResponse(BaseModel):
-    """Schema for user assignment response."""
+    """Schema para resposta de atribuição de utilizador."""
 
     id: UUID
     user_id: UUID
@@ -148,7 +147,7 @@ class UserAssignmentResponse(BaseModel):
 
 
 class UserAssignmentWithDetailsResponse(BaseModel):
-    """Assignment response with resolved unit and user info."""
+    """Resposta de atribuição com unidade e informações do utilizador resolvidas."""
 
     id: UUID
     user_id: UUID
@@ -170,7 +169,7 @@ class UserAssignmentWithDetailsResponse(BaseModel):
 
 
 class OrganizationContextResponse(BaseModel):
-    """Schema for /me/organization-context response."""
+    """Schema para a resposta de /me/organization-context."""
 
     organization: OrganizationResponse | None = None
     primary_unit: UnitResponse | None = None

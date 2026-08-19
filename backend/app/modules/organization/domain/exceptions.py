@@ -1,41 +1,77 @@
-"""Organization domain exceptions."""
+"""Excepções do domínio de organização."""
 
 
 class OrganizationError(Exception):
-    """Base organization error."""
+    """Erro base de organização."""
 
 
 class UnitNotFoundError(OrganizationError):
-    """Organizational unit not found."""
+    """Unidade organizacional não encontrada."""
 
 
 class OrganizationNotFoundError(OrganizationError):
-    """Organization not found."""
+    """Organização não encontrada."""
 
 
 class CircularHierarchyError(OrganizationError):
-    """Circular reference in hierarchy detected."""
+    """Detectada referência circular na hierarquia."""
 
 
 class SelfParentError(OrganizationError):
-    """Unit cannot be its own parent."""
+    """Uma unidade não pode ser pai de si própria."""
 
 
 class CrossOrganizationError(OrganizationError):
-    """Cannot assign parent from different organization."""
+    """Não é possível atribuir pai de outra organização."""
 
 
 class InvalidParentError(OrganizationError):
-    """Parent unit does not exist or is inactive."""
+    """A unidade pai não existe ou está inactiva."""
 
 
 class DuplicateCodeError(OrganizationError):
-    """Unit code already exists in this organization."""
+    """O código da unidade já existe nesta organização."""
 
 
 class MultiplePrimaryAssignmentError(OrganizationError):
-    """User already has a primary assignment. Deactivate existing first."""
+    """O utilizador já possui uma atribuição principal. Desactivar a existente primeiro."""
 
 
 class AssignmentNotFoundError(OrganizationError):
-    """User assignment not found."""
+    """Atribuição de utilizador não encontrada."""
+
+
+class InvalidAssignmentPeriodError(OrganizationError):
+    """Período da atribuição inválido (fim antes do início)."""
+
+
+class InactiveUnitAssignmentError(OrganizationError):
+    """Não é possível atribuir um utilizador a uma unidade inactiva."""
+
+
+class ResponsibilityNotFoundError(OrganizationError):
+    """Responsabilidade não encontrada."""
+
+
+class InvalidResponsibilityError(OrganizationError):
+    """Responsabilidade inválida (âmbito exige unidade, período inválido)."""
+
+
+class DelegationNotFoundError(OrganizationError):
+    """Delegação não encontrada."""
+
+
+class InvalidDelegationError(OrganizationError):
+    """Delegação inválida (auto-delegação, período inválido, sobreposição)."""
+
+
+class OverlappingDelegationError(InvalidDelegationError):
+    """Já existe uma delegação activa sobreposta."""
+
+
+class SubstitutionNotFoundError(OrganizationError):
+    """Substituição não encontrada."""
+
+
+class InvalidSubstitutionError(OrganizationError):
+    """Substituição inválida (auto-substituição, período inválido)."""

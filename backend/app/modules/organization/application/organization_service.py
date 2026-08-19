@@ -1,6 +1,6 @@
-"""Organization service — central operations for organizational management.
+"""Serviço de organização — operações centrais para a gestão organizacional.
 
-Provides CRUD, hierarchy access, context retrieval, and user-unit resolution.
+Fornece CRUD, acesso à hierarquia, recuperação de contexto e resolução utilizador-unidade.
 """
 
 import uuid
@@ -9,19 +9,23 @@ from dataclasses import dataclass, field
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
+from app.modules.organization.application.assignment_service import AssignmentService
 from app.modules.organization.application.hierarchy_service import HierarchyService
 from app.modules.organization.domain.exceptions import (
     DuplicateCodeError,
     UnitNotFoundError,
 )
-from app.modules.organization.domain.organization import Organization
+from app.modules.organization.domain.organization import (
+    Organization,
+    OrganizationType,
+)
 from app.modules.organization.domain.unit import OrganizationalUnit, UnitStatus
 from app.modules.organization.domain.user_assignment import UserAssignment
 
 
 @dataclass
 class OrganizationContext:
-    """Contextual information for a user within the organization."""
+    """Informação contextual de um utilizador dentro da organização."""
 
     organization: Organization | None = None
     primary_unit: OrganizationalUnit | None = None
@@ -30,24 +34,23 @@ class OrganizationContext:
 
 
 class OrganizationService:
-    """Central service for organization operations."""
+    """Serviço central para operações de organização."""
 
     def __init__(self, db: Session) -> None:
         self.db = db
         self.hierarchy = HierarchyService(db)
+        self.assignments = AssignmentService(db)
 
     def get_organization(self, org_id: uuid.UUID) -> Organization | None:
-        """Get organization by ID."""
+        """Obtém a organização pelo ID."""
         return self.db.get(Organization, org_id)
 
     def get_organization_by_code(self, code: str) -> Organization | None:
-        """Get organization by code."""
-        return self.db.scalar(
-            select(Organization).where(Organization.code == code)
-        )
+        """Obtém a organização pelo código."""
+        return self.db.scalar(select(Organization).where(Organization.code == code))
 
     def list_organizations(self) -> list[Organization]:
-        """List all active organizations."""
+        """Lista todas as organizações activas."""
         return list(
             self.db.scalars(
                 select(Organization).where(Organization.is_active == True)  # noqa: E712
@@ -60,8 +63,9 @@ class OrganizationService:
         name: str,
         short_name: str | None = None,
         description: str | None = None,
+        organization_type: OrganizationType | str = OrganizationType.INTERNAL,
     ) -> Organization:
-        """Create a new organization."""
+        """Cria uma nova organização."""
         existing = self.get_organization_by_code(code)
         if existing is not None:
             raise DuplicateCodeError(f"Organization code '{code}' already exists.")
@@ -71,19 +75,18 @@ class OrganizationService:
             name=name,
             short_name=short_name,
             description=description,
+            organization_type=organization_type,
         )
         self.db.add(org)
         self.db.flush()
         return org
 
     def get_unit(self, unit_id: uuid.UUID) -> OrganizationalUnit | None:
-        """Get organizational unit by ID."""
+        """Obtém a unidade organizacional pelo ID."""
         return self.db.get(OrganizationalUnit, unit_id)
 
-    def get_unit_by_code(
-        self, organization_id: uuid.UUID, code: str
-    ) -> OrganizationalUnit | None:
-        """Get unit by code within an organization."""
+    def get_unit_by_code(self, organization_id: uuid.UUID, code: str) -> OrganizationalUnit | None:
+        """Obtém a unidade pelo código dentro de uma organização."""
         return self.db.scalar(
             select(OrganizationalUnit).where(
                 OrganizationalUnit.organization_id == organization_id,
@@ -92,7 +95,7 @@ class OrganizationService:
         )
 
     def list_root_units(self, organization_id: uuid.UUID) -> list[OrganizationalUnit]:
-        """List top-level units (no parent) for an organization."""
+        """Lista unidades de topo (sem pai) de uma organização."""
         return list(
             self.db.scalars(
                 select(OrganizationalUnit).where(
@@ -104,30 +107,34 @@ class OrganizationService:
         )
 
     def list_all_units(self, organization_id: uuid.UUID) -> list[OrganizationalUnit]:
-        """List all units for an organization (flat list)."""
+        """Lista todas as unidades de uma organização (lista plana)."""
         return list(
             self.db.scalars(
-                select(OrganizationalUnit).where(
+                select(OrganizationalUnit)
+                .where(
                     OrganizationalUnit.organization_id == organization_id,
                     OrganizationalUnit.is_active == True,  # noqa: E712
-                ).order_by(OrganizationalUnit.sort_order, OrganizationalUnit.name)
+                )
+                .order_by(OrganizationalUnit.sort_order, OrganizationalUnit.name)
             )
         )
 
-    def get_unit_tree(self, organization_id: uuid.UUID) -> list[dict]:
-        """Build the full organizational tree for an organization.
+    def get_unit_tree(self, organization_id: uuid.UUID) -> list[dict[str, object]]:
+        """Constrói a árvore organizacional completa de uma organização.
 
-        Returns a nested dict structure suitable for JSON serialization.
+        Devolve uma estrutura de dicionários aninhada adequada para serialização JSON.
         """
         all_units = list(
             self.db.scalars(
-                select(OrganizationalUnit).where(
+                select(OrganizationalUnit)
+                .where(
                     OrganizationalUnit.organization_id == organization_id,
-                ).order_by(OrganizationalUnit.sort_order, OrganizationalUnit.name)
+                )
+                .order_by(OrganizationalUnit.sort_order, OrganizationalUnit.name)
             )
         )
 
-        unit_map: dict[uuid.UUID, dict] = {}
+        unit_map: dict[uuid.UUID, dict[str, object]] = {}
         for unit in all_units:
             unit_map[unit.id] = {
                 "id": unit.id,
@@ -144,24 +151,24 @@ class OrganizationService:
                 "children_count": 0,
             }
 
-        roots: list[dict] = []
+        roots: list[dict[str, object]] = []
         for unit in all_units:
             node = unit_map[unit.id]
             if unit.parent_id and unit.parent_id in unit_map:
                 parent = unit_map[unit.parent_id]
-                parent["children"].append(node)
-                parent["children_count"] = len(parent["children"])
+                children = parent["children"]
+                assert isinstance(children, list)
+                children.append(node)
+                parent["children_count"] = len(children)
             else:
                 roots.append(node)
 
         return roots
 
-    def get_unit_assignments(
-        self, unit_id: uuid.UUID
-    ) -> list[tuple[UserAssignment, str, str]]:
-        """Get all active assignments for a unit.
+    def get_unit_assignments(self, unit_id: uuid.UUID) -> list[tuple[UserAssignment, str, str]]:
+        """Obtém todas as atribuições activas de uma unidade.
 
-        Returns list of (assignment, username, user_full_name).
+        Devolve lista de (atribuição, username, nome_completo_utilizador).
         """
         from app.modules.auth.domain.user import User as UserModel
 
@@ -186,7 +193,7 @@ class OrganizationService:
     def list_units_by_type(
         self, organization_id: uuid.UUID, type_id: str
     ) -> list[OrganizationalUnit]:
-        """List units of a specific type within an organization."""
+        """Lista unidades de um tipo específico dentro de uma organização."""
         return list(
             self.db.scalars(
                 select(OrganizationalUnit).where(
@@ -207,13 +214,11 @@ class OrganizationService:
         short_name: str | None = None,
         description: str | None = None,
     ) -> OrganizationalUnit:
-        """Create a new organizational unit."""
+        """Cria uma nova unidade organizacional."""
         if code is not None:
             existing = self.get_unit_by_code(organization_id, code)
             if existing is not None:
-                raise DuplicateCodeError(
-                    f"Unit code '{code}' already exists in this organization."
-                )
+                raise DuplicateCodeError(f"Unit code '{code}' already exists in this organization.")
 
         # Validate parent
         self.hierarchy.validate_parent(uuid.uuid4(), parent_id, organization_id)
@@ -232,20 +237,18 @@ class OrganizationService:
         return unit
 
     def move_unit(self, unit_id: uuid.UUID, new_parent_id: uuid.UUID | None) -> None:
-        """Move a unit to a new parent."""
+        """Move uma unidade para um novo pai."""
         unit = self.db.get(OrganizationalUnit, unit_id)
         if unit is None:
             raise UnitNotFoundError(f"Unit {unit_id} not found.")
 
-        self.hierarchy.validate_parent(
-            unit_id, new_parent_id, unit.organization_id
-        )
+        self.hierarchy.validate_parent(unit_id, new_parent_id, unit.organization_id)
 
         unit.parent_id = new_parent_id
         self.db.flush()
 
     def deactivate_unit(self, unit_id: uuid.UUID) -> None:
-        """Deactivate a unit (soft delete)."""
+        """Desactiva uma unidade (eliminação suave)."""
         unit = self.db.get(OrganizationalUnit, unit_id)
         if unit is None:
             raise UnitNotFoundError(f"Unit {unit_id} not found.")
@@ -255,30 +258,90 @@ class OrganizationService:
         self.db.flush()
 
     def get_user_assignments(self, user_id: uuid.UUID) -> list[UserAssignment]:
-        """Get all active assignments for a user."""
-        return list(
-            self.db.scalars(
-                select(UserAssignment).where(
-                    UserAssignment.user_id == user_id,
-                    UserAssignment.status == "ACTIVE",
+        """Obtém todas as atribuições activas de um utilizador."""
+        return self.assignments.list_for_user(user_id)
+
+    def get_user_primary_assignment(self, user_id: uuid.UUID) -> UserAssignment | None:
+        """Obtém a atribuição principal de um utilizador."""
+        return self.assignments.get_primary(user_id)
+
+    def get_user_responsibility_scopes(self, user_id: uuid.UUID) -> list[str]:
+        """Obtém os valores de âmbitos de responsabilidade activos de um utilizador."""
+        from app.modules.organization.domain.responsibility import (
+            Responsibility,
+            ResponsibilityStatus,
+        )
+
+        rows = self.db.scalars(
+            select(Responsibility).where(
+                Responsibility.user_id == user_id,
+                Responsibility.status == ResponsibilityStatus.ACTIVE,
+            )
+        )
+        return [str(r.scope) for r in rows]
+
+    def get_user_functional_roles(self, user_id: uuid.UUID) -> list[str]:
+        """Obtém os valores de funções activas de um utilizador."""
+        from app.modules.organization.domain.functional_role import (
+            FunctionalRoleAssignment,
+        )
+
+        rows = self.db.scalars(
+            select(FunctionalRoleAssignment).where(
+                FunctionalRoleAssignment.user_id == user_id,
+                FunctionalRoleAssignment.is_active.is_(True),
+            )
+        )
+        return [str(r.functional_role) for r in rows]
+
+    def get_user_delegation_data(
+        self, user_id: uuid.UUID
+    ) -> tuple[list[str], list[str], list[uuid.UUID]]:
+        """Obtém dados de delegação de um utilizador.
+
+        Devolve (âmbitos_delegante, âmbitos_delegado, substituições).
+        """
+        from app.modules.organization.domain.delegation import (
+            Delegation,
+            DelegationStatus,
+        )
+        from app.modules.organization.domain.substitution import (
+            Substitution,
+            SubstitutionStatus,
+        )
+
+        delegator_scopes = [
+            str(d.scope)
+            for d in self.db.scalars(
+                select(Delegation).where(
+                    Delegation.delegator_user_id == user_id,
+                    Delegation.status == DelegationStatus.ACTIVE,
                 )
             )
-        )
-
-    def get_user_primary_assignment(
-        self, user_id: uuid.UUID
-    ) -> UserAssignment | None:
-        """Get the primary assignment for a user."""
-        return self.db.scalar(
-            select(UserAssignment).where(
-                UserAssignment.user_id == user_id,
-                UserAssignment.is_primary == True,  # noqa: E712
-                UserAssignment.status == "ACTIVE",
+        ]
+        delegate_scopes = [
+            str(d.scope)
+            for d in self.db.scalars(
+                select(Delegation).where(
+                    Delegation.delegate_user_id == user_id,
+                    Delegation.status == DelegationStatus.ACTIVE,
+                )
             )
-        )
+        ]
+        substitutions = [
+            s.substitute_user_id
+            for s in self.db.scalars(
+                select(Substitution).where(
+                    Substitution.substituted_user_id == user_id,
+                    Substitution.status == SubstitutionStatus.ACTIVE,
+                )
+            )
+        ]
+
+        return delegator_scopes, delegate_scopes, substitutions
 
     def get_user_context(self, user_id: uuid.UUID) -> OrganizationContext:
-        """Get the full organizational context for a user."""
+        """Obtém o contexto organizacional completo de um utilizador."""
         assignments = self.get_user_assignments(user_id)
         if not assignments:
             return OrganizationContext()
@@ -286,9 +349,7 @@ class OrganizationService:
         primary = None
         units = []
         for assignment in assignments:
-            unit = self.db.get(
-                OrganizationalUnit, assignment.organizational_unit_id
-            )
+            unit = self.db.get(OrganizationalUnit, assignment.organizational_unit_id)
             if unit is not None and unit.is_active:
                 units.append(unit)
                 if assignment.is_primary:

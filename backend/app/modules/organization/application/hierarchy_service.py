@@ -1,6 +1,6 @@
-"""Hierarchy service — tree operations for organizational units.
+"""Serviço de hierarquia — operações de árvore para unidades organizacionais.
 
-Centralized hierarchy logic — never duplicate tree queries across modules.
+Lógica de hierarquia centralizada — nunca duplicar consultas de árvore entre módulos.
 """
 
 import uuid
@@ -17,13 +17,13 @@ from app.modules.organization.domain.unit import OrganizationalUnit
 
 
 class HierarchyService:
-    """Tree operations for organizational units."""
+    """Operações de árvore para unidades organizacionais."""
 
     def __init__(self, db: Session) -> None:
         self.db = db
 
     def get_parent(self, unit_id: uuid.UUID) -> OrganizationalUnit | None:
-        """Get the direct parent of a unit."""
+        """Obtém o pai directo de uma unidade."""
         unit = self.db.get(OrganizationalUnit, unit_id)
         if unit is None:
             return None
@@ -31,14 +31,14 @@ class HierarchyService:
         return parent  # type: ignore[no-any-return]
 
     def get_children(self, unit_id: uuid.UUID) -> list[OrganizationalUnit]:
-        """Get direct children of a unit."""
+        """Obtém os filhos directos de uma unidade."""
         unit = self.db.get(OrganizationalUnit, unit_id)
         if unit is None:
             return []
         return [child for child in unit.children if child.is_active]
 
     def get_ancestors(self, unit_id: uuid.UUID) -> list[OrganizationalUnit]:
-        """Get all ancestors from parent to root."""
+        """Obtém todos os antepassados, do pai até à raiz."""
         ancestors = []
         current = self.db.get(OrganizationalUnit, unit_id)
         if current is None:
@@ -47,9 +47,7 @@ class HierarchyService:
         visited: set[uuid.UUID] = set()
         while current.parent_id is not None:
             if current.id in visited:
-                raise CircularHierarchyError(
-                    f"Circular reference detected for unit {current.id}"
-                )
+                raise CircularHierarchyError(f"Circular reference detected for unit {current.id}")
             visited.add(current.id)
             current = current.parent
             if current is not None:
@@ -58,7 +56,7 @@ class HierarchyService:
         return ancestors
 
     def get_descendants(self, unit_id: uuid.UUID) -> list[OrganizationalUnit]:
-        """Get all descendants recursively (depth-first)."""
+        """Obtém todos os descendentes recursivamente (em profundidade)."""
         descendants = []
         stack = list(self.get_children(unit_id))
 
@@ -70,14 +68,14 @@ class HierarchyService:
         return descendants
 
     def get_root(self, unit_id: uuid.UUID) -> OrganizationalUnit | None:
-        """Get the root unit of the hierarchy."""
+        """Obtém a unidade raiz da hierarquia."""
         ancestors = self.get_ancestors(unit_id)
         if not ancestors:
             return self.db.get(OrganizationalUnit, unit_id)
         return ancestors[-1]
 
     def get_unit_path(self, unit_id: uuid.UUID) -> list[OrganizationalUnit]:
-        """Get full path from root to the unit (inclusive)."""
+        """Obtém o caminho completo da raiz até à unidade (inclusive)."""
         ancestors = self.get_ancestors(unit_id)
         unit = self.db.get(OrganizationalUnit, unit_id)
         if unit is None:
@@ -91,13 +89,13 @@ class HierarchyService:
         parent_id: uuid.UUID | None,
         organization_id: uuid.UUID,
     ) -> None:
-        """Validate that a parent assignment is valid.
+        """Valida se a atribuição de um pai é válida.
 
-        Checks:
-        - Not self-parent
-        - No circular references
-        - Parent exists in same organization
-        - Parent is active
+        Verifica:
+        - Não ser pai de si próprio
+        - Sem referências circulares
+        - O pai existe na mesma organização
+        - O pai está activo
         """
         if parent_id is None:
             return
@@ -110,20 +108,16 @@ class HierarchyService:
             raise InvalidParentError(f"Parent unit {parent_id} not found.")
 
         if parent.organization_id != organization_id:
-            raise CrossOrganizationError(
-                "Cannot assign parent from a different organization."
-            )
+            raise CrossOrganizationError("Cannot assign parent from a different organization.")
 
         if not parent.is_active:
             raise InvalidParentError("Parent unit is inactive.")
 
-        # Check for circular references
+        # Verificar referências circulares
         self._check_cycle(unit_id, parent_id)
 
-    def _check_cycle(
-        self, unit_id: uuid.UUID, proposed_parent_id: uuid.UUID
-    ) -> None:
-        """Check if setting parent_id would create a cycle."""
+    def _check_cycle(self, unit_id: uuid.UUID, proposed_parent_id: uuid.UUID) -> None:
+        """Verifica se definir parent_id criaria um ciclo."""
         visited: set[uuid.UUID] = set()
         current_id: uuid.UUID | None = proposed_parent_id
 
@@ -133,9 +127,7 @@ class HierarchyService:
                     "Setting this parent would create a circular reference."
                 )
             if current_id in visited:
-                raise CircularHierarchyError(
-                    "Circular reference detected in existing hierarchy."
-                )
+                raise CircularHierarchyError("Circular reference detected in existing hierarchy.")
             visited.add(current_id)
 
             unit = self.db.get(OrganizationalUnit, current_id)

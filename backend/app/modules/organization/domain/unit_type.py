@@ -1,10 +1,10 @@
-"""OrganizationalUnitType enum."""
+"""Enum OrganizationalUnitType."""
 
 import enum
 
 
 class UnitType(enum.StrEnum):
-    """Types of organizational units."""
+    """Tipos de unidades organizacionais."""
 
     ORGANIZATION = "ORGANIZATION"
     DIRECTION = "DIRECTION"

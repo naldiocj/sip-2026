@@ -1,4 +1,4 @@
-"""Organization API router."""
+"""Router da API de organização."""
 
 import structlog
 from fastapi import APIRouter, Depends, HTTPException, Request, status
@@ -37,7 +37,7 @@ from app.modules.organization.domain.exceptions import (
     SelfParentError,
     UnitNotFoundError,
 )
-from app.modules.organization.domain.unit_type import UnitType, UNIT_TYPE_LABELS
+from app.modules.organization.domain.unit_type import UNIT_TYPE_LABELS, UnitType
 
 logger = structlog.get_logger("organization")
 
@@ -45,7 +45,7 @@ router = APIRouter(prefix="/organizations", tags=["organizations"])
 
 
 def _handle_error(e: Exception) -> None:
-    """Convert domain errors to HTTP errors."""
+    """Converte erros de domínio em erros HTTP."""
     if isinstance(e, OrganizationNotFoundError):
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -106,7 +106,7 @@ _UNIT_TYPE_DESCRIPTIONS: dict[UnitType, str] = {
 def list_unit_types(
     user: User = Depends(require_organization_read),
 ) -> list[UnitTypeItem]:
-    """List all available unit types with labels and metadata."""
+    """Lista todos os tipos de unidade disponíveis com rótulos e metadados."""
     return [
         UnitTypeItem(
             value=t.value,
@@ -127,7 +127,7 @@ def list_organizations(
     user: User = Depends(require_organization_read),
     db: Session = Depends(get_db_session),
 ) -> list[OrganizationResponse]:
-    """List all active organizations."""
+    """Lista todas as organizações activas."""
     service = OrganizationService(db)
     return service.list_organizations()  # type: ignore[return-value]
 
@@ -143,7 +143,7 @@ def create_organization(
     user: User = Depends(require_organization_manage),
     db: Session = Depends(get_db_session),
 ) -> OrganizationResponse:
-    """Create a new organization."""
+    """Cria uma nova organização."""
     service = OrganizationService(db)
     try:
         org = service.create_organization(
@@ -179,7 +179,7 @@ def get_unit_tree(
     user: User = Depends(require_organization_read),
     db: Session = Depends(get_db_session),
 ) -> list[UnitTreeNode]:
-    """Get the full organizational tree for an organization."""
+    """Obtém a árvore organizacional completa de uma organização."""
     import uuid
 
     service = OrganizationService(db)
@@ -193,7 +193,7 @@ def list_units(
     user: User = Depends(require_organization_read),
     db: Session = Depends(get_db_session),
 ) -> list[UnitResponse]:
-    """List all units for an organization (flat list)."""
+    """Lista todas as unidades de uma organização (lista plana)."""
     import uuid
 
     service = OrganizationService(db)
@@ -211,7 +211,7 @@ def create_unit(
     user: User = Depends(require_organization_manage),
     db: Session = Depends(get_db_session),
 ) -> UnitResponse:
-    """Create a new organizational unit."""
+    """Cria uma nova unidade organizacional."""
     service = OrganizationService(db)
     try:
         unit = service.create_unit(
@@ -246,7 +246,7 @@ def get_unit(
     user: User = Depends(require_organization_read),
     db: Session = Depends(get_db_session),
 ) -> UnitResponse:
-    """Get an organizational unit by ID."""
+    """Obtém uma unidade organizacional pelo ID."""
     import uuid
 
     service = OrganizationService(db)
@@ -267,7 +267,7 @@ def update_unit(
     user: User = Depends(require_organization_manage),
     db: Session = Depends(get_db_session),
 ) -> UnitResponse:
-    """Update an organizational unit."""
+    """Actualiza uma unidade organizacional."""
     import uuid
 
     service = OrganizationService(db)
@@ -320,7 +320,7 @@ def list_unit_assignments(
     user: User = Depends(require_organization_read),
     db: Session = Depends(get_db_session),
 ) -> list[UserAssignmentWithDetailsResponse]:
-    """List all active assignments for a unit, with user details."""
+    """Lista todas as atribuições activas de uma unidade, com detalhes do utilizador."""
     import uuid
 
     service = OrganizationService(db)
@@ -360,7 +360,7 @@ def list_user_assignments(
     user: User = Depends(get_current_user),
     db: Session = Depends(get_db_session),
 ) -> list[UserAssignmentResponse]:
-    """List assignments for a user."""
+    """Lista as atribuições de um utilizador."""
     import uuid
 
     service = OrganizationService(db)
@@ -379,7 +379,7 @@ def create_user_assignment(
     user: User = Depends(require_organization_manage),
     db: Session = Depends(get_db_session),
 ) -> UserAssignmentResponse:
-    """Create a user assignment."""
+    """Cria uma atribuição de utilizador."""
     import uuid
 
     from app.modules.organization.domain.user_assignment import (
@@ -439,7 +439,7 @@ def get_organization_context(
     user: User = Depends(get_current_user),
     db: Session = Depends(get_db_session),
 ) -> OrganizationContextResponse:
-    """Get the current user's organizational context."""
+    """Obtém o contexto organizacional do utilizador actual."""
     service = AccessContextService(db)
     context = service.get_context(user)
 

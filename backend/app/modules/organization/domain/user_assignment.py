@@ -1,4 +1,4 @@
-"""UserAssignment entity."""
+"""Entidade UserAssignment."""
 
 import enum
 import uuid
@@ -11,7 +11,7 @@ from app.db.base import Base, TimestampMixin, UUIDPrimaryKeyMixin
 
 
 class AssignmentType(enum.StrEnum):
-    """Types of user assignments to organizational units."""
+    """Tipos de atribuições de utilizadores a unidades organizacionais."""
 
     PRIMARY = "PRIMARY"
     SECONDARY = "SECONDARY"
@@ -30,16 +30,16 @@ ASSIGNMENT_TYPE_LABELS: dict[AssignmentType, str] = {
 
 
 class AssignmentStatus(enum.StrEnum):
-    """Assignment status."""
+    """Estado da atribuição."""
 
     ACTIVE = "ACTIVE"
     INACTIVE = "INACTIVE"
 
 
 class UserAssignment(UUIDPrimaryKeyMixin, TimestampMixin, Base):
-    """User assignment to organizational unit.
+    """Atribuição de utilizador a unidade organizacional.
 
-    Links users to organizational units with type and period.
+    Liga utilizadores a unidades organizacionais com tipo e período.
     """
 
     __tablename__ = "user_assignments"
@@ -80,7 +80,7 @@ class UserAssignment(UUIDPrimaryKeyMixin, TimestampMixin, Base):
         default=AssignmentStatus.ACTIVE,
     )
 
-    # Relationships
+    # Relacionamentos
     organizational_unit = relationship(
         "OrganizationalUnit",
         back_populates="assignments",

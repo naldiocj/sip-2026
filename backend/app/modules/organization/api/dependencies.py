@@ -1,4 +1,4 @@
-"""Organization API dependencies."""
+"""Dependências da API de organização."""
 
 from fastapi import Depends, HTTPException, Request, status
 from sqlalchemy.orm import Session
@@ -16,7 +16,7 @@ def require_organization_manage(
     user: User = Depends(get_current_user),
     db: Session = Depends(get_db_session),
 ) -> User:
-    """Require organization.manage permission."""
+    """Exige a permissão organization.manage."""
     service = AuthorizationService(db)
     if not service.check_permission(user, "organization.manage"):
         client_ip = request.client.host if request.client else None
@@ -40,7 +40,7 @@ def require_organization_read(
     user: User = Depends(get_current_user),
     db: Session = Depends(get_db_session),
 ) -> User:
-    """Require organization.read permission."""
+    """Exige a permissão organization.read."""
     service = AuthorizationService(db)
     if not service.check_permission(user, "organization.read"):
         client_ip = request.client.host if request.client else None
