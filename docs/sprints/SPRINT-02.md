@@ -62,7 +62,7 @@ Cada conceito possui responsabilidade própria.
 | TASK-023 | organization-tree | PARTIAL |
 | TASK-024 | audit-integration | DONE |
 | TASK-025 | security-review | DONE |
-| TASK-026 | backend-tests | PARTIAL |
+| TASK-026 | backend-tests | DONE |
 | TASK-027 | frontend-tests | PLANNED |
 | TASK-028 | e2e-tests | PLANNED |
 | TASK-029 | documentation | PARTIAL |
