@@ -86,7 +86,7 @@ class AccessContext:
         ]
 
 
-def _person_dict(person: object) -> dict[str, object] | None:
+def _person_dict(person: Any) -> dict[str, object] | None:
     """Serializa dados públicos de uma pessoa sem expor informação sensível."""
     if person is None:
         return None

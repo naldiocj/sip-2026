@@ -13,6 +13,7 @@ from app.modules.organization.api.router import (
 from app.modules.organization.api.router import (
     router as org_router,
 )
+from app.modules.person.api import router as persons_router
 
 api_router = APIRouter()
 api_router.include_router(health.router)
@@ -23,3 +24,4 @@ api_router.include_router(units_router)
 api_router.include_router(unit_types_router)
 api_router.include_router(assignments_router)
 api_router.include_router(me_router)
+api_router.include_router(persons_router)

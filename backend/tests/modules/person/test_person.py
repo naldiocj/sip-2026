@@ -100,9 +100,10 @@ def test_update_missing_person_raises(db_session) -> None:
 @requires_database
 def test_duplicate_employee_number_rejected(db_session) -> None:
     service = PersonService(db_session)
-    service.create(full_name="Funcionário", employee_number="EMP-001")
+    employee_number = f"EMP-{uuid.uuid4().hex[:8].upper()}"
+    service.create(full_name="Funcionário", employee_number=employee_number)
     with pytest.raises(DuplicateEmployeeNumberError):
-        service.create(full_name="Outro", employee_number="EMP-001")
+        service.create(full_name="Outro", employee_number=employee_number)
 
 
 @requires_database
