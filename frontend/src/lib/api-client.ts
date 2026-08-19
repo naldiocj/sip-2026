@@ -109,4 +109,7 @@ export const apiClient = {
       body: body === undefined ? undefined : JSON.stringify(body),
     });
   },
+  delete<T>(path: string): Promise<T> {
+    return request<T>(path, { method: "DELETE" });
+  },
 };

@@ -25,7 +25,7 @@ export function UserPicker({
   placeholder = "Selecionar utilizador",
 }: UserPickerProps) {
   const [search, setSearch] = useState("");
-  const { data } = useUsers(search || undefined);
+  const { data } = useUsers({ search: search || undefined, status: "ACTIVE" });
 
   const users = data?.items ?? [];
   const selected = users.find((u) => u.id === value) ?? null;

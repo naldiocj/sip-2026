@@ -68,6 +68,7 @@ const USER_STATUS_LABELS: Record<string, string> = {
   ACTIVE: "Ativo",
   INACTIVE: "Inativo",
   BLOCKED: "Bloqueado",
+  SUSPENDED: "Suspenso",
   PENDING: "Pendente",
 };
 

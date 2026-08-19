@@ -44,11 +44,14 @@ describe("humanizeProfile", () => {
 describe("humanizeUserStatus", () => {
   it("returns Portuguese label for known status", () => {
     expect(humanizeUserStatus("ACTIVE")).toBe("Ativo");
+    expect(humanizeUserStatus("INACTIVE")).toBe("Inativo");
     expect(humanizeUserStatus("BLOCKED")).toBe("Bloqueado");
+    expect(humanizeUserStatus("SUSPENDED")).toBe("Suspenso");
+    expect(humanizeUserStatus("PENDING")).toBe("Pendente");
   });
 
   it("generates fallback for unknown status", () => {
-    expect(humanizeUserStatus("SUSPENDED")).toBe("Suspended");
+    expect(humanizeUserStatus("UNKNOWN")).toBe("Unknown");
   });
 });
 
