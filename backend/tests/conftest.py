@@ -90,6 +90,12 @@ def _clean_test_data() -> None:
         conn.execute(text("DELETE FROM substitutions"))
         conn.execute(text("DELETE FROM persons WHERE person_number NOT LIKE 'PES-000001'"))
         seed_list = ", ".join(f"'{u}'" for u in seed_usernames)
+        conn.execute(
+            text(
+                f"DELETE FROM user_profiles WHERE user_id IN "
+                f"(SELECT id FROM users WHERE username NOT IN ({seed_list}))"
+            )
+        )
         conn.execute(text(f"DELETE FROM users WHERE username NOT IN ({seed_list})"))
     engine.dispose()
 

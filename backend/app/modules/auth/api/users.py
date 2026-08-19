@@ -10,6 +10,7 @@ from typing import Any
 
 import structlog
 from fastapi import APIRouter, Depends, HTTPException, Request, status
+from pydantic import BaseModel
 from sqlalchemy import func, or_, select
 from sqlalchemy.orm import Session, aliased
 
@@ -311,3 +312,70 @@ router.post("/{user_id}/block", response_model=UserListItem)(
 router.post("/{user_id}/unblock", response_model=UserListItem)(
     _status_endpoint("unblock", "user_unblocked")
 )
+
+
+# --- Perfis do utilizador ---
+
+
+class UserProfileAssignRequest(BaseModel):
+    """Corpo de atribuição de perfil a um utilizador."""
+
+    profile_id: uuid.UUID
+
+
+@router.post(
+    "/{user_id}/profiles",
+    response_model=UserListItem,
+    status_code=status.HTTP_201_CREATED,
+)
+def assign_user_profile(
+    user_id: uuid.UUID,
+    body: UserProfileAssignRequest,
+    request: Request,
+    user: User = Depends(require_permission("profile.manage")),
+    db: Session = Depends(get_db_session),
+) -> UserListItem:
+    """Atribui um perfil activo ao utilizador (auditoria registada)."""
+    service = UserService(db)
+    try:
+        service.assign_profile(user_id, body.profile_id, actor=user)
+        db.commit()
+    except UserNotFoundError:
+        db.rollback()
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="User not found"
+        ) from None
+    except ValueError as e:
+        db.rollback()
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail=str(e)
+        ) from None
+    logger.info("profile_assigned", user_id=str(user_id), profile_id=str(body.profile_id))
+    return _item_dict(db, db.get(User, user_id))  # type: ignore[arg-type]
+
+
+@router.delete("/{user_id}/profiles/{profile_id}", response_model=UserListItem)
+def remove_user_profile(
+    user_id: uuid.UUID,
+    profile_id: uuid.UUID,
+    request: Request,
+    user: User = Depends(require_permission("profile.manage")),
+    db: Session = Depends(get_db_session),
+) -> UserListItem:
+    """Remove um perfil do utilizador (auditoria registada)."""
+    service = UserService(db)
+    try:
+        service.remove_profile(user_id, profile_id, actor=user)
+        db.commit()
+    except UserNotFoundError:
+        db.rollback()
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="User not found"
+        ) from None
+    except ValueError as e:
+        db.rollback()
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail=str(e)
+        ) from None
+    logger.info("profile_removed", user_id=str(user_id), profile_id=str(profile_id))
+    return _item_dict(db, db.get(User, user_id))  # type: ignore[arg-type]

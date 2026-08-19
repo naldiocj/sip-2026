@@ -318,3 +318,97 @@ def test_status_endpoints_require_user_update_permission(client: TestClient) -> 
     for action in ("activate", "deactivate", "block", "unblock"):
         response = client.post(f"{USERS_URL}/{user_id}/{action}", headers=instrutor)
         assert response.status_code == 403, f"{action} deve exigir permissão"
+
+
+# ── Perfis ──────────────────────────────────────────────────────
+
+
+@requires_database
+def test_list_profiles_returns_humanized_labels(client: TestClient) -> None:
+    headers = _auth_headers(client)
+    response = client.get("/api/v1/profiles", headers=headers)
+    assert response.status_code == 200, response.text
+    items = response.json()["items"]
+    codes = {p["code"] for p in items}
+    assert "ADMINISTRADOR_SISTEMA" in codes
+    assert "CHEFE_SECCAO" in codes
+    admin = next(p for p in items if p["code"] == "ADMINISTRADOR_SISTEMA")
+    assert admin["label"] == "Administrador do Sistema"
+
+
+@requires_database
+def test_list_profiles_requires_profile_read(client: TestClient) -> None:
+    headers = _auth_headers(client, username="instrutor", password="instrutor123")
+    response = client.get("/api/v1/profiles", headers=headers)
+    assert response.status_code == 403
+
+
+@requires_database
+def test_assign_profile_to_user(client: TestClient, db_session: Session) -> None:
+    from app.modules.auth.domain.profile import Profile
+
+    headers = _auth_headers(client)
+    created = client.post(USERS_URL, json=_unique_user_payload(), headers=headers)
+    user_id = created.json()["id"]
+
+    profile = db_session.scalar(select(Profile).where(Profile.code == "DIRECTOR"))
+    response = client.post(
+        f"{USERS_URL}/{user_id}/profiles",
+        json={"profile_id": str(profile.id)},
+        headers=headers,
+    )
+    assert response.status_code == 201, response.text
+    assert any(p["code"] == "DIRECTOR" for p in response.json()["profiles"])
+
+
+@requires_database
+def test_assign_duplicate_profile_rejected(client: TestClient, db_session: Session) -> None:
+    from app.modules.auth.domain.profile import Profile
+
+    headers = _auth_headers(client)
+    created = client.post(USERS_URL, json=_unique_user_payload(), headers=headers)
+    user_id = created.json()["id"]
+
+    profile = db_session.scalar(select(Profile).where(Profile.code == "DIRECTOR"))
+    body = {"profile_id": str(profile.id)}
+    first = client.post(f"{USERS_URL}/{user_id}/profiles", json=body, headers=headers)
+    assert first.status_code == 201
+    second = client.post(f"{USERS_URL}/{user_id}/profiles", json=body, headers=headers)
+    assert second.status_code == 422
+
+
+@requires_database
+def test_remove_profile_from_user(client: TestClient, db_session: Session) -> None:
+    from app.modules.auth.domain.profile import Profile
+
+    headers = _auth_headers(client)
+    created = client.post(USERS_URL, json=_unique_user_payload(), headers=headers)
+    user_id = created.json()["id"]
+
+    profile = db_session.scalar(select(Profile).where(Profile.code == "DIRECTOR"))
+    client.post(
+        f"{USERS_URL}/{user_id}/profiles",
+        json={"profile_id": str(profile.id)},
+        headers=headers,
+    )
+    response = client.delete(f"{USERS_URL}/{user_id}/profiles/{profile.id}", headers=headers)
+    assert response.status_code == 200
+    assert not any(p["code"] == "DIRECTOR" for p in response.json()["profiles"])
+
+
+@requires_database
+def test_profile_management_requires_permission(client: TestClient, db_session: Session) -> None:
+    from app.modules.auth.domain.profile import Profile
+
+    headers = _auth_headers(client)
+    created = client.post(USERS_URL, json=_unique_user_payload(), headers=headers)
+    user_id = created.json()["id"]
+
+    profile = db_session.scalar(select(Profile).where(Profile.code == "DIRECTOR"))
+    instrutor = _auth_headers(client, username="instrutor", password="instrutor123")
+    response = client.post(
+        f"{USERS_URL}/{user_id}/profiles",
+        json={"profile_id": str(profile.id)},
+        headers=instrutor,
+    )
+    assert response.status_code == 403
