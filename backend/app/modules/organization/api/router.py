@@ -1,5 +1,6 @@
 """Router da API de organização."""
 
+import uuid
 from typing import Any
 
 import structlog
@@ -294,14 +295,24 @@ def get_unit_tree(
 @units_router.get("", response_model=list[UnitResponse])
 def list_units(
     organization_id: str,
+    parent_id: uuid.UUID | None = None,
+    type_id: str | None = None,
     user: User = Depends(require_organization_read),
     db: Session = Depends(get_db_session),
 ) -> list[UnitResponse]:
-    """Lista todas as unidades de uma organização (lista plana)."""
-    import uuid
+    """Lista unidades de uma organização (lista plana).
 
+    parent_id restringe ao sub-árvore (inclui descendentes) e type_id
+    filtra pelo tipo de unidade — usados pelos selects dependentes do
+    formulário de utilizadores.
+    """
     service = OrganizationService(db)
-    return service.list_all_units(uuid.UUID(organization_id))  # type: ignore[return-value]
+    unit_type = UnitType(type_id) if type_id is not None else None
+    return service.list_all_units(  # type: ignore[return-value]
+        uuid.UUID(organization_id),
+        parent_id=parent_id,
+        type_id=unit_type,
+    )
 
 
 @units_router.post(

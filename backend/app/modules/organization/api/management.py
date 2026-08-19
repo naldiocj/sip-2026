@@ -100,6 +100,7 @@ def update_user_assignment(
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND, detail="Assignment not found"
             ) from None
+        previous_primary = assignment.is_primary
         assignment = service.update(
             uuid.UUID(assignment_id),
             assignment_type=body.assignment_type,
@@ -115,6 +116,19 @@ def update_user_assignment(
             request,
             {"assignment_id": str(assignment.id), "user_id": user_id, "action": "update"},
         )
+        if previous_primary != assignment.is_primary:
+            _record_audit(
+                db,
+                AuditEventType.USER_PRIMARY_ASSIGNMENT_CHANGED,
+                user,
+                request,
+                {
+                    "assignment_id": str(assignment.id),
+                    "user_id": user_id,
+                    "unit_id": str(assignment.organizational_unit_id),
+                    "is_primary": assignment.is_primary,
+                },
+            )
         logger.info("assignment_updated", assignment_id=str(assignment.id))
         return {
             "id": str(assignment.id),

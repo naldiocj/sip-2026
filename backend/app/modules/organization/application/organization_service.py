@@ -21,6 +21,7 @@ from app.modules.organization.domain.organization import (
     OrganizationType,
 )
 from app.modules.organization.domain.unit import OrganizationalUnit, UnitStatus
+from app.modules.organization.domain.unit_type import UnitType
 from app.modules.organization.domain.user_assignment import UserAssignment
 
 
@@ -107,18 +108,52 @@ class OrganizationService:
             )
         )
 
-    def list_all_units(self, organization_id: uuid.UUID) -> list[OrganizationalUnit]:
-        """Lista todas as unidades de uma organização (lista plana)."""
+    def list_all_units(
+        self,
+        organization_id: uuid.UUID,
+        parent_id: uuid.UUID | None = None,
+        type_id: UnitType | None = None,
+    ) -> list[OrganizationalUnit]:
+        """Lista todas as unidades de uma organização (lista plana).
+
+        parent_id filtra o sub-árvore (inclui descendentes);
+        type_id filtra pelo tipo de unidade.
+        """
+        stmt = select(OrganizationalUnit).where(
+            OrganizationalUnit.organization_id == organization_id,
+            OrganizationalUnit.is_active == True,  # noqa: E712
+        )
+        if type_id is not None:
+            stmt = stmt.where(OrganizationalUnit.type_id == type_id)
+        if parent_id is not None:
+            subtree = self._unit_subtree_ids(organization_id, parent_id)
+            subtree.discard(parent_id)
+            stmt = stmt.where(OrganizationalUnit.id.in_(subtree))
         return list(
+            self.db.scalars(stmt.order_by(OrganizationalUnit.sort_order, OrganizationalUnit.name))
+        )
+
+    def _unit_subtree_ids(self, organization_id: uuid.UUID, root_id: uuid.UUID) -> set[uuid.UUID]:
+        """Devolve os IDs da unidade raiz e de todos os seus descendentes."""
+        units = list(
             self.db.scalars(
-                select(OrganizationalUnit)
-                .where(
-                    OrganizationalUnit.organization_id == organization_id,
-                    OrganizationalUnit.is_active == True,  # noqa: E712
+                select(OrganizationalUnit).where(
+                    OrganizationalUnit.organization_id == organization_id
                 )
-                .order_by(OrganizationalUnit.sort_order, OrganizationalUnit.name)
             )
         )
+        children: dict[uuid.UUID | None, list[uuid.UUID]] = {}
+        for unit in units:
+            children.setdefault(unit.parent_id, []).append(unit.id)
+        result: set[uuid.UUID] = set()
+        pending = [root_id]
+        while pending:
+            current = pending.pop()
+            if current in result:
+                continue
+            result.add(current)
+            pending.extend(children.get(current, []))
+        return result
 
     def get_unit_tree(self, organization_id: uuid.UUID) -> list[dict[str, object]]:
         """Constrói a árvore organizacional completa de uma organização.

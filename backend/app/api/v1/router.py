@@ -4,6 +4,7 @@ from fastapi import APIRouter
 
 from app.api.v1.routes import health, metrics
 from app.modules.auth.api import router as auth_router
+from app.modules.auth.api.audit import router as audit_router
 from app.modules.auth.api.profiles import router as profiles_router
 from app.modules.auth.api.users import router as users_router
 from app.modules.organization.api.management import (
@@ -31,6 +32,7 @@ api_router.include_router(metrics.router)
 api_router.include_router(auth_router.router)
 api_router.include_router(users_router)
 api_router.include_router(profiles_router)
+api_router.include_router(audit_router)
 api_router.include_router(org_router)
 api_router.include_router(units_router)
 api_router.include_router(unit_types_router)
