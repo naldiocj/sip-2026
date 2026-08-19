@@ -399,7 +399,7 @@ function SidebarGroupLabel({
           "group-data-[collapsible=icon]:-mt-8 group-data-[collapsible=icon]:opacity-0",
           className,
         ),
-      },
+      } as React.ComponentProps<"div">,
       props,
     ),
     render,
@@ -425,7 +425,7 @@ function SidebarGroupAction({
           "group-data-[collapsible=icon]:hidden",
           className,
         ),
-      },
+      } as React.ComponentProps<"button">,
       props,
     ),
     render,
@@ -516,7 +516,7 @@ function SidebarMenuButton({
         "data-size": size,
         "data-active": isActive,
         className: cn(sidebarMenuButtonVariants({ variant, size }), className),
-      },
+      } as React.ComponentProps<"button">,
       props,
     ),
     render: !tooltip ? render : <TooltipTrigger render={render} />,
@@ -577,7 +577,7 @@ function SidebarMenuAction({
             "group-focus-within/menu-item:opacity-100 group-hover/menu-item:opacity-100 peer-data-[active=true]/menu-button:text-sidebar-accent-foreground data-[state=open]:opacity-100 md:opacity-0",
           className,
         ),
-      },
+      } as React.ComponentProps<"button">,
       props,
     ),
     render,
@@ -618,7 +618,7 @@ function SidebarMenuSkeleton({
   showIcon?: boolean;
 }) {
   const width = React.useMemo(() => {
-    return `${Math.floor(Math.random() * 40) + 50}%`;
+    return "50%";
   }, []);
 
   return (
@@ -703,7 +703,7 @@ function SidebarMenuSubButton({
           "group-data-[collapsible=icon]:hidden",
           className,
         ),
-      },
+      } as React.ComponentProps<"a">,
       props,
     ),
     render,

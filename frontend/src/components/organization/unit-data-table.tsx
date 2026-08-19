@@ -3,11 +3,15 @@
 import { useMemo, useState } from "react";
 import {
   useTable,
-  createCoreRowModel,
-  createSortedRowModel,
-  createFilteredRowModel,
-  createPaginatedRowModel,
   flexRender,
+  tableFeatures,
+  columnFilteringFeature,
+  globalFilteringFeature,
+  rowSortingFeature,
+  rowPaginationFeature,
+  createFilteredRowModel,
+  createSortedRowModel,
+  createPaginatedRowModel,
   type ColumnDef,
   type SortingState,
   type ColumnFiltersState,
@@ -50,6 +54,19 @@ interface UnitDataTableProps {
   canManage: boolean;
 }
 
+const features = tableFeatures({
+  rowSortingFeature,
+  columnFilteringFeature,
+  globalFilteringFeature,
+  rowPaginationFeature,
+  sortedRowModel: createSortedRowModel(),
+  filteredRowModel: createFilteredRowModel(),
+  paginatedRowModel: createPaginatedRowModel(),
+});
+
+type TableFeatures = typeof features;
+type UnitColumnDef = ColumnDef<TableFeatures, OrganizationalUnit, unknown>;
+
 export function UnitDataTable({
   units,
   selectedUnitId,
@@ -62,7 +79,7 @@ export function UnitDataTable({
   const [globalFilter, setGlobalFilter] = useState("");
   const [pageSize, setPageSize] = useState(20);
 
-  const columns: ColumnDef<OrganizationalUnit, unknown>[] = useMemo(
+  const columns: UnitColumnDef[] = useMemo(
     () => [
       {
         accessorKey: "name",
@@ -168,6 +185,7 @@ export function UnitDataTable({
   );
 
   const table = useTable({
+    features,
     data: units,
     columns,
     state: {
@@ -179,10 +197,6 @@ export function UnitDataTable({
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
     onGlobalFilterChange: setGlobalFilter,
-    getCoreRowModel: createCoreRowModel(),
-    getSortedRowModel: createSortedRowModel(),
-    getFilteredRowModel: createFilteredRowModel(),
-    getPaginationRowModel: createPaginatedRowModel(),
   });
 
   const activeFilters = columnFilters.filter((f) => f.value && f.value !== "all");
@@ -313,7 +327,7 @@ export function UnitDataTable({
                   )}
                   onClick={() => onSelectUnit(row.original)}
                 >
-                  {row.getVisibleCells().map((cell) => (
+                  {row.getAllCells().map((cell) => (
                     <TableCell key={cell.id}>
                       {flexRender(
                         cell.column.columnDef.cell,
@@ -361,7 +375,7 @@ export function UnitDataTable({
               <ChevronLeftIcon className="size-3.5" />
             </Button>
             <span className="text-xs text-muted-foreground">
-              {table.getState().pagination.pageIndex + 1} / {table.getPageCount()}
+              {table.state.pagination.pageIndex + 1} / {table.getPageCount()}
             </span>
             <Button
               variant="outline"

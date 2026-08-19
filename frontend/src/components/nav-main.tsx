@@ -20,6 +20,7 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
 } from "@/components/ui/sidebar";
+import type { NavigationBadge } from "@/types/navigation";
 
 export function NavMain({
   label,
@@ -31,7 +32,7 @@ export function NavMain({
     label: string;
     route: string;
     icon: LucideIcon;
-    badge?: { count: number; variant?: string };
+    badge?: NavigationBadge;
     children?: {
       id: string;
       label: string;
@@ -72,7 +73,7 @@ export function NavMain({
                     <span>{item.label}</span>
                     <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
                   </CollapsibleTrigger>
-                  {item.badge && item.badge.count > 0 && (
+                  {item.badge && (item.badge.count ?? 0) > 0 && (
                     <SidebarMenuBadge>{item.badge.count}</SidebarMenuBadge>
                   )}
                   <CollapsibleContent>
@@ -108,7 +109,7 @@ export function NavMain({
                 <item.icon />
                 <span>{item.label}</span>
               </SidebarMenuButton>
-              {item.badge && item.badge.count > 0 && (
+              {item.badge && (item.badge.count ?? 0) > 0 && (
                 <SidebarMenuBadge>{item.badge.count}</SidebarMenuBadge>
               )}
             </SidebarMenuItem>

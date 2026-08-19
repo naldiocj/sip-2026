@@ -17,18 +17,18 @@ import {
 } from "@/hooks/use-badge-counts";
 import { navigationGroups, filterNavigationByPermission } from "@/lib/navigation-config";
 import { humanizeProfile } from "@/lib/humanize";
-import type { NavigationItem } from "@/types/navigation";
+import type { NavigationBadge, NavigationItem } from "@/types/navigation";
 import type { LucideIcon } from "lucide-react";
 
 function withBadges(
   items: NavigationItem[],
-  badges: Record<string, { count: number; variant?: string }>,
+  badges: Record<string, NavigationBadge>,
 ): NavigationItem[] {
   return items.map((item) => {
     const badge = badges[item.id];
     return {
       ...item,
-      badge: badge && badge.count > 0 ? badge : item.badge,
+      badge: badge && (badge.count ?? 0) > 0 ? badge : item.badge,
       children: item.children ? withBadges(item.children, badges) : undefined,
     };
   });
@@ -41,7 +41,7 @@ function navItemToMain(
   label: string;
   route: string;
   icon: LucideIcon;
-  badge?: { count: number; variant?: string };
+  badge?: NavigationBadge;
   children?: { id: string; label: string; route: string; icon: LucideIcon }[];
 } {
   return {
@@ -62,7 +62,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 
   const permissions = user?.permissions ?? [];
 
-  const badgeMap: Record<string, { count: number; variant?: string }> = {
+  const badgeMap: Record<string, NavigationBadge> = {
     ocorrencias: { count: ocorrenciasCount, variant: "destructive" },
     detidos: { count: detidosCount, variant: "secondary" },
     notificacoes: { count: notificacoesCount, variant: "destructive" },
@@ -87,7 +87,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarHeader>
       <SidebarContent>
         {filteredGroups.map((group) => (
-          <NavMain key={group.id} label={group.label} items={group.items} />
+          <NavMain key={group.id} label={group.label} items={group.items.map(navItemToMain)} />
         ))}
       </SidebarContent>
       <SidebarFooter>
