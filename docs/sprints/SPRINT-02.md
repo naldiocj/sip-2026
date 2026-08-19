@@ -40,11 +40,11 @@ Cada conceito possui responsabilidade própria.
 | TASK-001 | person-domain | DONE |
 | TASK-002 | person-functional-data | DONE |
 | TASK-003 | user-person-association | DONE |
-| TASK-004 | profile-permission-integration | PARTIAL |
+| TASK-004 | profile-permission-integration | DONE |
 | TASK-005 | organization-domain | DONE |
 | TASK-006 | organizational-unit | DONE |
-| TASK-007 | organizational-hierarchy | PLANNED |
-| TASK-008 | organizational-unit-types | PLANNED |
+| TASK-007 | organizational-hierarchy | DONE |
+| TASK-008 | organizational-unit-types | DONE |
 | TASK-009 | user-assignment | DONE |
 | TASK-010 | lotacao | DONE |
 | TASK-011 | functional-role | DONE |
