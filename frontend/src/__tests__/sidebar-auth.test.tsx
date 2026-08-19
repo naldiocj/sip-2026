@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { AppSidebar } from "@/components/layout/sidebar";
+import { AppSidebar } from "@/components/app-sidebar";
 import { AuthContext, type AuthContextType } from "@/contexts/auth-context";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { SidebarProvider } from "@/components/ui/sidebar";

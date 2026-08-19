@@ -124,7 +124,7 @@ function UnitFormContent({
       }
       onClose();
     } catch {
-      // Error handled by mutation
+      // Erro tratado pela mutação
     }
   };
 

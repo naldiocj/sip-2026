@@ -27,6 +27,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="pt"
+      suppressHydrationWarning
       className={cn(
         "h-full",
         "antialiased",
