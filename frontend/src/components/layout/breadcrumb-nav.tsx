@@ -35,6 +35,9 @@ const segmentLabels: Record<string, string> = {
   pessoas: "Pessoas",
   atribuicoes: "Atribuições",
   historico: "Histórico",
+  administracao: "Administração",
+  responsabilidades: "Responsabilidades",
+  delegacoes: "Delegações",
 };
 
 export function BreadcrumbNav() {

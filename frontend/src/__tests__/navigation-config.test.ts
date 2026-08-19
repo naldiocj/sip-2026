@@ -28,9 +28,45 @@ describe("findNavigationItem", () => {
 
   it("searches across all items", () => {
     const allItems = [...mainNavigation, ...managementNavigation];
-    const item = findNavigationItem(allItems, "/organizacao");
+    const item = findNavigationItem(allItems, "/administracao/pessoas");
     expect(item).toBeDefined();
-    expect(item?.id).toBe("organizacao");
+    expect(item?.id).toBe("administracao-pessoas");
+  });
+
+  it("finds all administration routes", () => {
+    const allItems = [...mainNavigation, ...managementNavigation];
+    const routes = [
+      "/administracao/pessoas",
+      "/administracao/utilizadores",
+      "/administracao/organizacao",
+      "/administracao/atribuicoes",
+      "/administracao/responsabilidades",
+    ];
+    for (const route of routes) {
+      expect(findNavigationItem(allItems, route)).toBeDefined();
+    }
+  });
+
+  it("hides administration section without organization.read", () => {
+    const filtered = filterNavigationByPermission(managementNavigation, [
+      "person.read",
+      "process.read",
+    ]);
+    const items = filtered.map((i) => i.id);
+    expect(items).not.toContain("administracao-pessoas");
+    expect(items).not.toContain("administracao");
+  });
+
+  it("filters administration children by permission", () => {
+    const filtered = filterNavigationByPermission(managementNavigation, [
+      "organization.read",
+      "person.read",
+    ]);
+    const administracao = filtered.find((i) => i.id === "administracao");
+    const childIds = (administracao?.children ?? []).map((c) => c.id);
+    expect(childIds).toContain("administracao-pessoas");
+    expect(childIds).not.toContain("administracao-responsabilidades");
+    expect(childIds).not.toContain("administracao-utilizadores");
   });
 });
 

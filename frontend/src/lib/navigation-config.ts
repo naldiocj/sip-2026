@@ -16,7 +16,8 @@ import {
   MapPin,
   UserCheck,
   Landmark,
-  LayoutList,
+  UserPlus,
+  CalendarClock,
 } from "lucide-react";
 import type { NavigationItem, NavigationGroup } from "@/types/navigation";
 
@@ -128,44 +129,64 @@ export const mainNavigation: NavigationItem[] = [
 
 export const managementNavigation: NavigationItem[] = [
   {
+    id: "administracao",
+    label: "Administração",
+    route: "/administracao",
+    icon: Building2,
+    description: "Gestão administrativa do SIP",
+    requiredPermission: "organization.read",
+    children: [
+      {
+        id: "administracao-pessoas",
+        label: "Pessoas",
+        route: "/administracao/pessoas",
+        icon: UserPlus,
+        requiredPermission: "person.read",
+      },
+      {
+        id: "administracao-organizacao",
+        label: "Organização",
+        route: "/administracao/organizacao",
+        icon: Landmark,
+        requiredPermission: "organization.read",
+      },
+      {
+        id: "administracao-atribuicoes",
+        label: "Atribuições",
+        route: "/administracao/atribuicoes",
+        icon: CalendarClock,
+        requiredPermission: "assignment.read",
+      },
+      {
+        id: "administracao-responsabilidades",
+        label: "Responsabilidades",
+        route: "/administracao/responsabilidades",
+        icon: Shield,
+        requiredPermission: "responsibility.read",
+      },
+      {
+        id: "administracao-delegacoes",
+        label: "Delegações",
+        route: "/administracao/delegacoes",
+        icon: UserCheck,
+        requiredPermission: "delegation.read",
+      },
+      {
+        id: "administracao-utilizadores",
+        label: "Utilizadores",
+        route: "/administracao/utilizadores",
+        icon: Users,
+        requiredPermission: "user.read",
+      },
+    ],
+  },
+  {
     id: "pesquisa",
     label: "Pesquisa",
     route: "/pesquisa",
     icon: Search,
     description: "Pesquisa global",
     requiredPermission: "process.read",
-  },
-  {
-    id: "organizacao",
-    label: "Organização",
-    route: "/organizacao",
-    icon: Building2,
-    description: "Estrutura organizacional",
-    requiredPermission: "organization.read",
-    children: [
-      {
-        id: "organizacao-estrutura",
-        label: "Estrutura",
-        route: "/organizacao",
-        icon: Landmark,
-        requiredPermission: "organization.read",
-      },
-      {
-        id: "organizacao-unidades",
-        label: "Unidades",
-        route: "/organizacao",
-        icon: LayoutList,
-        requiredPermission: "organization.read",
-      },
-    ],
-  },
-  {
-    id: "utilizadores",
-    label: "Utilizadores",
-    route: "/utilizadores",
-    icon: Users,
-    description: "Gestão de utilizadores",
-    requiredPermission: "user.read",
   },
   {
     id: "auditoria",
@@ -200,8 +221,8 @@ export const navigationGroups: NavigationGroup[] = [
     items: mainNavigation,
   },
   {
-    id: "management",
-    label: "Gestão",
+    id: "administration",
+    label: "Administração",
     items: managementNavigation,
     requiredPermission: "organization.read",
   },

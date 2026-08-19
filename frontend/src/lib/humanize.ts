@@ -21,6 +21,20 @@ const PERMISSION_LABELS: Record<string, string> = {
   "notification.manage": "Gerir Notificações",
   "organization.read": "Consultar Organização",
   "organization.manage": "Gerir Organização",
+  "organization.create": "Criar Organização",
+  "organization.update": "Atualizar Organização",
+  "person.read": "Consultar Pessoas",
+  "person.create": "Criar Pessoas",
+  "person.update": "Atualizar Pessoas",
+  "person.deactivate": "Desativar Pessoas",
+  "assignment.read": "Consultar Atribuições",
+  "assignment.create": "Criar Atribuições",
+  "assignment.update": "Atualizar Atribuições",
+  "assignment.end": "Terminar Atribuições",
+  "responsibility.read": "Consultar Responsabilidades",
+  "responsibility.manage": "Gerir Responsabilidades",
+  "delegation.read": "Consultar Delegações",
+  "delegation.manage": "Gerir Delegações",
   "system.admin": "Administrar o Sistema",
   "system.config": "Configurar o Sistema",
   "system.audit": "Consultar Auditoria",
@@ -55,6 +69,22 @@ const USER_STATUS_LABELS: Record<string, string> = {
   INACTIVE: "Inativo",
   BLOCKED: "Bloqueado",
   PENDING: "Pendente",
+};
+
+const PERSON_STATUS_LABELS: Record<string, string> = {
+  ACTIVE: "Activo",
+  INACTIVE: "Inactivo",
+  RETIRED: "Reformado",
+  DECEASED: "Falecido",
+  UNKNOWN: "Desconhecido",
+};
+
+const EMPLOYMENT_STATUS_LABELS: Record<string, string> = {
+  EMPLOYED: "Empregado",
+  ON_LEAVE: "Licença",
+  SUSPENDED: "Suspenso",
+  TERMINATED: "Terminado",
+  NOT_APPLICABLE: "Não aplicável",
 };
 
 const PROCESS_STATUS_LABELS: Record<string, string> = {
@@ -190,6 +220,14 @@ export function humanizeUserStatus(status: string): string {
   return USER_STATUS_LABELS[status] ?? titleCase(status);
 }
 
+export function humanizePersonStatus(status: string): string {
+  return PERSON_STATUS_LABELS[status] ?? titleCase(status);
+}
+
+export function humanizeEmploymentStatus(status: string): string {
+  return EMPLOYMENT_STATUS_LABELS[status] ?? titleCase(status);
+}
+
 export function humanizeUnitType(code: string): string {
   return UNIT_TYPE_LABELS[code] ?? titleCase(code);
 }
@@ -238,6 +276,8 @@ export function humanizeEntity(type: string, code: string): string {
     permission: PERMISSION_LABELS,
     profile: PROFILE_LABELS,
     userStatus: USER_STATUS_LABELS,
+    personStatus: PERSON_STATUS_LABELS,
+    employmentStatus: EMPLOYMENT_STATUS_LABELS,
     process: PROCESS_STATUS_LABELS,
     document: DOCUMENT_TYPE_LABELS,
     occurrence: OCCURRENCE_TYPE_LABELS,
