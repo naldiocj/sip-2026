@@ -12,15 +12,19 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { LoadingState, ErrorState } from "@/components/ui/state-components";
 import { UserDataTable } from "@/components/user/user-data-table";
+import { UserForm } from "@/components/user/user-form";
 import { useAuth } from "@/hooks/use-auth";
 import {
   useActivateUser,
   useBlockUser,
+  useCreateUser,
   useDeactivateUser,
   useProfiles,
   useUnblockUser,
+  useUpdateUser,
   useUsers,
 } from "@/hooks/use-users";
+import { useCreateAssignment } from "@/hooks/use-organization";
 import type { UserListItem } from "@/lib/users-api";
 import { toast } from "sonner";
 import { UserPlusIcon } from "lucide-react";
@@ -47,6 +51,8 @@ function UtilizadoresContent() {
   const [profileFilter, setProfileFilter] = useState("all");
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(20);
+  const [formOpen, setFormOpen] = useState(false);
+  const [editingUser, setEditingUser] = useState<UserListItem | null>(null);
   const debouncedSearch = useDebounced(search);
 
   const { data, isLoading, isError, refetch } = useUsers({
@@ -62,6 +68,15 @@ function UtilizadoresContent() {
   const deactivateMutation = useDeactivateUser();
   const blockMutation = useBlockUser();
   const unblockMutation = useUnblockUser();
+  const createMutation = useCreateUser();
+  const updateMutation = useUpdateUser();
+
+  const [pendingAssignment, setPendingAssignment] = useState<{
+    userId: string;
+    unitId: string;
+    isPrimary: boolean;
+  } | null>(null);
+  const assignmentMutation = useCreateAssignment(pendingAssignment?.userId ?? "");
 
   const pendingActionRef = useRef<((user: UserListItem) => void) | null>(null);
 
@@ -130,6 +145,30 @@ function UtilizadoresContent() {
     [handleAction, blockMutation, unblockMutation],
   );
 
+  const openCreate = () => {
+    setEditingUser(null);
+    setFormOpen(true);
+  };
+
+  const openEdit = (user: UserListItem) => {
+    setEditingUser(user);
+    setFormOpen(true);
+  };
+
+  const handleCreateAssignment = async (userId: string, unitId: string, isPrimary: boolean) => {
+    setPendingAssignment({ userId, unitId, isPrimary });
+    try {
+      await assignmentMutation.mutateAsync({
+        organizational_unit_id: unitId,
+        assignment_type: isPrimary ? "PRIMARY" : "SECONDARY",
+        is_primary: isPrimary,
+        start_date: new Date().toISOString().slice(0, 10),
+      });
+    } finally {
+      setPendingAssignment(null);
+    }
+  };
+
   return (
     <PageContainer>
       <PageHeader
@@ -137,10 +176,7 @@ function UtilizadoresContent() {
         description="Gestão de contas e acessos ao sistema"
         actions={
           canCreate ? (
-            <Button
-              onClick={() => router.push("/administracao/utilizadores/novo")}
-              data-testid="novo-utilizador"
-            >
+            <Button onClick={openCreate} data-testid="novo-utilizador">
               <UserPlusIcon className="mr-2 size-4" />
               Novo Utilizador
             </Button>
@@ -170,7 +206,7 @@ function UtilizadoresContent() {
                 permissions={{ canUpdate, canManageProfiles }}
                 actions={{
                   onView: (user) => router.push(`/administracao/utilizadores/${user.id}`),
-                  onEdit: (user) => router.push(`/administracao/utilizadores/${user.id}?tab=editar`),
+                  onEdit: openEdit,
                   onToggleStatus: toggleStatus,
                   onToggleBlock: toggleBlock,
                   onManageProfiles: (user) =>
@@ -198,6 +234,22 @@ function UtilizadoresContent() {
           </CardContent>
         </Card>
       </PageContent>
+      <UserForm
+        open={formOpen}
+        onClose={() => setFormOpen(false)}
+        editingUser={editingUser}
+        onCreate={async (data) => {
+          const created = await createMutation.mutateAsync(data);
+          toast.success("Utilizador criado com sucesso");
+          return created;
+        }}
+        onUpdate={async (userId, data) => {
+          const updated = await updateMutation.mutateAsync({ userId, data });
+          toast.success("Utilizador actualizado com sucesso");
+          return updated;
+        }}
+        onCreateAssignment={handleCreateAssignment}
+      />
     </PageContainer>
   );
 }

@@ -65,10 +65,16 @@ export function useCreateUser() {
   });
 }
 
-export function useUpdateUser(userId: string) {
+export function useUpdateUser() {
   const invalidate = useInvalidateUsers();
   return useMutation({
-    mutationFn: (data: UserUpdate) => usersApi.update(userId, data),
+    mutationFn: ({
+      userId,
+      data,
+    }: {
+      userId: string;
+      data: UserUpdate;
+    }) => usersApi.update(userId, data),
     onSuccess: (user) => invalidate(user.id),
   });
 }

@@ -31,6 +31,23 @@ export function useOrganizationUnits(organizationId: string | null) {
   });
 }
 
+export function useUnitsByParent(
+  organizationId: string | null,
+  parentId: string | null,
+  typeId?: string,
+) {
+  return useQuery({
+    queryKey: [...organizationKeys.units(organizationId ?? ""), "children", parentId ?? "", typeId ?? ""] as const,
+    queryFn: () =>
+      organizationApi.listUnitsByFilters(organizationId!, {
+        parent_id: parentId,
+        type_id: typeId,
+      }),
+    enabled: !!organizationId,
+    staleTime: 30_000,
+  });
+}
+
 export function useOrganizationTree(organizationId: string | null) {
   return useQuery({
     queryKey: organizationKeys.tree(organizationId ?? ""),

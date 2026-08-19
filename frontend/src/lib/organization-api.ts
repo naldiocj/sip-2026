@@ -28,6 +28,16 @@ export const organizationApi = {
     );
   },
 
+  listUnitsByFilters(
+    organizationId: string,
+    filters: { parent_id?: string | null; type_id?: string } = {},
+  ): Promise<OrganizationalUnit[]> {
+    const query = new URLSearchParams({ organization_id: organizationId });
+    if (filters.parent_id) query.set("parent_id", filters.parent_id);
+    if (filters.type_id) query.set("type_id", filters.type_id);
+    return apiClient.get<OrganizationalUnit[]>(`/api/v1/units?${query.toString()}`);
+  },
+
   getUnitTree(organizationId: string): Promise<UnitTreeNode[]> {
     return apiClient.get<UnitTreeNode[]>(
       `/api/v1/units/tree?organization_id=${organizationId}`,
