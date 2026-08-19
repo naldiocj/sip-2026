@@ -11,12 +11,23 @@ import {
   useUnitAssignments,
   useCreateUnit,
   useUpdateUnit,
+  useMoveUnit,
+  useDeactivateUnit,
 } from "@/hooks/use-organization";
 import type { UnitTreeNode, OrganizationalUnit } from "@/lib/organization-types";
 import { OrganizationTree } from "@/components/organization/organization-tree";
 import { UnitDataTable } from "@/components/organization/unit-data-table";
 import { UnitDetails } from "@/components/organization/unit-details";
 import { UnitForm } from "@/components/organization/unit-form";
+import { MoveUnitDialog } from "@/components/organization/move-unit-dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from "@/components/ui/dialog";
 import { LoadingState, ErrorState, EmptyState } from "@/components/ui/state-components";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -34,6 +45,7 @@ import {
   useQueryClient,
 } from "@tanstack/react-query";
 import { organizationKeys } from "@/hooks/use-organization";
+import { toast } from "sonner";
 
 function OrganizationContent() {
   const { user } = useAuth();
@@ -57,6 +69,8 @@ function OrganizationContent() {
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [editingUnit, setEditingUnit] = useState<OrganizationalUnit | null>(null);
   const [defaultParentId, setDefaultParentId] = useState<string | null>(null);
+  const [movingUnit, setMovingUnit] = useState<UnitTreeNode | null>(null);
+  const [deactivatingUnit, setDeactivatingUnit] = useState<UnitTreeNode | null>(null);
 
   const selectedUnitId = selectedUnit?.id ?? null;
 
@@ -64,6 +78,8 @@ function OrganizationContent() {
 
   const createUnitMutation = useCreateUnit();
   const updateUnitMutation = useUpdateUnit(orgId ?? "");
+  const moveUnitMutation = useMoveUnit(orgId ?? "");
+  const deactivateUnitMutation = useDeactivateUnit(orgId ?? "");
 
   const handleSelectTreeNode = useCallback((node: UnitTreeNode) => {
     setSelectedUnit(node);
@@ -224,6 +240,8 @@ function OrganizationContent() {
                       onSelectUnit={handleSelectTreeNode}
                       onAddChild={canManage ? handleAddChild : undefined}
                       onEditUnit={canManage ? handleEditUnit : undefined}
+                      onMoveUnit={canManage ? setMovingUnit : undefined}
+                      onDeactivateUnit={canManage ? setDeactivatingUnit : undefined}
                       canManage={canManage}
                     />
                   )}
@@ -334,6 +352,108 @@ function OrganizationContent() {
             updateFn={(unitId, data) => updateUnitMutation.mutateAsync({ unitId, data })}
           />
         )}
+
+        {movingUnit && (
+          <MoveUnitDialog
+            unit={movingUnit}
+            units={units ?? []}
+            onClose={() => setMovingUnit(null)}
+            onMoved={async (unitId, parentId) => {
+              await moveUnitMutation.mutateAsync({ unitId, parentId });
+              toast.success("Unidade movida com sucesso");
+            }}
+          />
+        )}
+
+        <Dialog open={!!deactivatingUnit} onOpenChange={() => setDeactivatingUnit(null)}>
+          <DialogContent className="max-w-md">
+            <DialogHeader>
+              <DialogTitle>Desativar unidade</DialogTitle>
+              <DialogDescription>
+                Tem a certeza que pretende desativar a unidade{" "}
+                <span className="font-medium">{deactivatingUnit?.name}</span>? A
+                unidade ficará inativa, mas o histórico será preservado.
+              </DialogDescription>
+            </DialogHeader>
+            <DialogFooter>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => setDeactivatingUnit(null)}
+              >
+                Cancelar
+              </Button>
+              <Button
+                type="button"
+                variant="destructive"
+                disabled={deactivateUnitMutation.isPending}
+                onClick={async () => {
+                  if (!deactivatingUnit) return;
+                  try {
+                    await deactivateUnitMutation.mutateAsync(deactivatingUnit.id);
+                    toast.success("Unidade desativada com sucesso");
+                    setDeactivatingUnit(null);
+                  } catch {
+                    toast.error("Não foi possível desativar a unidade");
+                  }
+                }}
+              >
+                {deactivateUnitMutation.isPending ? "A desativar..." : "Desativar"}
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+
+        {movingUnit && (
+          <MoveUnitDialog
+            unit={movingUnit}
+            units={units ?? []}
+            onClose={() => setMovingUnit(null)}
+            onMoved={async (unitId, parentId) => {
+              await moveUnitMutation.mutateAsync({ unitId, parentId });
+              toast.success("Unidade movida com sucesso");
+            }}
+          />
+        )}
+
+        <Dialog open={!!deactivatingUnit} onOpenChange={() => setDeactivatingUnit(null)}>
+          <DialogContent className="max-w-md">
+            <DialogHeader>
+              <DialogTitle>Desativar unidade</DialogTitle>
+              <DialogDescription>
+                Tem a certeza que pretende desativar a unidade{" "}
+                <span className="font-medium">{deactivatingUnit?.name}</span>? A
+                unidade ficará inativa, mas o histórico será preservado.
+              </DialogDescription>
+            </DialogHeader>
+            <DialogFooter>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => setDeactivatingUnit(null)}
+              >
+                Cancelar
+              </Button>
+              <Button
+                type="button"
+                variant="destructive"
+                disabled={deactivateUnitMutation.isPending}
+                onClick={async () => {
+                  if (!deactivatingUnit) return;
+                  try {
+                    await deactivateUnitMutation.mutateAsync(deactivatingUnit.id);
+                    toast.success("Unidade desativada com sucesso");
+                    setDeactivatingUnit(null);
+                  } catch {
+                    toast.error("Não foi possível desativar a unidade");
+                  }
+                }}
+              >
+                {deactivateUnitMutation.isPending ? "A desativar..." : "Desativar"}
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       </PageContent>
     </PageContainer>
   );

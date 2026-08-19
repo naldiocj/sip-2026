@@ -43,7 +43,17 @@ export const organizationApi = {
   },
 
   updateUnit(unitId: string, data: UnitUpdate): Promise<OrganizationalUnit> {
-    return apiClient.post<OrganizationalUnit>(`/api/v1/units/${unitId}`, data);
+    return apiClient.patch<OrganizationalUnit>(`/api/v1/units/${unitId}`, data);
+  },
+
+  moveUnit(unitId: string, parentId: string | null): Promise<OrganizationalUnit> {
+    return apiClient.patch<OrganizationalUnit>(`/api/v1/units/${unitId}`, {
+      parent_id: parentId,
+    });
+  },
+
+  deactivateUnit(unitId: string): Promise<OrganizationalUnit> {
+    return apiClient.post<OrganizationalUnit>(`/api/v1/units/${unitId}/deactivate`);
   },
 
   getUnitAssignments(unitId: string): Promise<UserAssignmentWithDetails[]> {

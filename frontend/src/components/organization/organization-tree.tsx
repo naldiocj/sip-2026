@@ -9,6 +9,7 @@ import {
   ChevronDownIcon,
   PlusIcon,
   PencilIcon,
+  MoveIcon,
   MoreHorizontalIcon,
   Building2Icon,
   LandmarkIcon,
@@ -16,6 +17,7 @@ import {
   BoxIcon,
   MapPinIcon,
   FolderIcon,
+  PowerIcon,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -43,6 +45,8 @@ interface OrganizationTreeProps {
   onSelectUnit: (unit: UnitTreeNode) => void;
   onAddChild?: (parentId: string) => void;
   onEditUnit?: (unit: UnitTreeNode) => void;
+  onMoveUnit?: (unit: UnitTreeNode) => void;
+  onDeactivateUnit?: (unit: UnitTreeNode) => void;
   canManage: boolean;
   className?: string;
 }
@@ -53,6 +57,8 @@ interface TreeNodeProps {
   onSelectUnit: (unit: UnitTreeNode) => void;
   onAddChild?: (parentId: string) => void;
   onEditUnit?: (unit: UnitTreeNode) => void;
+  onMoveUnit?: (unit: UnitTreeNode) => void;
+  onDeactivateUnit?: (unit: UnitTreeNode) => void;
   canManage: boolean;
   level: number;
 }
@@ -63,6 +69,8 @@ function TreeNode({
   onSelectUnit,
   onAddChild,
   onEditUnit,
+  onMoveUnit,
+  onDeactivateUnit,
   canManage,
   level,
 }: TreeNodeProps) {
@@ -160,13 +168,17 @@ function TreeNode({
                   <PlusIcon className="mr-2 size-3.5" />
                   Adicionar sub-unidade
                 </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => onMoveUnit?.(node)}>
+                  <MoveIcon className="mr-2 size-3.5" />
+                  Mover
+                </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
                   className="text-destructive"
-                  onClick={() => {
-                    /* TODO: deactivate */
-                  }}
+                  disabled={!node.is_active}
+                  onClick={() => onDeactivateUnit?.(node)}
                 >
+                  <PowerIcon className="mr-2 size-3.5" />
                   Desativar
                 </DropdownMenuItem>
               </DropdownMenuContent>
@@ -185,6 +197,8 @@ function TreeNode({
             onSelectUnit={onSelectUnit}
             onAddChild={onAddChild}
             onEditUnit={onEditUnit}
+            onMoveUnit={onMoveUnit}
+            onDeactivateUnit={onDeactivateUnit}
             canManage={canManage}
             level={level + 1}
           />
@@ -199,6 +213,8 @@ export function OrganizationTree({
   onSelectUnit,
   onAddChild,
   onEditUnit,
+  onMoveUnit,
+  onDeactivateUnit,
   canManage,
   className,
 }: OrganizationTreeProps) {
@@ -242,6 +258,8 @@ export function OrganizationTree({
           onSelectUnit={onSelectUnit}
           onAddChild={onAddChild}
           onEditUnit={onEditUnit}
+          onMoveUnit={onMoveUnit}
+          onDeactivateUnit={onDeactivateUnit}
           canManage={canManage}
           level={0}
         />

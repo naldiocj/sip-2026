@@ -111,6 +111,39 @@ export function useUpdateUnit(organizationId: string) {
   });
 }
 
+export function useMoveUnit(organizationId: string) {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({ unitId, parentId }: { unitId: string; parentId: string | null }) =>
+      organizationApi.moveUnit(unitId, parentId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: organizationKeys.units(organizationId),
+      });
+      queryClient.invalidateQueries({
+        queryKey: organizationKeys.tree(organizationId),
+      });
+    },
+  });
+}
+
+export function useDeactivateUnit(organizationId: string) {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (unitId: string) => organizationApi.deactivateUnit(unitId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: organizationKeys.units(organizationId),
+      });
+      queryClient.invalidateQueries({
+        queryKey: organizationKeys.tree(organizationId),
+      });
+    },
+  });
+}
+
 export function useCreateAssignment(userId: string) {
   const queryClient = useQueryClient();
 
