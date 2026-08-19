@@ -15,5 +15,7 @@ export default defineConfig({
     setupFiles: ["./src/__tests__/setup.ts"],
     css: true,
     include: ["src/**/*.test.{ts,tsx}"],
+    fileParallelism: false,
+    maxConcurrency: 2,
   },
 });

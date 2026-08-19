@@ -151,8 +151,8 @@ describe("UnitDetails", () => {
     expect(screen.getAllByText("Direcção Nacional").length).toBeGreaterThan(0);
     expect(screen.getByText("DN")).toBeTruthy();
     expect(screen.getAllByText("DIR-001").length).toBeGreaterThan(0);
-    expect(screen.getByText("Direcção")).toBeTruthy();
-    expect(screen.getByText("Ativo")).toBeTruthy();
+    expect(screen.getAllByText("Direcção").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("Ativo").length).toBeGreaterThan(0);
     expect(screen.getByText("Direcção superior")).toBeTruthy();
   });
 

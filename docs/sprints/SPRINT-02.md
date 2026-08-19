@@ -63,7 +63,7 @@ Cada conceito possui responsabilidade própria.
 | TASK-024 | audit-integration | DONE |
 | TASK-025 | security-review | DONE |
 | TASK-026 | backend-tests | DONE |
-| TASK-027 | frontend-tests | PLANNED |
+| TASK-027 | frontend-tests | DONE |
 | TASK-028 | e2e-tests | PLANNED |
 | TASK-029 | documentation | DONE |
 | TASK-030 | final-review | PLANNED |
