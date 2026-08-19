@@ -218,3 +218,103 @@ def test_patch_user_requires_user_update_permission(client: TestClient) -> None:
         headers=instrutor,
     )
     assert response.status_code == 403
+
+
+# ── Estado da conta ──────────────────────────────────────────────
+
+
+def _create_and_login_user(client: TestClient) -> tuple[dict, dict]:
+    """Cria um utilizador via API e autentica-o; devolve (user, headers)."""
+    payload = _unique_user_payload("estado")
+    created = client.post(
+        USERS_URL, json={**payload, "status": "ACTIVE"}, headers=_auth_headers(client)
+    )
+    assert created.status_code == 201, created.text
+    login = client.post(
+        "/api/v1/auth/login",
+        json={"username": payload["username"], "password": payload["password"]},
+    )
+    assert login.status_code == 200, login.text
+    token = login.cookies.get("sip_access_token")
+    return created.json(), {"Authorization": f"Bearer {token}"}
+
+
+@requires_database
+def test_deactivate_blocks_login_and_revokes_session(client: TestClient) -> None:
+    admin_headers = _auth_headers(client)
+    user, user_headers = _create_and_login_user(client)
+
+    me_before = client.get("/api/v1/auth/me", headers=user_headers)
+    assert me_before.status_code == 200
+
+    response = client.post(f"{USERS_URL}/{user['id']}/deactivate", headers=admin_headers)
+    assert response.status_code == 200, response.text
+    assert response.json()["status"] == "INACTIVE"
+
+    me_after = client.get("/api/v1/auth/me", headers=user_headers)
+    assert me_after.status_code == 401, "sessão deve ser revogada após desactivação"
+
+    login_after = client.post(
+        "/api/v1/auth/login",
+        json={"username": user["username"], "password": "segredo123"},
+    )
+    assert login_after.status_code == 401, "login deve falhar após desactivação"
+
+
+@requires_database
+def test_block_is_distinct_from_deactivate(client: TestClient) -> None:
+    admin_headers = _auth_headers(client)
+    user, user_headers = _create_and_login_user(client)
+
+    response = client.post(f"{USERS_URL}/{user['id']}/block", headers=admin_headers)
+    assert response.status_code == 200
+    assert response.json()["status"] == "BLOCKED"
+
+    me_after = client.get("/api/v1/auth/me", headers=user_headers)
+    assert me_after.status_code == 401
+
+
+@requires_database
+def test_unblock_allows_login_again(client: TestClient) -> None:
+    admin_headers = _auth_headers(client)
+    user, _ = _create_and_login_user(client)
+
+    client.post(f"{USERS_URL}/{user['id']}/block", headers=admin_headers)
+    unblocked = client.post(f"{USERS_URL}/{user['id']}/unblock", headers=admin_headers)
+    assert unblocked.status_code == 200
+    assert unblocked.json()["status"] == "ACTIVE"
+
+    login = client.post(
+        "/api/v1/auth/login",
+        json={"username": user["username"], "password": "segredo123"},
+    )
+    assert login.status_code == 200
+
+
+@requires_database
+def test_activate_restores_access(client: TestClient) -> None:
+    admin_headers = _auth_headers(client)
+    user, _ = _create_and_login_user(client)
+
+    client.post(f"{USERS_URL}/{user['id']}/deactivate", headers=admin_headers)
+    activated = client.post(f"{USERS_URL}/{user['id']}/activate", headers=admin_headers)
+    assert activated.status_code == 200
+    assert activated.json()["status"] == "ACTIVE"
+
+    login = client.post(
+        "/api/v1/auth/login",
+        json={"username": user["username"], "password": "segredo123"},
+    )
+    assert login.status_code == 200
+
+
+@requires_database
+def test_status_endpoints_require_user_update_permission(client: TestClient) -> None:
+    headers = _auth_headers(client)
+    listed = client.get(USERS_URL, headers=headers)
+    user_id = listed.json()["items"][0]["id"]
+
+    instrutor = _auth_headers(client, username="instrutor", password="instrutor123")
+    for action in ("activate", "deactivate", "block", "unblock"):
+        response = client.post(f"{USERS_URL}/{user_id}/{action}", headers=instrutor)
+        assert response.status_code == 403, f"{action} deve exigir permissão"

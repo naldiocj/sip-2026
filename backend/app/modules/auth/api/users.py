@@ -268,3 +268,46 @@ def update_user(
         ) from None
     logger.info("user_updated", user_id=str(user_id), by=str(user.id))
     return _item_dict(db, updated)
+
+
+def _status_endpoint(service_method: str, detail: str) -> Any:
+    """Factory de endpoint de transição de estado (activa/desactiva/bloqueia)."""
+
+    def endpoint(
+        user_id: uuid.UUID,
+        request: Request,
+        user: User = Depends(require_permission("user.update")),
+        db: Session = Depends(get_db_session),
+    ) -> UserListItem:
+        service = UserService(db)
+        try:
+            updated = getattr(service, service_method)(user_id, actor=user)
+            db.commit()
+        except UserNotFoundError:
+            db.rollback()
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND, detail="User not found"
+            ) from None
+        except ValueError as e:
+            db.rollback()
+            raise HTTPException(
+                status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail=str(e)
+            ) from None
+        logger.info(detail, user_id=str(user_id), by=str(user.id))
+        return _item_dict(db, updated)
+
+    return endpoint
+
+
+router.post("/{user_id}/activate", response_model=UserListItem)(
+    _status_endpoint("activate", "user_activated")
+)
+router.post("/{user_id}/deactivate", response_model=UserListItem)(
+    _status_endpoint("deactivate", "user_deactivated")
+)
+router.post("/{user_id}/block", response_model=UserListItem)(
+    _status_endpoint("block", "user_blocked")
+)
+router.post("/{user_id}/unblock", response_model=UserListItem)(
+    _status_endpoint("unblock", "user_unblocked")
+)
