@@ -15,6 +15,7 @@ class OrganizationCreate(BaseModel):
     name: str = Field(..., min_length=1, max_length=255)
     short_name: str | None = Field(None, max_length=100)
     description: str | None = None
+    organization_type: str = "INTERNAL"
 
 
 class OrganizationResponse(BaseModel):
@@ -25,6 +26,8 @@ class OrganizationResponse(BaseModel):
     name: str
     short_name: str | None = None
     description: str | None = None
+    organization_type: str = "INTERNAL"
+    organization_type_label: str = "Interna"
     status: str
     is_active: bool
     created_at: datetime | None = None

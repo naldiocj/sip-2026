@@ -3,7 +3,7 @@
 import enum
 import uuid
 
-from sqlalchemy import Boolean, ForeignKey, String, Text, Uuid
+from sqlalchemy import Boolean, ForeignKey, String, Text, UniqueConstraint, Uuid
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.db.base import Base, TimestampMixin, UUIDPrimaryKeyMixin
@@ -24,6 +24,13 @@ class OrganizationalUnit(UUIDPrimaryKeyMixin, TimestampMixin, Base):
     """
 
     __tablename__ = "organizational_units"
+    __table_args__ = (
+        UniqueConstraint(
+            "organization_id",
+            "code",
+            name="uq_organizational_units_org_code",
+        ),
+    )
 
     organization_id: Mapped[uuid.UUID] = mapped_column(
         Uuid,

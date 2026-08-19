@@ -37,35 +37,35 @@ Cada conceito possui responsabilidade própria.
 
 | ID | Task | Estado |
 |---|---|---|
-| TASK-001 | person-domain | PLANNED |
-| TASK-002 | person-functional-data | PLANNED |
-| TASK-003 | user-person-association | PLANNED |
-| TASK-004 | profile-permission-integration | PLANNED |
-| TASK-005 | organization-domain | PLANNED |
-| TASK-006 | organizational-unit | PLANNED |
+| TASK-001 | person-domain | DONE |
+| TASK-002 | person-functional-data | DONE |
+| TASK-003 | user-person-association | DONE |
+| TASK-004 | profile-permission-integration | PARTIAL |
+| TASK-005 | organization-domain | DONE |
+| TASK-006 | organizational-unit | DONE |
 | TASK-007 | organizational-hierarchy | PLANNED |
 | TASK-008 | organizational-unit-types | PLANNED |
-| TASK-009 | user-assignment | PLANNED |
-| TASK-010 | lotacao | PLANNED |
-| TASK-011 | functional-role | PLANNED |
-| TASK-012 | responsibility | PLANNED |
-| TASK-013 | delegation | PLANNED |
-| TASK-014 | substitution | PLANNED |
-| TASK-015 | access-context | PLANNED |
-| TASK-016 | scope-engine | PLANNED |
-| TASK-017 | organization-api | PLANNED |
+| TASK-009 | user-assignment | DONE |
+| TASK-010 | lotacao | PARTIAL |
+| TASK-011 | functional-role | PARTIAL |
+| TASK-012 | responsibility | DONE |
+| TASK-013 | delegation | DONE |
+| TASK-014 | substitution | DONE |
+| TASK-015 | access-context | PARTIAL |
+| TASK-016 | scope-engine | DONE |
+| TASK-017 | organization-api | PARTIAL |
 | TASK-018 | person-management-api | PLANNED |
-| TASK-019 | assignment-api | PLANNED |
-| TASK-020 | organization-ui | PLANNED |
+| TASK-019 | assignment-api | PARTIAL |
+| TASK-020 | organization-ui | PARTIAL |
 | TASK-021 | person-management-ui | PLANNED |
 | TASK-022 | assignment-ui | PLANNED |
-| TASK-023 | organization-tree | PLANNED |
-| TASK-024 | audit-integration | PLANNED |
+| TASK-023 | organization-tree | PARTIAL |
+| TASK-024 | audit-integration | PARTIAL |
 | TASK-025 | security-review | PLANNED |
-| TASK-026 | backend-tests | PLANNED |
+| TASK-026 | backend-tests | PARTIAL |
 | TASK-027 | frontend-tests | PLANNED |
 | TASK-028 | e2e-tests | PLANNED |
-| TASK-029 | documentation | PLANNED |
+| TASK-029 | documentation | PARTIAL |
 | TASK-030 | final-review | PLANNED |
 
 ## Dependencies

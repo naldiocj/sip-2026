@@ -151,6 +151,7 @@ def create_organization(
             name=body.name,
             short_name=body.short_name,
             description=body.description,
+            organization_type=body.organization_type,
         )
         db.commit()
         logger.info(

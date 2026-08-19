@@ -284,7 +284,11 @@ def seed(session: Session, hasher: PasswordHasher | None = None) -> dict[str, in
             user.profiles.append(profiles[ProfileEnum(str(user_data["profile"]))])
 
     # Organização e unidades (DEV ONLY)
-    from app.modules.organization.domain.organization import Organization, OrganizationStatus
+    from app.modules.organization.domain.organization import (
+        Organization,
+        OrganizationStatus,
+        OrganizationType,
+    )
     from app.modules.organization.domain.unit import OrganizationalUnit, UnitStatus
     from app.modules.organization.domain.unit_type import UnitType
     from app.modules.organization.domain.user_assignment import (
@@ -301,6 +305,7 @@ def seed(session: Session, hasher: PasswordHasher | None = None) -> dict[str, in
             name="Serviço de Investigação Criminal",
             short_name="SIC",
             description="Organização principal do SIP",
+            organization_type=OrganizationType.INTERNAL,
             status=OrganizationStatus.ACTIVE,
             is_active=True,
         )
