@@ -62,9 +62,44 @@ export interface DelegationCreate {
   reason?: string | null;
 }
 
+export interface SubstitutionRecord {
+  id: string;
+  substituted_user_id: string;
+  substitute_user_id: string;
+  organizational_unit_id: string | null;
+  functional_role: string | null;
+  start_date: string | null;
+  end_date: string | null;
+  reason: string | null;
+  status: string;
+  is_active: boolean;
+}
+
+export interface SubstitutionCreate {
+  substituted_user_id: string;
+  substitute_user_id: string;
+  organizational_unit_id?: string | null;
+  functional_role?: string | null;
+  start_date?: string | null;
+  end_date?: string | null;
+  reason?: string | null;
+}
+
+export interface AssignmentCreate {
+  organizational_unit_id: string;
+  assignment_type?: string;
+  is_primary?: boolean;
+  start_date?: string | null;
+  end_date?: string | null;
+}
+
 export const managementApi = {
   listUserAssignments(userId: string): Promise<AssignmentRecord[]> {
     return apiClient.get<AssignmentRecord[]>(`/api/v1/users/${userId}/assignments`);
+  },
+
+  createUserAssignment(userId: string, data: AssignmentCreate): Promise<AssignmentRecord> {
+    return apiClient.post<AssignmentRecord>(`/api/v1/users/${userId}/assignments`, data);
   },
 
   updateUserAssignment(
@@ -110,5 +145,20 @@ export const managementApi = {
 
   revokeDelegation(delegationId: string): Promise<DelegationRecord> {
     return apiClient.post<DelegationRecord>(`/api/v1/delegations/${delegationId}/revoke`);
+  },
+
+  listSubstitutions(userId?: string): Promise<SubstitutionRecord[]> {
+    const qs = userId ? `?user_id=${userId}` : "";
+    return apiClient.get<SubstitutionRecord[]>(`/api/v1/substitutions${qs}`);
+  },
+
+  createSubstitution(data: SubstitutionCreate): Promise<SubstitutionRecord> {
+    return apiClient.post<SubstitutionRecord>("/api/v1/substitutions", data);
+  },
+
+  endSubstitution(substitutionId: string): Promise<SubstitutionRecord> {
+    return apiClient.post<SubstitutionRecord>(
+      `/api/v1/substitutions/${substitutionId}/end`,
+    );
   },
 };

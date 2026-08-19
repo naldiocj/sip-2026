@@ -115,6 +115,6 @@ export interface UserAssignmentCreate {
   organizational_unit_id: string;
   assignment_type: string;
   is_primary: boolean;
-  start_date?: string;
-  end_date?: string;
+  start_date?: string | null;
+  end_date?: string | null;
 }

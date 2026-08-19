@@ -172,6 +172,13 @@ export const managementNavigation: NavigationItem[] = [
         requiredPermission: "delegation.read",
       },
       {
+        id: "administracao-substituicoes",
+        label: "Substituições",
+        route: "/administracao/substituicoes",
+        icon: UserCheck,
+        requiredPermission: "delegation.read",
+      },
+      {
         id: "administracao-utilizadores",
         label: "Utilizadores",
         route: "/administracao/utilizadores",

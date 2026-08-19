@@ -58,7 +58,7 @@ Cada conceito possui responsabilidade própria.
 | TASK-019 | assignment-api | DONE |
 | TASK-020 | organization-ui | DONE |
 | TASK-021 | person-management-ui | PLANNED |
-| TASK-022 | assignment-ui | PLANNED |
+| TASK-022 | assignment-ui | DONE |
 | TASK-023 | organization-tree | PARTIAL |
 | TASK-024 | audit-integration | DONE |
 | TASK-025 | security-review | DONE |

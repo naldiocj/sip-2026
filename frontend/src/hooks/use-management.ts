@@ -3,6 +3,7 @@ import { managementApi } from "@/lib/management-api";
 import type {
   DelegationCreate,
   ResponsibilityCreate,
+  SubstitutionCreate,
   UserAssignmentUpdate,
 } from "@/lib/management-api";
 
@@ -107,6 +108,35 @@ export function useRevokeDelegation() {
     mutationFn: (delegationId: string) => managementApi.revokeDelegation(delegationId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: managementKeys.delegations() });
+    },
+  });
+}
+
+export function useSubstitutions(userId?: string | null) {
+  return useQuery({
+    queryKey: [...managementKeys.all, "substitutions", userId ?? "all"],
+    queryFn: () => managementApi.listSubstitutions(userId ?? undefined),
+  });
+}
+
+export function useCreateSubstitution() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (data: SubstitutionCreate) => managementApi.createSubstitution(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [...managementKeys.all, "substitutions"] });
+    },
+  });
+}
+
+export function useEndSubstitution() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (substitutionId: string) => managementApi.endSubstitution(substitutionId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [...managementKeys.all, "substitutions"] });
     },
   });
 }

@@ -7,8 +7,7 @@ import {
 } from "@/components/layout/page-container";
 import { ProtectedRoute } from "@/components/auth/protected-route";
 import { Card, CardContent } from "@/components/ui/card";
-import { EmptyState } from "@/components/ui/state-components";
-import { CalendarClockIcon } from "lucide-react";
+import { AssignmentsSection } from "@/components/management/assignments-section";
 
 function AtribuicoesContent() {
   return (
@@ -20,11 +19,7 @@ function AtribuicoesContent() {
       <PageContent>
         <Card>
           <CardContent className="p-4">
-            <EmptyState
-              icon={CalendarClockIcon}
-              title="Gestão de atribuições"
-              description="A gestão de atribuições de utilizadores a unidades será implementada em breve."
-            />
+            <AssignmentsSection />
           </CardContent>
         </Card>
       </PageContent>

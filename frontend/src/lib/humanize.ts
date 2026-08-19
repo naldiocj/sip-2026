@@ -169,15 +169,13 @@ const ASSIGNMENT_TYPE_LABELS: Record<string, string> = {
 };
 
 const RESPONSIBILITY_SCOPE_LABELS: Record<string, string> = {
-  GLOBAL: "Global",
-  ORGANIZATION: "Organização",
-  DIRECTION: "Direcção",
+  DIRECTION: "Direção",
   DEPARTMENT: "Departamento",
   SECTION: "Secção",
-  OWN: "Próprio",
-  ASSIGNED: "Atribuído",
+  UNIT: "Unidade",
   PIQUETE: "Piquete",
-  PGR: "PGR",
+  PROCESS_MANAGEMENT: "Gestão de Processos",
+  DOCUMENT_MANAGEMENT: "Gestão de Documentos",
 };
 
 const AUDIT_ACTION_LABELS: Record<string, string> = {

@@ -7,24 +7,19 @@ import {
 } from "@/components/layout/page-container";
 import { ProtectedRoute } from "@/components/auth/protected-route";
 import { Card, CardContent } from "@/components/ui/card";
-import { EmptyState } from "@/components/ui/state-components";
-import { ShieldIcon } from "lucide-react";
+import { ResponsibilitiesSection } from "@/components/management/responsibilities-section";
 
 function ResponsabilidadesContent() {
   return (
     <PageContainer>
       <PageHeader
         title="Responsabilidades"
-        description="Funções e âmbitos de responsabilidade dos utilizadores"
+        description="Âmbitos de responsabilidade por utilizador"
       />
       <PageContent>
         <Card>
           <CardContent className="p-4">
-            <EmptyState
-              icon={ShieldIcon}
-              title="Gestão de responsabilidades"
-              description="A gestão de responsabilidades será implementada em breve."
-            />
+            <ResponsibilitiesSection />
           </CardContent>
         </Card>
       </PageContent>

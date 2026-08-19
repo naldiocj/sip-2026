@@ -7,19 +7,19 @@ import {
 } from "@/components/layout/page-container";
 import { ProtectedRoute } from "@/components/auth/protected-route";
 import { Card, CardContent } from "@/components/ui/card";
-import { DelegationsSection } from "@/components/management/delegations-section";
+import { SubstitutionsSection } from "@/components/management/substitutions-section";
 
-function DelegacoesContent() {
+function SubstituicoesContent() {
   return (
     <PageContainer>
       <PageHeader
-        title="Delegações"
-        description="Transferência temporária de responsabilidades"
+        title="Substituições"
+        description="Exercício temporário de funções por outros utilizadores"
       />
       <PageContent>
         <Card>
           <CardContent className="p-4">
-            <DelegationsSection />
+            <SubstitutionsSection />
           </CardContent>
         </Card>
       </PageContent>
@@ -27,10 +27,10 @@ function DelegacoesContent() {
   );
 }
 
-export default function DelegacoesPage() {
+export default function SubstituicoesPage() {
   return (
     <ProtectedRoute>
-      <DelegacoesContent />
+      <SubstituicoesContent />
     </ProtectedRoute>
   );
 }
