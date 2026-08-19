@@ -1,22 +1,13 @@
+import type { CSSProperties } from "react";
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Inter } from "next/font/google";
+import "@fontsource/inter/latin.css";
+import "@fontsource/geist-sans/latin.css";
+import "@fontsource/geist-mono/latin.css";
 import "./globals.css";
 import { Providers } from "@/components/providers";
 import { AppLayout } from "@/components/layout/app-layout";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
-
-const inter = Inter({subsets:['latin'],variable:'--font-sans'});
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
 
 export const metadata: Metadata = {
   title: "SIP — Sistema de Instrução Processual",
@@ -28,14 +19,12 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html
       lang="pt"
       suppressHydrationWarning
-      className={cn(
-        "h-full",
-        "antialiased",
-        geistSans.variable,
-        geistMono.variable,
-        "font-sans",
-        inter.variable,
-      )}
+      className={cn("h-full", "antialiased", "font-sans")}
+      style={{
+        "--font-sans": "'Inter', 'Geist Sans', ui-sans-serif, system-ui, sans-serif",
+        "--font-geist-sans": "'Geist Sans', ui-sans-serif, system-ui, sans-serif",
+        "--font-geist-mono": "'Geist Mono', ui-monospace, monospace",
+      } as CSSProperties}
     >
       <body className="min-h-full flex flex-col">
         <Providers>
