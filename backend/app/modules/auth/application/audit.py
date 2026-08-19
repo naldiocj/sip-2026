@@ -38,12 +38,17 @@ class AuditService:
         user_agent: str | None = None,
         details: dict[str, object] | None = None,
         result: AuditResult = AuditResult.SUCCESS,
+        commit: bool = True,
     ) -> AuditEvent:
-        """Persiste um evento de auditoria (commit imediato).
+        """Persiste um evento de auditoria (commit imediato por omissão).
 
         Defesa em profundidade: qualquer chave de details que possa
         conter passwords, tokens ou segredos é removida antes de
         persistir.
+
+        Usar commit=False quando a operação de negócio ainda vai ser
+        commitada pelo chamador (evita commits parciais e preserva a
+        atomicidade da transacção).
         """
         safe_details = self._sanitize_details(details or {})
         event = AuditEvent(
@@ -56,7 +61,8 @@ class AuditService:
             result=result,
         )
         self.db.add(event)
-        self.db.commit()
+        if commit:
+            self.db.commit()
         return event
 
     @staticmethod

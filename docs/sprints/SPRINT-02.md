@@ -60,7 +60,7 @@ Cada conceito possui responsabilidade própria.
 | TASK-021 | person-management-ui | PLANNED |
 | TASK-022 | assignment-ui | PLANNED |
 | TASK-023 | organization-tree | PARTIAL |
-| TASK-024 | audit-integration | PARTIAL |
+| TASK-024 | audit-integration | DONE |
 | TASK-025 | security-review | PLANNED |
 | TASK-026 | backend-tests | PARTIAL |
 | TASK-027 | frontend-tests | PLANNED |

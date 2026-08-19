@@ -99,7 +99,7 @@ def update_user_assignment(
         db.commit()
         _record_audit(
             db,
-            AuditEventType.USER_ASSIGNED,
+            AuditEventType.ASSIGNMENT_UPDATED,
             user,
             request,
             {"assignment_id": str(assignment.id), "user_id": user_id, "action": "update"},
@@ -146,7 +146,7 @@ def end_user_assignment(
         db.commit()
         _record_audit(
             db,
-            AuditEventType.USER_UNASSIGNED,
+            AuditEventType.ASSIGNMENT_ENDED,
             user,
             request,
             {"assignment_id": str(assignment.id), "user_id": user_id, "action": "end"},

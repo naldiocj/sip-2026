@@ -8,6 +8,8 @@ from sqlalchemy.orm import Session
 
 from app.db.session import get_db_session
 from app.modules.auth.api.dependencies import get_current_user
+from app.modules.auth.application.audit import AuditService
+from app.modules.auth.domain.audit import AuditEventType
 from app.modules.auth.domain.user import User
 from app.modules.organization.api.dependencies import (
     require_organization_manage,
@@ -46,6 +48,24 @@ from app.modules.organization.domain.unit_type import UNIT_TYPE_LABELS, UnitType
 logger = structlog.get_logger("organization")
 
 router = APIRouter(prefix="/organizations", tags=["organizations"])
+
+
+def _record_audit(
+    db: Session,
+    event_type: AuditEventType,
+    user: User,
+    request: Request,
+    details: dict[str, object],
+) -> None:
+    """Regista um evento de auditoria com contexto do pedido."""
+    client_ip = request.client.host if request.client else None
+    AuditService(db).record(
+        event_type,
+        user_id=user.id,
+        ip_address=client_ip,
+        user_agent=request.headers.get("user-agent"),
+        details=details,
+    )
 
 
 def _handle_error(e: Exception) -> None:
@@ -158,6 +178,13 @@ def create_organization(
             organization_type=body.organization_type,
         )
         db.commit()
+        _record_audit(
+            db,
+            AuditEventType.ORGANIZATION_CREATED,
+            user,
+            request,
+            {"organization_id": str(org.id), "code": org.code, "name": org.name},
+        )
         logger.info(
             "organization_created",
             user_id=str(user.id),
@@ -227,6 +254,13 @@ def update_organization(
             org.is_active = body.status == "ACTIVE"
 
         db.commit()
+        _record_audit(
+            db,
+            AuditEventType.ORGANIZATION_UPDATED,
+            user,
+            request,
+            {"organization_id": str(org.id), "code": org.code},
+        )
         logger.info(
             "organization_updated",
             user_id=str(user.id),
@@ -294,6 +328,18 @@ def create_unit(
             description=body.description,
         )
         db.commit()
+        _record_audit(
+            db,
+            AuditEventType.UNIT_CREATED,
+            user,
+            request,
+            {
+                "unit_id": str(unit.id),
+                "organization_id": str(unit.organization_id),
+                "code": unit.code,
+                "name": unit.name,
+            },
+        )
         logger.info(
             "unit_created",
             user_id=str(user.id),
@@ -363,8 +409,22 @@ def update_unit(
 
         if body.parent_id is not None:
             service.move_unit(unit.id, body.parent_id)
+            _record_audit(
+                db,
+                AuditEventType.UNIT_MOVED,
+                user,
+                request,
+                {"unit_id": str(unit.id), "new_parent_id": str(body.parent_id)},
+            )
 
         db.commit()
+        _record_audit(
+            db,
+            AuditEventType.UNIT_UPDATED,
+            user,
+            request,
+            {"unit_id": str(unit.id), "code": unit.code, "name": unit.name},
+        )
         logger.info(
             "unit_updated",
             user_id=str(user.id),
@@ -398,6 +458,13 @@ def deactivate_unit(
     try:
         service.deactivate_unit(uuid.UUID(unit_id))
         db.commit()
+        _record_audit(
+            db,
+            AuditEventType.UNIT_DEACTIVATED,
+            user,
+            request,
+            {"unit_id": unit_id},
+        )
         logger.info(
             "unit_deactivated",
             user_id=str(user.id),
@@ -525,6 +592,19 @@ def create_user_assignment(
     db.add(assignment)
     db.commit()
     db.refresh(assignment)
+
+    _record_audit(
+        db,
+        AuditEventType.ASSIGNMENT_CREATED,
+        user,
+        request,
+        {
+            "assignment_id": str(assignment.id),
+            "user_id": user_id,
+            "unit_id": str(assignment.organizational_unit_id),
+            "assignment_type": body.assignment_type,
+        },
+    )
 
     logger.info(
         "user_assigned",

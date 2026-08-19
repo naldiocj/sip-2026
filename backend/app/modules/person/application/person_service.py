@@ -250,6 +250,14 @@ class PersonService:
 
         user.person = person
         self.db.flush()
+        from app.modules.auth.application.audit import AuditService
+        from app.modules.auth.domain.audit import AuditEventType
+
+        AuditService(self.db).record(
+            AuditEventType.USER_PERSON_LINKED,
+            details={"user_id": str(user_id), "person_id": str(person_id)},
+            commit=False,
+        )
         return person
 
     def unlink_user_from_person(self, user_id: uuid.UUID) -> Person | None:
@@ -264,4 +272,12 @@ class PersonService:
             return None
         user.person = None
         self.db.flush()
+        from app.modules.auth.application.audit import AuditService
+        from app.modules.auth.domain.audit import AuditEventType
+
+        AuditService(self.db).record(
+            AuditEventType.USER_PERSON_UNLINKED,
+            details={"user_id": str(user_id), "person_id": str(person.id)},
+            commit=False,
+        )
         return person  # type: ignore[no-any-return]
