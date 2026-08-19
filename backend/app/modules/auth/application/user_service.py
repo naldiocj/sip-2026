@@ -15,6 +15,7 @@ from sqlalchemy.orm import Session
 from app.modules.auth.application.audit import AuditService
 from app.modules.auth.application.password import PasswordService
 from app.modules.auth.domain.audit import AuditEventType
+from app.modules.auth.domain.profile import Profile
 from app.modules.auth.domain.session import UserSession
 from app.modules.auth.domain.user import User, UserStatus
 
@@ -168,6 +169,60 @@ class UserService:
             AuditEventType.USER_UNBLOCKED,
             user_id=actor.id,
             details={"user_id": str(user_id)},
+            commit=False,
+        )
+        return user
+
+    def assign_profile(
+        self,
+        user_id: uuid.UUID,
+        profile_id: uuid.UUID,
+        *,
+        actor: User,
+    ) -> User:
+        """Atribui um perfil activo ao utilizador e regista auditoria."""
+        user = self._get_or_raise(user_id)
+        profile = self.db.get(Profile, profile_id)
+        if profile is None or not profile.is_active:
+            raise ValueError("Perfil inválido ou inactivo")
+        if any(p.id == profile_id for p in user.profiles):
+            raise ValueError("Perfil já atribuído a este utilizador")
+        user.profiles.append(profile)
+        self.db.flush()
+        self.audit_service.record(
+            AuditEventType.USER_PROFILE_ASSIGNED,
+            user_id=actor.id,
+            details={
+                "user_id": str(user_id),
+                "profile_id": str(profile_id),
+                "profile": profile.code,
+            },
+            commit=False,
+        )
+        return user
+
+    def remove_profile(
+        self,
+        user_id: uuid.UUID,
+        profile_id: uuid.UUID,
+        *,
+        actor: User,
+    ) -> User:
+        """Remove um perfil do utilizador e regista auditoria."""
+        user = self._get_or_raise(user_id)
+        profile = next((p for p in user.profiles if p.id == profile_id), None)
+        if profile is None:
+            raise ValueError("Perfil não atribuído a este utilizador")
+        user.profiles.remove(profile)
+        self.db.flush()
+        self.audit_service.record(
+            AuditEventType.USER_PROFILE_REMOVED,
+            user_id=actor.id,
+            details={
+                "user_id": str(user_id),
+                "profile_id": str(profile_id),
+                "profile": profile.code,
+            },
             commit=False,
         )
         return user

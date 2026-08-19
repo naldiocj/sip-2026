@@ -71,13 +71,14 @@ def test_create_user_records_audit_without_password(
     db_session: Session, seeded_user_admin: User
 ) -> None:
     service = UserService(db_session)
+    before = len(_audit_events(db_session, AuditEventType.USER_CREATED))
     user = _create_test_user(db_session, service, seeded_user_admin)
     db_session.flush()
 
     events = _audit_events(db_session, AuditEventType.USER_CREATED)
-    assert len(events) == 1
-    assert str(events[0].user_id) == str(seeded_user_admin.id)
-    details = events[0].details or {}
+    assert len(events) == before + 1
+    assert str(events[-1].user_id) == str(seeded_user_admin.id)
+    details = events[-1].details or {}
     assert details.get("user_id") == str(user.id)
     assert "password" not in str(details).lower()
 
@@ -123,9 +124,10 @@ def test_update_user_records_audit(db_session: Session, seeded_user_admin: User)
     user = _create_test_user(db_session, service, seeded_user_admin)
     db_session.flush()
 
+    before = len(_audit_events(db_session, AuditEventType.USER_UPDATED))
     service.update(user.id, full_name="Novo Nome", actor=seeded_user_admin)
     db_session.flush()
-    assert len(_audit_events(db_session, AuditEventType.USER_UPDATED)) == 1
+    assert len(_audit_events(db_session, AuditEventType.USER_UPDATED)) == before + 1
 
 
 @requires_database
@@ -183,16 +185,24 @@ def test_status_transitions_record_audit(db_session: Session, seeded_user_admin:
     user = _create_test_user(db_session, service, seeded_user_admin)
     db_session.flush()
 
+    def _delta(event: AuditEventType) -> int:
+        return len(_audit_events(db_session, event))
+
+    base_deactivated = _delta(AuditEventType.USER_DEACTIVATED)
+    base_activated = _delta(AuditEventType.USER_ACTIVATED)
+    base_blocked = _delta(AuditEventType.USER_BLOCKED)
+    base_unblocked = _delta(AuditEventType.USER_UNBLOCKED)
+
     service.deactivate(user.id, actor=seeded_user_admin)
     service.activate(user.id, actor=seeded_user_admin)
     service.block(user.id, actor=seeded_user_admin)
     service.unblock(user.id, actor=seeded_user_admin)
     db_session.flush()
 
-    assert len(_audit_events(db_session, AuditEventType.USER_DEACTIVATED)) == 1
-    assert len(_audit_events(db_session, AuditEventType.USER_ACTIVATED)) == 1
-    assert len(_audit_events(db_session, AuditEventType.USER_BLOCKED)) == 1
-    assert len(_audit_events(db_session, AuditEventType.USER_UNBLOCKED)) == 1
+    assert len(_audit_events(db_session, AuditEventType.USER_DEACTIVATED)) == base_deactivated + 1
+    assert len(_audit_events(db_session, AuditEventType.USER_ACTIVATED)) == base_activated + 1
+    assert len(_audit_events(db_session, AuditEventType.USER_BLOCKED)) == base_blocked + 1
+    assert len(_audit_events(db_session, AuditEventType.USER_UNBLOCKED)) == base_unblocked + 1
 
 
 @requires_database

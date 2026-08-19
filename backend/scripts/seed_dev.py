@@ -405,9 +405,23 @@ def seed(session: Session, hasher: PasswordHasher | None = None) -> dict[str, in
             session.add(unit)
         session.flush()
 
-        # Atribuir admin à Direcção de Investigação
-        admin_user = session.scalar(select(User).where(User.username == "admin"))
-        if admin_user is not None:
+    # Atribuir admin à Direcção de Investigação (idempotente — garante
+    # que o admin possui sempre atribuição principal no seed).
+    admin_user = session.scalar(select(User).where(User.username == "admin"))
+    dir_inv = session.scalar(
+        select(OrganizationalUnit).where(
+            OrganizationalUnit.code == "DIR-INV",
+            OrganizationalUnit.type_id == UnitType.DIRECTION,
+        )
+    )
+    if admin_user is not None and dir_inv is not None:
+        has_primary = session.scalar(
+            select(UserAssignment).where(
+                UserAssignment.user_id == admin_user.id,
+                UserAssignment.is_primary.is_(True),
+            )
+        )
+        if has_primary is None:
             assignment = UserAssignment(
                 user_id=admin_user.id,
                 organizational_unit_id=dir_inv.id,
