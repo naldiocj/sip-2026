@@ -53,7 +53,7 @@ Cada conceito possui responsabilidade própria.
 | TASK-014 | substitution | DONE |
 | TASK-015 | access-context | DONE |
 | TASK-016 | scope-engine | DONE |
-| TASK-017 | organization-api | PARTIAL |
+| TASK-017 | organization-api | DONE |
 | TASK-018 | person-management-api | DONE |
 | TASK-019 | assignment-api | DONE |
 | TASK-020 | organization-ui | PARTIAL |

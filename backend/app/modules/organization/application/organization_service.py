@@ -13,6 +13,7 @@ from app.modules.organization.application.assignment_service import AssignmentSe
 from app.modules.organization.application.hierarchy_service import HierarchyService
 from app.modules.organization.domain.exceptions import (
     DuplicateCodeError,
+    OrganizationNotFoundError,
     UnitNotFoundError,
 )
 from app.modules.organization.domain.organization import (
@@ -215,6 +216,10 @@ class OrganizationService:
         description: str | None = None,
     ) -> OrganizationalUnit:
         """Cria uma nova unidade organizacional."""
+        org = self.db.get(Organization, organization_id)
+        if org is None:
+            raise OrganizationNotFoundError(f"Organization {organization_id} not found.")
+
         if code is not None:
             existing = self.get_unit_by_code(organization_id, code)
             if existing is not None:

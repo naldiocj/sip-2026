@@ -36,6 +36,16 @@ class OrganizationResponse(BaseModel):
     model_config = {"from_attributes": True}
 
 
+class OrganizationUpdate(BaseModel):
+    """Schema para actualizar uma organização."""
+
+    name: str | None = Field(None, min_length=1, max_length=255)
+    short_name: str | None = Field(None, max_length=100)
+    description: str | None = None
+    organization_type: str | None = None
+    status: str | None = None
+
+
 # --- Organizational Unit ---
 
 

@@ -18,6 +18,7 @@ from app.modules.organization.api.schemas import (
     OrganizationContextResponse,
     OrganizationCreate,
     OrganizationResponse,
+    OrganizationUpdate,
     UnitCreate,
     UnitResponse,
     UnitTreeNode,
@@ -172,6 +173,71 @@ def create_organization(
     )
 
 
+@router.get("/{org_id}", response_model=OrganizationResponse)
+def get_organization(
+    org_id: str,
+    user: User = Depends(require_organization_read),
+    db: Session = Depends(get_db_session),
+) -> OrganizationResponse:
+    """Obtém uma organização pelo ID."""
+    import uuid
+
+    service = OrganizationService(db)
+    org = service.get_organization(uuid.UUID(org_id))
+    if org is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Organization not found",
+        )
+    return org  # type: ignore[return-value]
+
+
+@router.patch("/{org_id}", response_model=OrganizationResponse)
+def update_organization(
+    org_id: str,
+    body: OrganizationUpdate,
+    request: Request,
+    user: User = Depends(require_organization_manage),
+    db: Session = Depends(get_db_session),
+) -> OrganizationResponse:
+    """Actualiza campos de uma organização (deactivate suave incluído)."""
+    import uuid
+
+    service = OrganizationService(db)
+    org = service.get_organization(uuid.UUID(org_id))
+    if org is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Organization not found",
+        )
+
+    try:
+        if body.name is not None:
+            org.name = body.name
+        if body.short_name is not None:
+            org.short_name = body.short_name
+        if body.description is not None:
+            org.description = body.description
+        if body.organization_type is not None:
+            org.organization_type = body.organization_type  # type: ignore[assignment]
+        if body.status is not None:
+            from app.modules.organization.domain.organization import OrganizationStatus
+
+            org.status = OrganizationStatus(body.status)
+            org.is_active = body.status == "ACTIVE"
+
+        db.commit()
+        logger.info(
+            "organization_updated",
+            user_id=str(user.id),
+            org_code=org.code,
+        )
+    except Exception as e:
+        db.rollback()
+        _handle_error(e)
+    return org  # type: ignore[return-value]
+
+
 # --- Organizational Unit endpoints ---
 
 units_router = APIRouter(prefix="/units", tags=["organizational-units"])
@@ -308,6 +374,45 @@ def update_unit(
         db.rollback()
         _handle_error(e)
 
+    return UnitResponse(
+        id=unit.id,
+        organization_id=unit.organization_id,
+        type_id=unit.type_id,
+        name=unit.name,
+        status=unit.status,
+        is_active=unit.is_active,
+    )
+
+
+@units_router.post("/{unit_id}/deactivate", response_model=UnitResponse)
+def deactivate_unit(
+    unit_id: str,
+    request: Request,
+    user: User = Depends(require_organization_manage),
+    db: Session = Depends(get_db_session),
+) -> UnitResponse:
+    """Desactiva uma unidade suavemente (histórico preservado)."""
+    import uuid
+
+    service = OrganizationService(db)
+    try:
+        service.deactivate_unit(uuid.UUID(unit_id))
+        db.commit()
+        logger.info(
+            "unit_deactivated",
+            user_id=str(user.id),
+            unit_id=unit_id,
+        )
+    except Exception as e:
+        db.rollback()
+        _handle_error(e)
+
+    unit = service.get_unit(uuid.UUID(unit_id))
+    if unit is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Unit not found",
+        )
     return UnitResponse(
         id=unit.id,
         organization_id=unit.organization_id,
