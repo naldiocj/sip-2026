@@ -22,7 +22,13 @@ from app.modules.auth.domain.user import User, UserStatus
 
 
 def test_user_status_enum_values() -> None:
-    assert [s.value for s in UserStatus] == ["ACTIVE", "INACTIVE", "BLOCKED", "PENDING"]
+    assert [s.value for s in UserStatus] == [
+        "ACTIVE",
+        "INACTIVE",
+        "BLOCKED",
+        "SUSPENDED",
+        "PENDING",
+    ]
 
 
 def test_profile_enum_values() -> None:

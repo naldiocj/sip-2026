@@ -16,6 +16,7 @@ class UserStatus(enum.StrEnum):
     ACTIVE = "ACTIVE"
     INACTIVE = "INACTIVE"
     BLOCKED = "BLOCKED"
+    SUSPENDED = "SUSPENDED"
     PENDING = "PENDING"
 
 

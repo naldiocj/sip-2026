@@ -17,6 +17,7 @@ USER_STATUS_LABELS: dict[UserStatus, str] = {
     UserStatus.ACTIVE: "Ativo",
     UserStatus.INACTIVE: "Inativo",
     UserStatus.BLOCKED: "Bloqueado",
+    UserStatus.SUSPENDED: "Suspenso",
     UserStatus.PENDING: "Pendente",
 }
 

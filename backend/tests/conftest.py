@@ -66,9 +66,21 @@ def _prepare_test_database() -> None:
 def _clean_test_data() -> None:
     """Limpa dados transitórios da base de teste entre sessões.
 
-    Remove pessoas e dados de organização criados por testes anteriores,
-    preservando os dados de seed (users, perfis, unidades e a organização SIC).
+    Remove pessoas, utilizadores e dados de organização criados por
+    testes anteriores, preservando os dados de seed (users, perfis,
+    unidades e a organização SIC).
     """
+    seed_usernames = (
+        "admin",
+        "director",
+        "secretaria",
+        "chefe_departamento",
+        "chefe_seccao",
+        "instrutor",
+        "piquete",
+        "editor",
+        "pgr",
+    )
     engine = create_engine(TEST_DATABASE_URL)
     with engine.begin() as conn:
         conn.execute(text("DELETE FROM audit_events"))
@@ -77,6 +89,8 @@ def _clean_test_data() -> None:
         conn.execute(text("DELETE FROM delegations"))
         conn.execute(text("DELETE FROM substitutions"))
         conn.execute(text("DELETE FROM persons WHERE person_number NOT LIKE 'PES-000001'"))
+        seed_list = ", ".join(f"'{u}'" for u in seed_usernames)
+        conn.execute(text(f"DELETE FROM users WHERE username NOT IN ({seed_list})"))
     engine.dispose()
 
 
