@@ -1,5 +1,7 @@
 """Router da API de organização."""
 
+from typing import Any
+
 import structlog
 from fastapi import APIRouter, Depends, HTTPException, Request, status
 from sqlalchemy.orm import Session
@@ -12,6 +14,7 @@ from app.modules.organization.api.dependencies import (
     require_organization_read,
 )
 from app.modules.organization.api.schemas import (
+    AccessContextResponse,
     OrganizationContextResponse,
     OrganizationCreate,
     OrganizationResponse,
@@ -449,4 +452,85 @@ def get_organization_context(
         primary_unit=context.organization.primary_unit if context.organization else None,
         units=context.organization.units if context.organization else [],
         responsibility_scopes=context.responsibility_scopes,
+    )
+
+
+@me_router.get("/context", response_model=AccessContextResponse)
+def get_access_context(
+    user: User = Depends(get_current_user),
+    db: Session = Depends(get_db_session),
+) -> AccessContextResponse:
+    """Obtém o contexto de acesso completo do utilizador actual.
+
+    Inclui utilizador, pessoa, perfis, permissões, organização,
+    atribuições, responsabilidades, delegações e âmbitos efectivos.
+    Nunca expõe passwords ou tokens.
+    """
+    service = AccessContextService(db)
+    context = service.get_context(user)
+
+    def _assignment_dict(a: Any) -> dict[str, object]:
+        return {
+            "id": str(a.id),
+            "user_id": str(a.user_id),
+            "organizational_unit_id": str(a.organizational_unit_id),
+            "assignment_type": str(a.assignment_type),
+            "is_primary": a.is_primary,
+            "start_date": str(a.start_date) if a.start_date else None,
+            "end_date": str(a.end_date) if a.end_date else None,
+            "status": str(a.status),
+        }
+
+    def _responsibility_dict(r: Any) -> dict[str, object]:
+        return {
+            "id": str(r.id),
+            "user_id": str(r.user_id),
+            "scope": str(r.scope),
+            "organizational_unit_id": str(r.organizational_unit_id)
+            if r.organizational_unit_id
+            else None,
+            "start_date": str(r.start_date) if r.start_date else None,
+            "end_date": str(r.end_date) if r.end_date else None,
+            "status": str(r.status),
+        }
+
+    def _delegation_dict(d: Any) -> dict[str, object]:
+        return {
+            "id": str(d.id),
+            "delegator_user_id": str(d.delegator_user_id),
+            "delegate_user_id": str(d.delegate_user_id),
+            "scope": str(d.scope),
+            "organizational_unit_id": str(d.organizational_unit_id)
+            if d.organizational_unit_id
+            else None,
+            "start_date": str(d.start_date) if d.start_date else None,
+            "end_date": str(d.end_date) if d.end_date else None,
+            "status": str(d.status),
+        }
+
+    return AccessContextResponse(
+        user_id=context.user_id,
+        username=context.username,
+        person=context.person,
+        profiles=context.profiles,
+        permissions=context.permissions,
+        organization_id=context.organization_id,
+        organization_name=(
+            context.organization.organization.name
+            if context.organization and context.organization.organization
+            else None
+        ),
+        primary_unit_id=context.primary_unit_id,
+        primary_unit_name=(
+            context.organization.primary_unit.name
+            if context.organization and context.organization.primary_unit
+            else None
+        ),
+        assignments=[_assignment_dict(a) for a in context.assignments],
+        responsibilities=[_responsibility_dict(r) for r in context.responsibilities],
+        delegations=[_delegation_dict(d) for d in context.delegations],
+        responsibility_scopes=context.responsibility_scopes,
+        effective_scopes=context.effective_scopes,
+        humanized_scopes=context.humanized_scopes,
+        functional_roles=context.functional_roles,
     )

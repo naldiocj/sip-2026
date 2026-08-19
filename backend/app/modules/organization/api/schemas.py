@@ -178,3 +178,28 @@ class OrganizationContextResponse(BaseModel):
     primary_unit: UnitResponse | None = None
     units: list[UnitResponse] = Field(default_factory=list)
     responsibility_scopes: list[str] = Field(default_factory=list)
+
+
+class AccessContextResponse(BaseModel):
+    """Schema para a resposta de /me/context.
+
+    Contexto de acesso completo do utilizador autenticado.
+    Nunca inclui passwords, tokens ou dados sensíveis.
+    """
+
+    user_id: UUID
+    username: str
+    person: dict[str, object] | None = None
+    profiles: list[str] = Field(default_factory=list)
+    permissions: list[str] = Field(default_factory=list)
+    organization_id: UUID | None = None
+    organization_name: str | None = None
+    primary_unit_id: UUID | None = None
+    primary_unit_name: str | None = None
+    assignments: list[object] = Field(default_factory=list)
+    responsibilities: list[object] = Field(default_factory=list)
+    delegations: list[object] = Field(default_factory=list)
+    responsibility_scopes: list[str] = Field(default_factory=list)
+    effective_scopes: list[str] = Field(default_factory=list)
+    humanized_scopes: list[str] = Field(default_factory=list)
+    functional_roles: list[str] = Field(default_factory=list)

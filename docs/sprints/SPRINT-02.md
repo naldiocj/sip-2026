@@ -51,7 +51,7 @@ Cada conceito possui responsabilidade própria.
 | TASK-012 | responsibility | DONE |
 | TASK-013 | delegation | DONE |
 | TASK-014 | substitution | DONE |
-| TASK-015 | access-context | PARTIAL |
+| TASK-015 | access-context | DONE |
 | TASK-016 | scope-engine | DONE |
 | TASK-017 | organization-api | PARTIAL |
 | TASK-018 | person-management-api | PLANNED |
