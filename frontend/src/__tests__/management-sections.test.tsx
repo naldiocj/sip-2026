@@ -200,6 +200,62 @@ describe("ResponsibilitiesSection", () => {
     });
     expect(screen.getAllByText("Nova responsabilidade").length).toBeGreaterThan(0);
   });
+
+  it("lista responsabilidades com âmbito humanizado", async () => {
+    vi.spyOn(globalThis, "fetch").mockImplementation((input: RequestInfo | URL) => {
+      const url = String(input);
+      if (url.includes("/api/v1/users")) {
+        return Promise.resolve(jsonResponse(usersPayload));
+      }
+      if (url.includes("/api/v1/organizations")) {
+        return Promise.resolve(jsonResponse(organizationsPayload));
+      }
+      if (url.includes("/api/v1/units?")) {
+        return Promise.resolve(jsonResponse(unitsPayload));
+      }
+      if (url.includes("/api/v1/responsibilities")) {
+        return Promise.resolve(
+          jsonResponse([
+            {
+              id: "resp-1",
+              user_id: "user-1",
+              scope: "DIRECTION",
+              organizational_unit_id: "unit-1",
+              resource_type: "processo",
+              start_date: "2026-01-01",
+              end_date: null,
+              status: "ACTIVE",
+            },
+            {
+              id: "resp-2",
+              user_id: "user-2",
+              scope: "PROCESS_MANAGEMENT",
+              organizational_unit_id: null,
+              resource_type: null,
+              start_date: "2026-01-01",
+              end_date: "2026-02-01",
+              status: "ENDED",
+            },
+          ]),
+        );
+      }
+      return Promise.resolve(jsonResponse({}));
+    });
+    renderWithProviders(<ResponsibilitiesSection />);
+    await waitFor(() => {
+      expect(screen.getByText("Direção")).toBeTruthy();
+    });
+    expect(screen.getByText("Gestão de Processos")).toBeTruthy();
+    await waitFor(() => {
+      expect(screen.getByText("Secção de Instrução")).toBeTruthy();
+    });
+    expect(screen.getByText("processo")).toBeTruthy();
+    expect(screen.getByText("Ativa")).toBeTruthy();
+    expect(screen.getByText("Terminada")).toBeTruthy();
+    expect(
+      screen.getAllByRole("button", { name: "Terminar responsabilidade Direção" }),
+    ).toHaveLength(1);
+  });
 });
 
 describe("DelegationsSection", () => {
@@ -233,5 +289,60 @@ describe("DelegationsSection", () => {
       expect(screen.getByText("Sem delegações")).toBeTruthy();
     });
     expect(screen.getAllByText("Nova delegação").length).toBeGreaterThan(0);
+  });
+
+  it("lista delegações com estado humanizado", async () => {
+    vi.spyOn(globalThis, "fetch").mockImplementation((input: RequestInfo | URL) => {
+      const url = String(input);
+      if (url.includes("/api/v1/users")) {
+        return Promise.resolve(jsonResponse(usersPayload));
+      }
+      if (url.includes("/api/v1/organizations")) {
+        return Promise.resolve(jsonResponse(organizationsPayload));
+      }
+      if (url.includes("/api/v1/units?")) {
+        return Promise.resolve(jsonResponse(unitsPayload));
+      }
+      if (url.includes("/api/v1/delegations")) {
+        return Promise.resolve(
+          jsonResponse([
+            {
+              id: "del-1",
+              delegator_user_id: "user-1",
+              delegate_user_id: "user-2",
+              scope: "SECTION",
+              organizational_unit_id: "unit-1",
+              start_date: "2026-01-01",
+              end_date: null,
+              status: "ACTIVE",
+            },
+            {
+              id: "del-2",
+              delegator_user_id: "user-2",
+              delegate_user_id: "user-1",
+              scope: "DOCUMENT_MANAGEMENT",
+              organizational_unit_id: null,
+              start_date: "2026-01-01",
+              end_date: "2026-01-15",
+              status: "REVOKED",
+            },
+          ]),
+        );
+      }
+      return Promise.resolve(jsonResponse({}));
+    });
+    renderWithProviders(<DelegationsSection />);
+    await waitFor(() => {
+      expect(screen.getByText("Secção de Instrução")).toBeTruthy();
+    });
+    expect(screen.getByText("Secção")).toBeTruthy();
+    expect(screen.getByText("Gestão de Documentos")).toBeTruthy();
+    expect(screen.getByText("Ativa")).toBeTruthy();
+    expect(screen.getByText("Revogada")).toBeTruthy();
+    expect(
+      screen.getByRole("button", {
+        name: /Revogar delegação de user-1 para user-2/,
+      }),
+    ).toBeTruthy();
   });
 });

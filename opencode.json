@@ -1,8 +1,21 @@
 {
   "$schema": "https://opencode.ai/config.json",
+  "mcp": {
+    "graphify": {
+      "type": "local",
+      "command": [
+        "/home/naldiocj/.local/share/uv/tools/graphifyy/bin/python",
+        "-m",
+        "graphify.serve",
+        "/home/naldiocj/projects/sic/sip/graphify-out/graph.json"
+      ],
+      "enabled": true
+    }
+  },
   "skills": {
     "paths": ["skills"]
   },
+  "lsp": true,
   "permission": {
     "edit": "allow",
     "bash": "allow",

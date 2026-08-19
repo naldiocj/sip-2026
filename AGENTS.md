@@ -27,20 +27,21 @@ Para cada Sprint:
 2. Ler as Tasks (prompts/tasks/).
 3. Ler este ficheiro (AGENTS.md).
 4. Ler ADRs relevantes (docs/adr/).
-5. Inspeccionar o código existente.
-6. Criar plano.
-7. Executar uma Task de cada vez.
-8. Implementar.
-9. Testar.
-10. Corrigir.
-11. Executar lint.
-12. Executar typecheck.
-13. Rever segurança.
-14. Rever permissões.
-15. Actualizar documentação.
-16. Criar commit.
-17. Actualizar estado da Task.
-18. Só então passar para a próxima Task.
+5. Consultar o graphify (ver secção "graphify" abaixo) para contexto do codebase.
+6. Inspeccionar o código existente.
+7. Criar plano.
+8. Executar uma Task de cada vez.
+9. Implementar.
+10. Testar.
+11. Corrigir.
+12. Executar lint.
+13. Executar typecheck.
+14. Rever segurança.
+15. Rever permissões.
+16. Actualizar documentação.
+17. Criar commit.
+18. Actualizar estado da Task.
+19. Só então passar para a próxima Task.
 
 ## Regras
 
@@ -85,3 +86,20 @@ refactor(scope): description
 
 # Componentes de Domínio/Negócio (Fora de ui/): 
 Os nomes dos arquivos e componentes deverão utilizar a terminologia em português para manter a consistência do projeto.
+
+## graphify (USO OBRIGATÓRIO)
+
+This project has a knowledge graph at graphify-out/ with god nodes, community structure, and cross-file relationships.
+
+O graphify é a **fonte primária de contexto do codebase** e deve ser utilizado **SEMPRE**, em todas as sessões e tarefas — nunca iniciar trabalho sem consultar o graphify.
+
+When the user types `/graphify`, use the installed graphify skill or instructions before doing anything else.
+
+Rules (MUST):
+- **SEMPRE**: antes de qualquer tarefa (feature, bug, refactoring, review, documentação), executar primeiro `graphify query "<questão>"` — nunca saltar directamente para grep ou leitura raw de ficheiros.
+- **SEMPRE**: usar `graphify path "<A>" "<B>"` para relações entre componentes e `graphify explain "<concept>"` para conceitos focados. Retornam um subgrafo scoped, normalmente muito menor que GRAPH_REPORT.md ou output raw de grep.
+- **SEMPRE**: após modificar código, executar `graphify update .` para manter o grafo actualizado (AST-only, sem custo de API).
+- Dirty graphify-out/ files são esperados após hooks ou updates incrementais; dirty graph files **não** são motivo para saltar o graphify. Só saltar se a tarefa for sobre output do grafo stale/incorrecto, ou se o utilizador disser explicitamente para não usar.
+- Se graphify-out/wiki/index.md existir, usar para navegação ampla em vez de browsing raw de source.
+- Ler graphify-out/GRAPH_REPORT.md apenas para revisão ampla de arquitectura ou quando query/path/explain não fornecerem contexto suficiente.
+- Se o grafo não existir ou estiver incompleto (ex.: falta graphify-out/graph.json), **reconstruir** com `graphify update .` antes de prosseguir.
