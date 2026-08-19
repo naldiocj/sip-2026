@@ -1,8 +1,8 @@
-"""User session entity.
+"""Entidade de sessão do utilizador.
 
-Sessions allow revocation of access (logout, security incidents).
-Full refresh-token support is prepared here and activated in a future
-sprint, keeping the architecture revocable from day one.
+As sessões permitem revogar o acesso (logout, incidentes de segurança).
+O suporte completo a refresh tokens está preparado aqui e será activado
+numa sprint futura, mantendo a arquitectura revogável desde o início.
 """
 
 import uuid
@@ -15,11 +15,11 @@ from app.db.base import Base, TimestampMixin, UUIDPrimaryKeyMixin
 
 
 class UserSession(UUIDPrimaryKeyMixin, TimestampMixin, Base):
-    """User authentication session.
+    """Sessão de autenticação do utilizador.
 
-    A session is created on login and revoked on logout or when access
-    must be cut. An access token carries the session id so revocation
-    can be enforced on every authenticated request.
+    Uma sessão é criada no login e revogada no logout ou quando o acesso
+    precisa de ser cortado. O access token transporta o id da sessão para
+    que a revogação seja imposta em todos os pedidos autenticados.
     """
 
     __tablename__ = "user_sessions"
@@ -55,11 +55,11 @@ class UserSession(UUIDPrimaryKeyMixin, TimestampMixin, Base):
 
     @property
     def is_revoked(self) -> bool:
-        """Whether the session has been revoked."""
+        """Indica se a sessão foi revogada."""
         return self.revoked_at is not None
 
     def revoke(self) -> None:
-        """Revoke this session (idempotent)."""
+        """Revoga esta sessão (idempotente)."""
         if self.revoked_at is None:
             self.revoked_at = datetime.now(UTC)
 

@@ -1,4 +1,4 @@
-"""Permission entity."""
+"""Entidade de permissão."""
 
 from sqlalchemy import Boolean, String, Text
 from sqlalchemy.orm import Mapped, mapped_column, relationship
@@ -7,10 +7,10 @@ from app.db.base import Base, TimestampMixin, UUIDPrimaryKeyMixin
 
 
 class Permission(UUIDPrimaryKeyMixin, TimestampMixin, Base):
-    """Permission entity.
+    """Entidade Permission.
 
-    Represents a specific permission in the format RESOURCE.ACTION.
-    Extensible for future business-specific permissions.
+    Representa uma permissão específica no formato RECURSO.ACÇÃO.
+    Extensível para permissões futuras específicas do negócio.
     """
 
     __tablename__ = "permissions"
@@ -41,7 +41,7 @@ class Permission(UUIDPrimaryKeyMixin, TimestampMixin, Base):
         default=True,
     )
 
-    # Relationships
+    # Relacionamentos
     profiles = relationship(
         "Profile",
         secondary="profile_permissions",

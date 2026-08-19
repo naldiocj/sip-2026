@@ -1,7 +1,7 @@
-"""Person entity.
+"""Entidade Person.
 
-Represents a real person known to the SIP. A Person is
-independent of a User — a Person may exist without a User account.
+Representa uma pessoa real conhecida pelo SIP. Uma Person é
+independente de um User — uma Person pode existir sem conta de utilizador.
 
 Regra arquitectural: dados pessoais, dados funcionais e dados de
 autenticação são separados. Person NUNCA contém password ou dados de
@@ -18,7 +18,7 @@ from app.db.base import Base, TimestampMixin, UUIDPrimaryKeyMixin
 
 
 class PersonStatus(enum.StrEnum):
-    """Lifecycle status of a person record."""
+    """Estado do ciclo de vida do registo de uma pessoa."""
 
     ACTIVE = "ACTIVE"
     INACTIVE = "INACTIVE"
@@ -28,9 +28,9 @@ class PersonStatus(enum.StrEnum):
 
 
 class PersonalStatus(enum.StrEnum):
-    """Optional finer-grained personal status.
+    """Estado pessoal opcional, de maior granularidade.
 
-    Kept minimal — only states with functional meaning.
+    Mantido mínimo — apenas estados com significado funcional.
     """
 
     CIVIL_SERVANT = "CIVIL_SERVANT"
@@ -39,7 +39,7 @@ class PersonalStatus(enum.StrEnum):
 
 
 class EmploymentStatus(enum.StrEnum):
-    """Employment status for functional data."""
+    """Estado de emprego para os dados funcionais."""
 
     EMPLOYED = "EMPLOYED"
     ON_LEAVE = "ON_LEAVE"
@@ -49,10 +49,10 @@ class EmploymentStatus(enum.StrEnum):
 
 
 class Person(UUIDPrimaryKeyMixin, TimestampMixin, Base):
-    """A real person known to the SIP.
+    """Uma pessoa real conhecida pelo SIP.
 
-    Person represents the identity of a person. It is deliberately
-    separate from User (authentication) and from functional data.
+    Person representa a identidade de uma pessoa. Está deliberadamente
+    separada de User (autenticação) e dos dados funcionais.
     """
 
     __tablename__ = "persons"
@@ -148,7 +148,7 @@ class Person(UUIDPrimaryKeyMixin, TimestampMixin, Base):
         nullable=True,
     )
 
-    # Relationships
+    # Relacionamentos
     user = relationship(
         "User",
         back_populates="person",
@@ -161,18 +161,18 @@ class Person(UUIDPrimaryKeyMixin, TimestampMixin, Base):
 
     @property
     def display_name(self) -> str:
-        """Preferred name when available, otherwise full name."""
+        """Nome preferido quando disponível; caso contrário, o nome completo."""
         return self.preferred_name or self.full_name
 
 
 class PersonNumberGenerator:
-    """Generates sequential person numbers (PES-000001)."""
+    """Gera números de pessoa sequenciais (PES-000001)."""
 
     PREFIX = "PES"
 
     @staticmethod
     def next_number(last_number: str | None) -> str:
-        """Return the next person number given the last one."""
+        """Devolve o próximo número de pessoa dado o último."""
         if last_number is None:
             return f"{PersonNumberGenerator.PREFIX}-000001"
         try:

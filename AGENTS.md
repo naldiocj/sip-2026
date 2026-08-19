@@ -76,3 +76,12 @@ refactor(scope): description
 - Problemas arquitecturais: documentar, não esconder.
 - Decisões importantes: criar ADR.
 - Dúvidas: não inventar requisito. Consultar documentação, código existente, ADRs, Tasks.
+
+## Comentários de Código (Backend e Frontend): 
+- Serão redigidos exclusivamente em português.
+
+## Componentes Genéricos (app/components/ui/): 
+- Os arquivos manterão seus nomes originais em inglês (ex.: button.tsx, dialog.tsx, select.tsx).
+
+# Componentes de Domínio/Negócio (Fora de ui/): 
+Os nomes dos arquivos e componentes deverão utilizar a terminologia em português para manter a consistência do projeto.

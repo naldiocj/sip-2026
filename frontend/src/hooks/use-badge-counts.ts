@@ -3,15 +3,15 @@
 import { useEffect, useState } from "react";
 
 /**
- * Fetches the count of open ocorrências for sidebar badge.
- * TODO: Endpoint GET /api/v1/ocorrencias/count?status=aberta not yet available.
- * Uncomment and wire to apiClient.get() once the backend ocorrências module is implemented.
+ * Obtém a contagem de ocorrências abertas para o badge da barra lateral.
+ * TODO: O endpoint GET /api/v1/ocorrencias/count?status=aberta ainda não está disponível.
+ * Descomentar e ligar a apiClient.get() assim que o módulo de ocorrências do backend for implementado.
  */
 export function useOcorrenciasCount(): number {
   const [count] = useState(0);
 
   useEffect(() => {
-    // TODO: uncomment when backend is ready
+    // TODO: descomentar quando o backend estiver pronto
     // const data = await apiClient.get<{ count: number }>("/api/v1/ocorrencias/count");
     // setCount(data.count);
   }, []);
@@ -20,15 +20,15 @@ export function useOcorrenciasCount(): number {
 }
 
 /**
- * Fetches the count of currently detained persons for sidebar badge.
- * TODO: Endpoint GET /api/v1/detidos/count?status=ativo not yet available.
- * Uncomment and wire to apiClient.get() once the backend detidos module is implemented.
+ * Obtém a contagem de pessoas detidas para o badge da barra lateral.
+ * TODO: O endpoint GET /api/v1/detidos/count?status=ativo ainda não está disponível.
+ * Descomentar e ligar a apiClient.get() assim que o módulo de detidos do backend for implementado.
  */
 export function useDetidosCount(): number {
   const [count] = useState(0);
 
   useEffect(() => {
-    // TODO: uncomment when backend is ready
+    // TODO: descomentar quando o backend estiver pronto
     // const data = await apiClient.get<{ count: number }>("/api/v1/detidos/count");
     // setCount(data.count);
   }, []);
@@ -37,15 +37,15 @@ export function useDetidosCount(): number {
 }
 
 /**
- * Fetches the count of unread notifications for sidebar badge.
- * TODO: Endpoint GET /api/v1/notificacoes/count?read=false not yet available.
- * Uncomment and wire to apiClient.get() once the backend notifications module is implemented.
+ * Obtém a contagem de notificações não lidas para o badge da barra lateral.
+ * TODO: O endpoint GET /api/v1/notificacoes/count?read=false ainda não está disponível.
+ * Descomentar e ligar a apiClient.get() assim que o módulo de notificações do backend for implementado.
  */
 export function useNotificacoesCount(): number {
   const [count] = useState(0);
 
   useEffect(() => {
-    // TODO: uncomment when backend is ready
+    // TODO: descomentar quando o backend estiver pronto
     // const data = await apiClient.get<{ count: number }>("/api/v1/notificacoes/count");
     // setCount(data.count);
   }, []);

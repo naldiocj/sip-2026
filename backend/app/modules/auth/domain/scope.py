@@ -1,13 +1,13 @@
-"""Organization scope enum for future resource-level authorization."""
+"""Enum de âmbito de organização para autorização futura a nível de recurso."""
 
 import enum
 
 
 class OrganizationScope(enum.StrEnum):
-    """Scope levels for resource access control.
+    """Níveis de âmbito para controlo de acesso a recursos.
 
-    This enum defines the different levels of organizational access.
-    Full implementation will be in SPRINT-02.
+    Este enum define os diferentes níveis de acesso organizacional.
+    A implementação completa será feita na SPRINT-02.
     """
 
     GLOBAL = "GLOBAL"

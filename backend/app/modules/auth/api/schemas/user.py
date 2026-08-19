@@ -1,7 +1,7 @@
-"""User API schemas.
+"""Schemas da API de utilizadores.
 
-These schemas are used for API request/response serialization.
-password_hash is NEVER included in any response schema.
+Estes schemas são usados na serialização de pedidos/respostas da API.
+password_hash NUNCA é incluído em nenhum schema de resposta.
 """
 
 from datetime import datetime
@@ -13,7 +13,7 @@ from app.modules.auth.domain.user import UserStatus
 
 
 class UserBase(BaseModel):
-    """Base user schema with common fields."""
+    """Schema base de utilizador com campos comuns."""
 
     username: str = Field(..., min_length=3, max_length=50)
     email: EmailStr
@@ -22,13 +22,13 @@ class UserBase(BaseModel):
 
 
 class UserCreate(UserBase):
-    """Schema for creating a new user."""
+    """Schema para criar um novo utilizador."""
 
     password: str = Field(..., min_length=8, max_length=128)
 
 
 class UserUpdate(BaseModel):
-    """Schema for updating user information."""
+    """Schema para actualizar informação do utilizador."""
 
     full_name: str | None = Field(None, min_length=1, max_length=255)
     email: EmailStr | None = None
@@ -38,9 +38,9 @@ class UserUpdate(BaseModel):
 
 
 class UserResponse(UserBase):
-    """Schema for user responses.
+    """Schema para respostas de utilizador.
 
-    Never includes password_hash or sensitive fields.
+    Nunca inclui password_hash nem campos sensíveis.
     """
 
     id: UUID
@@ -54,13 +54,13 @@ class UserResponse(UserBase):
 
 
 class UserWithProfiles(UserResponse):
-    """Schema for user response with profile information."""
+    """Schema para resposta de utilizador com informação de perfil."""
 
     profiles: list["ProfileSummary"] = []
 
 
 class ProfileSummary(BaseModel):
-    """Summary schema for profile in user responses."""
+    """Schema resumido de perfil nas respostas de utilizador."""
 
     id: UUID
     code: str
@@ -71,7 +71,7 @@ class ProfileSummary(BaseModel):
 
 
 class PermissionSummary(BaseModel):
-    """Summary schema for permission in profile responses."""
+    """Schema resumido de permissão nas respostas de perfil."""
 
     id: UUID
     code: str
@@ -83,7 +83,7 @@ class PermissionSummary(BaseModel):
 
 
 class ProfileResponse(BaseModel):
-    """Schema for profile responses."""
+    """Schema para respostas de perfil."""
 
     id: UUID
     code: str
@@ -96,7 +96,7 @@ class ProfileResponse(BaseModel):
 
 
 class PermissionResponse(BaseModel):
-    """Schema for permission responses."""
+    """Schema para respostas de permissão."""
 
     id: UUID
     code: str
@@ -108,5 +108,5 @@ class PermissionResponse(BaseModel):
     model_config = {"from_attributes": True}
 
 
-# Forward reference resolution
+# Resolução de referência directa
 UserWithProfiles.model_rebuild()

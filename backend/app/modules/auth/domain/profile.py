@@ -1,4 +1,4 @@
-"""Profile entity and enum."""
+"""Entidade e enum de perfil."""
 
 import enum
 
@@ -9,10 +9,10 @@ from app.db.base import Base, TimestampMixin, UUIDPrimaryKeyMixin
 
 
 class ProfileEnum(enum.StrEnum):
-    """Official system profiles.
+    """Perfis oficiais do sistema.
 
-    Technical codes for internal use. Human-readable names
-    are provided in the profile_labels mapping.
+    Códigos técnicos para uso interno. Nomes legíveis por humanos
+    são fornecidos no mapeamento profile_labels.
     """
 
     ADMINISTRADOR_SISTEMA = "ADMINISTRADOR_SISTEMA"
@@ -26,7 +26,7 @@ class ProfileEnum(enum.StrEnum):
     AGENTE_PGR = "AGENTE_PGR"
 
 
-# Human-readable labels for profiles (Portuguese)
+# Rótulos legíveis por humanos para os perfis (português)
 PROFILE_LABELS: dict[ProfileEnum, str] = {
     ProfileEnum.ADMINISTRADOR_SISTEMA: "Administrador do Sistema",
     ProfileEnum.DIRECTOR: "Director",
@@ -41,9 +41,9 @@ PROFILE_LABELS: dict[ProfileEnum, str] = {
 
 
 class Profile(UUIDPrimaryKeyMixin, TimestampMixin, Base):
-    """Profile entity.
+    """Entidade Profile.
 
-    Represents a system profile with associated permissions.
+    Representa um perfil do sistema com permissões associadas.
     """
 
     __tablename__ = "profiles"
@@ -68,7 +68,7 @@ class Profile(UUIDPrimaryKeyMixin, TimestampMixin, Base):
         default=True,
     )
 
-    # Relationships
+    # Relacionamentos
     users = relationship(
         "User",
         secondary="user_profiles",
@@ -87,7 +87,7 @@ class Profile(UUIDPrimaryKeyMixin, TimestampMixin, Base):
 
     @property
     def label(self) -> str:
-        """Human-readable label for this profile."""
+        """Rótulo legível por humanos para este perfil."""
         try:
             return PROFILE_LABELS[ProfileEnum(self.code)]
         except (KeyError, ValueError):

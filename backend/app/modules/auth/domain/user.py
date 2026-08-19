@@ -1,4 +1,4 @@
-"""User entity."""
+"""Entidade User."""
 
 import enum
 import uuid
@@ -11,7 +11,7 @@ from app.db.base import Base, TimestampMixin, UUIDPrimaryKeyMixin
 
 
 class UserStatus(enum.StrEnum):
-    """User account status."""
+    """Estado da conta do utilizador."""
 
     ACTIVE = "ACTIVE"
     INACTIVE = "INACTIVE"
@@ -20,10 +20,10 @@ class UserStatus(enum.StrEnum):
 
 
 class User(UUIDPrimaryKeyMixin, TimestampMixin, Base):
-    """User entity.
+    """Entidade User.
 
-    Represents a system user with authentication credentials
-    and profile information.
+    Representa um utilizador do sistema com credenciais de
+    autenticação e informação de perfil.
     """
 
     __tablename__ = "users"
@@ -74,7 +74,7 @@ class User(UUIDPrimaryKeyMixin, TimestampMixin, Base):
         index=True,
     )
 
-    # Relationships
+    # Relacionamentos
     person = relationship(
         "Person",
         back_populates="user",

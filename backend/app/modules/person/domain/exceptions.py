@@ -1,25 +1,25 @@
-"""Person domain exceptions."""
+"""Excepções do domínio de pessoa."""
 
 
 class PersonError(Exception):
-    """Base person error."""
+    """Erro base de pessoa."""
 
 
 class PersonNotFoundError(PersonError):
-    """Person not found."""
+    """Pessoa não encontrada."""
 
 
 class DuplicatePersonNumberError(PersonError):
-    """Person number already exists."""
+    """O número de pessoa já existe."""
 
 
 class DuplicateEmployeeNumberError(PersonError):
-    """Employee number already exists."""
+    """O número de funcionário já existe."""
 
 
 class PersonAlreadyLinkedError(PersonError):
-    """Person is already linked to a user."""
+    """A pessoa já está associada a um utilizador."""
 
 
 class PersonDeactivatedError(PersonError):
-    """Operation not allowed on a deactivated person."""
+    """Operação não permitida numa pessoa desactivada."""

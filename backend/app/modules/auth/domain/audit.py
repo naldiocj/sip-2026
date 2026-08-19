@@ -1,4 +1,4 @@
-"""Audit event entity.
+"""Entidade de eventos de auditoria.
 
 Fundação de auditoria de segurança — registar eventos importantes:
 
@@ -28,7 +28,7 @@ from app.db.base import Base, TimestampMixin, UUIDPrimaryKeyMixin
 class AuditEventType(enum.StrEnum):
     """Tipos de eventos de segurança auditáveis."""
 
-    # Auth events
+    # Eventos de autenticação
     LOGIN_SUCCESS = "LOGIN_SUCCESS"
     LOGIN_FAILED = "LOGIN_FAILED"
     LOGOUT = "LOGOUT"
@@ -37,7 +37,7 @@ class AuditEventType(enum.StrEnum):
     PERMISSION_DENIED = "PERMISSION_DENIED"
     SESSION_REVOKED = "SESSION_REVOKED"
 
-    # Organization events
+    # Eventos de organização
     ORGANIZATION_CREATED = "ORGANIZATION_CREATED"
     ORGANIZATION_UPDATED = "ORGANIZATION_UPDATED"
     UNIT_CREATED = "UNIT_CREATED"
@@ -48,28 +48,28 @@ class AuditEventType(enum.StrEnum):
     USER_UNASSIGNED = "USER_UNASSIGNED"
     SCOPE_CHANGED = "SCOPE_CHANGED"
 
-    # Person events
+    # Eventos de pessoas
     PERSON_CREATED = "PERSON_CREATED"
     PERSON_UPDATED = "PERSON_UPDATED"
     PERSON_DEACTIVATED = "PERSON_DEACTIVATED"
     USER_PERSON_LINKED = "USER_PERSON_LINKED"
     USER_PERSON_UNLINKED = "USER_PERSON_UNLINKED"
 
-    # Assignment events
+    # Eventos de atribuições
     ASSIGNMENT_CREATED = "ASSIGNMENT_CREATED"
     ASSIGNMENT_UPDATED = "ASSIGNMENT_UPDATED"
     ASSIGNMENT_ENDED = "ASSIGNMENT_ENDED"
 
-    # Responsibility events
+    # Eventos de responsabilidades
     RESPONSIBILITY_CREATED = "RESPONSIBILITY_CREATED"
     RESPONSIBILITY_UPDATED = "RESPONSIBILITY_UPDATED"
     RESPONSIBILITY_ENDED = "RESPONSIBILITY_ENDED"
 
-    # Delegation events
+    # Eventos de delegações
     DELEGATION_CREATED = "DELEGATION_CREATED"
     DELEGATION_REVOKED = "DELEGATION_REVOKED"
 
-    # Substitution events
+    # Eventos de substituições
     SUBSTITUTION_CREATED = "SUBSTITUTION_CREATED"
     SUBSTITUTION_ENDED = "SUBSTITUTION_ENDED"
 

@@ -1,6 +1,6 @@
-"""Authentication API schemas.
+"""Schemas da API de autenticação.
 
-NUNCA incluir password_hash, refresh secrets ou segredos internos
+NUNCA incluir password_hash, segredos de refresh nem segredos internos
 em qualquer resposta.
 """
 
@@ -10,14 +10,14 @@ from pydantic import BaseModel, Field
 
 
 class LoginRequest(BaseModel):
-    """Schema for login request."""
+    """Schema para pedido de login."""
 
     username: str = Field(..., min_length=1, max_length=50)
     password: str = Field(..., min_length=1, max_length=128)
 
 
 class ProfileSummary(BaseModel):
-    """Profile summary in auth responses."""
+    """Resumo de perfil nas respostas de autenticação."""
 
     id: UUID
     code: str
@@ -28,7 +28,7 @@ class ProfileSummary(BaseModel):
 
 
 class UserSummary(BaseModel):
-    """Summary of authenticated user in login response."""
+    """Resumo do utilizador autenticado na resposta de login."""
 
     id: UUID
     username: str
@@ -40,7 +40,7 @@ class UserSummary(BaseModel):
 
 
 class LoginResponse(BaseModel):
-    """Schema for successful login response.
+    """Schema para resposta de login bem-sucedido.
 
     O access_token é transmitido APENAS via cookie httpOnly.
     Nunca retornar tokens no body da resposta.
@@ -50,10 +50,10 @@ class LoginResponse(BaseModel):
 
 
 class MeResponse(BaseModel):
-    """Schema for /auth/me response.
+    """Schema para a resposta de /auth/me.
 
     Dados seguros do utilizador autenticado, incluindo perfis,
-    permissões e scope organizacional (fundação).
+    permissões e âmbito organizacional (fundação).
     """
 
     id: UUID
@@ -69,10 +69,10 @@ class MeResponse(BaseModel):
 
 
 class LogoutResponse(BaseModel):
-    """Schema for logout response."""
+    """Schema para resposta de logout."""
 
     message: str = "Logout successful"
 
 
-# Forward reference resolution
+# Resolução de referência directa
 UserSummary.model_rebuild()

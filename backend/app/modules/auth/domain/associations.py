@@ -1,11 +1,11 @@
-"""Association tables for RBAC."""
+"""Tabelas de associação para RBAC."""
 
 from sqlalchemy import Column, ForeignKey, Table
 from sqlalchemy.dialects.postgresql import UUID
 
 from app.db.base import Base
 
-# User <-> Profile association
+# Associação User <-> Profile
 user_profiles = Table(
     "user_profiles",
     Base.metadata,
@@ -13,7 +13,7 @@ user_profiles = Table(
     Column("profile_id", UUID(as_uuid=True), ForeignKey("profiles.id"), primary_key=True),
 )
 
-# Profile <-> Permission association
+# Associação Profile <-> Permission
 profile_permissions = Table(
     "profile_permissions",
     Base.metadata,

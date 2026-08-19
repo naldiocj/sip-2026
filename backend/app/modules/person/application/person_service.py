@@ -1,8 +1,8 @@
-"""PersonService — central operations for person management.
+"""PersonService — operações centrais para a gestão de pessoas.
 
-Provides CRUD, person number generation, and user association
-with integrity guarantees. Person data is always separated from
-authentication data.
+Fornece CRUD, geração de número de pessoa e associação de utilizador
+com garantias de integridade. Os dados de pessoa estão sempre separados
+dos dados de autenticação.
 """
 
 import uuid
@@ -21,16 +21,16 @@ from app.modules.person.domain.person import Person, PersonNumberGenerator, Pers
 
 
 class PersonService:
-    """Central service for person operations."""
+    """Serviço central para operações de pessoa."""
 
     def __init__(self, db: Session) -> None:
         self.db = db
 
     def _next_person_number(self) -> str:
-        """Generate the next person number atomically."""
+        """Gera o próximo número de pessoa atomicamente."""
         last = self.db.scalar(select(func.max(Person.person_number)))
         number = PersonNumberGenerator.next_number(last)
-        # In the unlikely event of a race, retry a few times.
+        # No caso improvável de uma corrida, tentar novamente algumas vezes.
         for _ in range(5):
             exists = self.db.scalar(select(Person.id).where(Person.person_number == number))
             if exists is None:
@@ -39,11 +39,11 @@ class PersonService:
         raise DuplicatePersonNumberError("Could not allocate a unique person number.")
 
     def get(self, person_id: uuid.UUID) -> Person | None:
-        """Get person by ID."""
+        """Obtém uma pessoa pelo ID."""
         return self.db.get(Person, person_id)
 
     def get_by_person_number(self, person_number: str) -> Person | None:
-        """Get person by person number."""
+        """Obtém uma pessoa pelo número de pessoa."""
         return self.db.scalar(select(Person).where(Person.person_number == person_number))
 
     def list(
@@ -54,9 +54,9 @@ class PersonService:
         page: int = 1,
         page_size: int = 25,
     ) -> tuple[list[Person], int]:
-        """List persons with optional search, filter and pagination.
+        """Lista pessoas com pesquisa, filtro e paginação opcionais.
 
-        Returns (items, total).
+        Devolve (itens, total).
         """
         query = select(Person)
         count_query = select(func.count()).select_from(Person)
@@ -106,7 +106,7 @@ class PersonService:
         professional_registration: str | None = None,
         notes: str | None = None,
     ) -> Person:
-        """Create a new person."""
+        """Cria uma nova pessoa."""
         if employee_number is not None:
             existing = self.db.scalar(
                 select(Person.id).where(Person.employee_number == employee_number)
@@ -164,7 +164,7 @@ class PersonService:
         professional_registration: str | None = None,
         notes: str | None = None,
     ) -> Person:
-        """Update a person's fields (only provided fields)."""
+        """Actualiza os campos de uma pessoa (apenas os campos fornecidos)."""
         person = self.db.get(Person, person_id)
         if person is None:
             raise PersonNotFoundError(f"Person {person_id} not found.")
@@ -207,7 +207,7 @@ class PersonService:
         return person
 
     def deactivate(self, person_id: uuid.UUID) -> Person:
-        """Deactivate a person (soft — history preserved)."""
+        """Desactiva uma pessoa (suave — o histórico é preservado)."""
         person = self.db.get(Person, person_id)
         if person is None:
             raise PersonNotFoundError(f"Person {person_id} not found.")
@@ -217,7 +217,7 @@ class PersonService:
         return person
 
     def get_by_user_id(self, user_id: uuid.UUID) -> Person | None:
-        """Get person associated with a user (via user.person)."""
+        """Obtém a pessoa associada a um utilizador (via user.person)."""
         from app.modules.auth.domain.user import User
 
         user = self.db.get(User, user_id)
@@ -230,9 +230,9 @@ class PersonService:
         user_id: uuid.UUID,
         person_id: uuid.UUID,
     ) -> Person:
-        """Associate a user to a person (1:1 integrity).
+        """Associa um utilizador a uma pessoa (integridade 1:1).
 
-        Raises PersonAlreadyLinkedError if the person already has a user.
+        Levanta PersonAlreadyLinkedError se a pessoa já tiver um utilizador.
         """
         from app.modules.auth.domain.user import User
 
@@ -253,7 +253,7 @@ class PersonService:
         return person
 
     def unlink_user_from_person(self, user_id: uuid.UUID) -> Person | None:
-        """Unlink a user from its person. History/data preserved."""
+        """Desassocia um utilizador da sua pessoa. O histórico/dados são preservados."""
         from app.modules.auth.domain.user import User
 
         user = self.db.get(User, user_id)

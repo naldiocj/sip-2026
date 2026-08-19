@@ -16,8 +16,8 @@ from app.shared.cache import get_redis
 
 logger = structlog.get_logger("auth.rate_limit")
 
-# Lua script for atomic INCR + EXPIRE to prevent race conditions.
-# Returns the new count after increment.
+# Script Lua para INCR + EXPIRE atómico, evitando condições de corrida.
+# Devolve a nova contagem após o incremento.
 _LUA_INCR_EXPIRE = """
 local key = KEYS[1]
 local limit = tonumber(ARGV[1])

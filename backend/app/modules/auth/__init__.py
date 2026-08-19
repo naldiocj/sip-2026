@@ -1,4 +1,4 @@
-"""Auth module — Identity, Authentication, and Authorization."""
+"""Módulo de autenticação — Identidade, Autenticação e Autorização."""
 
 from app.modules.auth.domain.associations import profile_permissions, user_profiles
 from app.modules.auth.domain.permission import Permission

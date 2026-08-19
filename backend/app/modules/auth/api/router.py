@@ -77,14 +77,14 @@ def login(
             detail="Invalid credentials",
         ) from None
     except AccountBlockedError:
-        # Return 401 (not 403) to avoid leaking account state via status code.
+        # Devolver 401 (e não 403) para não revelar o estado da conta pelo código de status.
         logger.info("login_failed", username=body.username, reason="blocked")
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Invalid credentials",
         ) from None
     except AccountNotActiveError:
-        # Return 401 (not 403) to avoid leaking account state via status code.
+        # Devolver 401 (e não 403) para não revelar o estado da conta pelo código de status.
         logger.info("login_failed", username=body.username, reason="not_active")
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,

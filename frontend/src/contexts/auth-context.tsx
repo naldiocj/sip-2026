@@ -83,7 +83,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     try {
       await apiClient.post("/api/v1/auth/logout");
     } catch {
-      // Ignore logout errors — clear local state regardless
+      // Ignorar erros de logout — limpar o estado local de qualquer forma
     }
     setUser(null);
     router.push("/login");

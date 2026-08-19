@@ -1,4 +1,4 @@
-"""Humanized labels for person entities."""
+"""Rótulos humanizados para entidades de pessoa."""
 
 from app.modules.person.domain.person import (
     EmploymentStatus,
@@ -30,15 +30,15 @@ EMPLOYMENT_STATUS_LABELS: dict[EmploymentStatus, str] = {
 
 
 def humanize_person_status(status: str | PersonStatus) -> str:
-    """Human-readable label for a person status."""
+    """Rótulo legível por humanos para um estado de pessoa."""
     return PERSON_STATUS_LABELS.get(PersonStatus(status), str(status))
 
 
 def humanize_personal_status(status: str | PersonalStatus) -> str:
-    """Human-readable label for a personal status."""
+    """Rótulo legível por humanos para um estado pessoal."""
     return PERSONAL_STATUS_LABELS.get(PersonalStatus(status), str(status))
 
 
 def humanize_employment_status(status: str | EmploymentStatus) -> str:
-    """Human-readable label for an employment status."""
+    """Rótulo legível por humanos para um estado de emprego."""
     return EMPLOYMENT_STATUS_LABELS.get(EmploymentStatus(status), str(status))

@@ -1,4 +1,4 @@
-"""initial baseline
+"""baseline inicial
 
 Revision ID: 26d3a5c859c5
 Revises: 

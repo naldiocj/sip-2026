@@ -1,4 +1,4 @@
-"""organization tables
+"""tabelas de organização
 
 Revision ID: a1b2c3d4e5f6
 Revises: edfc35790c54
