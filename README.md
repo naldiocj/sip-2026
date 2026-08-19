@@ -91,7 +91,7 @@ sip/
 ├── backend/          # FastAPI (Modular Monolith)
 ├── frontend/         # Next.js (App Router)
 ├── infra/            # Docker Compose + Nginx + Prometheus
-├── docs/             # Documentação arquitectural
+├── docs/             # Documentação arquitectural (docs/architecture + docs/adr)
 ├── prompts/          # Prompts e tasks por sprint
 ├── scripts/          # Scripts utilitários
 ├── Makefile          # Comandos de dev, infra, lint, test
@@ -105,7 +105,7 @@ sip/
 |---|---|
 | Fase 00 — Bootstrap / Arquitectura | Concluída |
 | Fase 01 — Identidade + Auth | Concluída |
-| Fase 02 — Organização + Utilizadores | Pendente |
+| Fase 02 — Organização + Utilizadores | Em curso |
 | ... | ... |
 | Fase 16 — QA + Release | Pendente |
 

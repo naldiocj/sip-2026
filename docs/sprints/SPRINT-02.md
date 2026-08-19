@@ -65,7 +65,7 @@ Cada conceito possui responsabilidade própria.
 | TASK-026 | backend-tests | DONE |
 | TASK-027 | frontend-tests | PLANNED |
 | TASK-028 | e2e-tests | PLANNED |
-| TASK-029 | documentation | PARTIAL |
+| TASK-029 | documentation | DONE |
 | TASK-030 | final-review | PLANNED |
 
 ## Dependencies
