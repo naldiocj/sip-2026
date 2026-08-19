@@ -7,7 +7,7 @@ from fastapi import APIRouter, Depends, HTTPException, Request, status
 from sqlalchemy.orm import Session
 
 from app.db.session import get_db_session
-from app.modules.auth.api.dependencies import get_current_user
+from app.modules.auth.api.dependencies import get_current_user, require_permission
 from app.modules.auth.application.audit import AuditService
 from app.modules.auth.domain.audit import AuditEventType
 from app.modules.auth.domain.user import User
@@ -533,7 +533,7 @@ assignments_router = APIRouter(
 @assignments_router.get("", response_model=list[UserAssignmentResponse])
 def list_user_assignments(
     user_id: str,
-    user: User = Depends(get_current_user),
+    user: User = Depends(require_permission("assignment.read")),
     db: Session = Depends(get_db_session),
 ) -> list[UserAssignmentResponse]:
     """Lista as atribuições de um utilizador."""
@@ -552,7 +552,7 @@ def create_user_assignment(
     user_id: str,
     body: UserAssignmentCreate,
     request: Request,
-    user: User = Depends(require_organization_manage),
+    user: User = Depends(require_permission("assignment.create")),
     db: Session = Depends(get_db_session),
 ) -> UserAssignmentResponse:
     """Cria uma atribuição de utilizador."""

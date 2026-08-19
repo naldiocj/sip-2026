@@ -89,6 +89,11 @@ def update_user_assignment(
     """Actualiza períodos/tipo de uma atribuição (nunca apaga)."""
     service = AssignmentService(db)
     try:
+        assignment = service.get(uuid.UUID(assignment_id))
+        if assignment is None or str(assignment.user_id) != user_id:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND, detail="Assignment not found"
+            ) from None
         assignment = service.update(
             uuid.UUID(assignment_id),
             assignment_type=body.assignment_type,
@@ -142,6 +147,11 @@ def end_user_assignment(
     """Termina uma atribuição suavemente (histórico preservado)."""
     service = AssignmentService(db)
     try:
+        assignment = service.get(uuid.UUID(assignment_id))
+        if assignment is None or str(assignment.user_id) != user_id:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND, detail="Assignment not found"
+            ) from None
         assignment = service.end(uuid.UUID(assignment_id))
         db.commit()
         _record_audit(

@@ -57,8 +57,27 @@ def _prepare_test_database() -> None:
     cfg = Config(str(BACKEND_DIR / "alembic.ini"))
     cfg.set_main_option("script_location", str(BACKEND_DIR / "alembic"))
     command.upgrade(cfg, "head")
+
+    _clean_test_data()
     get_settings.cache_clear()
     os.environ.pop("DATABASE_URL", None)
+
+
+def _clean_test_data() -> None:
+    """Limpa dados transitórios da base de teste entre sessões.
+
+    Remove pessoas e dados de organização criados por testes anteriores,
+    preservando os dados de seed (users, perfis, unidades e a organização SIC).
+    """
+    engine = create_engine(TEST_DATABASE_URL)
+    with engine.begin() as conn:
+        conn.execute(text("DELETE FROM audit_events"))
+        conn.execute(text("DELETE FROM user_assignments"))
+        conn.execute(text("DELETE FROM responsibilities"))
+        conn.execute(text("DELETE FROM delegations"))
+        conn.execute(text("DELETE FROM substitutions"))
+        conn.execute(text("DELETE FROM persons WHERE person_number NOT LIKE 'PES-000001'"))
+    engine.dispose()
 
 
 @pytest.fixture(scope="session")
