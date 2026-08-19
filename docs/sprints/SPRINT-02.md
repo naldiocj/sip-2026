@@ -47,7 +47,7 @@ Cada conceito possui responsabilidade própria.
 | TASK-008 | organizational-unit-types | PLANNED |
 | TASK-009 | user-assignment | DONE |
 | TASK-010 | lotacao | DONE |
-| TASK-011 | functional-role | PARTIAL |
+| TASK-011 | functional-role | DONE |
 | TASK-012 | responsibility | DONE |
 | TASK-013 | delegation | DONE |
 | TASK-014 | substitution | DONE |

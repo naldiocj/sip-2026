@@ -75,3 +75,7 @@ class SubstitutionNotFoundError(OrganizationError):
 
 class InvalidSubstitutionError(OrganizationError):
     """Substituição inválida (auto-substituição, período inválido)."""
+
+
+class FunctionalRoleAssignmentNotFoundError(OrganizationError):
+    """Atribuição de função não encontrada."""
