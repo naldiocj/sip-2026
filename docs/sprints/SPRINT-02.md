@@ -55,7 +55,7 @@ Cada conceito possui responsabilidade própria.
 | TASK-016 | scope-engine | DONE |
 | TASK-017 | organization-api | PARTIAL |
 | TASK-018 | person-management-api | DONE |
-| TASK-019 | assignment-api | PARTIAL |
+| TASK-019 | assignment-api | DONE |
 | TASK-020 | organization-ui | PARTIAL |
 | TASK-021 | person-management-ui | PLANNED |
 | TASK-022 | assignment-ui | PLANNED |

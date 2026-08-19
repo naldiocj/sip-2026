@@ -203,3 +203,79 @@ class AccessContextResponse(BaseModel):
     effective_scopes: list[str] = Field(default_factory=list)
     humanized_scopes: list[str] = Field(default_factory=list)
     functional_roles: list[str] = Field(default_factory=list)
+
+
+# --- Assignment update ---
+
+
+class UserAssignmentUpdate(BaseModel):
+    """Schema para actualizar uma atribuição (períodos e tipo)."""
+
+    assignment_type: str | None = None
+    is_primary: bool | None = None
+    start_date: str | None = None
+    end_date: str | None = None
+
+
+# --- Responsibility ---
+
+
+class ResponsibilityCreate(BaseModel):
+    """Schema para criar uma responsabilidade funcional."""
+
+    user_id: UUID
+    scope: str = Field(..., min_length=1, max_length=50)
+    organizational_unit_id: UUID | None = None
+    resource_type: str | None = Field(None, max_length=100)
+    start_date: str | None = None
+    end_date: str | None = None
+
+
+class ResponsibilityResponse(BaseModel):
+    """Resposta de responsabilidade funcional."""
+
+    id: UUID
+    user_id: UUID
+    scope: str
+    organizational_unit_id: UUID | None = None
+    resource_type: str | None = None
+    start_date: str | None = None
+    end_date: str | None = None
+    status: str
+    is_active: bool
+    created_at: datetime | None = None
+
+    model_config = {"from_attributes": True}
+
+
+# --- Delegation ---
+
+
+class DelegationCreate(BaseModel):
+    """Schema para criar uma delegação."""
+
+    delegator_user_id: UUID
+    delegate_user_id: UUID
+    scope: str = Field(..., min_length=1, max_length=50)
+    organizational_unit_id: UUID | None = None
+    start_date: str | None = None
+    end_date: str | None = None
+    reason: str | None = Field(None, max_length=500)
+
+
+class DelegationResponse(BaseModel):
+    """Resposta de delegação."""
+
+    id: UUID
+    delegator_user_id: UUID
+    delegate_user_id: UUID
+    scope: str
+    organizational_unit_id: UUID | None = None
+    start_date: str | None = None
+    end_date: str | None = None
+    reason: str | None = None
+    status: str
+    is_active: bool
+    created_at: datetime | None = None
+
+    model_config = {"from_attributes": True}
