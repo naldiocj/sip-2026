@@ -50,6 +50,13 @@
   --color-chart-4: var(--chart-4);
   --color-chart-5: var(--chart-5);
 
+  /* ── SIP Identity Chart Colors ── */
+  --color-chart-sip-primary: var(--chart-sip-primary);
+  --color-chart-sip-secondary: var(--chart-sip-secondary);
+  --color-chart-sip-success: var(--chart-sip-success);
+  --color-chart-sip-warning: var(--chart-sip-warning);
+  --color-chart-sip-info: var(--chart-sip-info);
+
   /* ── Sidebar tokens ── */
   --color-sidebar: var(--sidebar);
   --color-sidebar-foreground: var(--sidebar-foreground);
@@ -104,6 +111,11 @@
   --easing-standard: cubic-bezier(0.4, 0, 0.2, 1);
   --easing-emphasized: cubic-bezier(0.4, 0, 0.2, 1);
 
+  /* ── Density tokens ── */
+  --density-comfortable: 1;
+  --density-compact: 0.75;
+  --density-dense: 0.5;
+
   /* ── Z-index scale ── */
   --z-base: 0;
   --z-dropdown: 50;
@@ -152,6 +164,13 @@
   --chart-3: oklch(0.609 0.126 221.723);
   --chart-4: oklch(0.52 0.105 223.128);
   --chart-5: oklch(0.45 0.085 224.283);
+
+  /* ── SIP Identity Chart Colors ── */
+  --chart-sip-primary: oklch(0.52 0.105 223.128);
+  --chart-sip-secondary: oklch(0.609 0.126 221.723);
+  --chart-sip-success: oklch(0.55 0.15 145);
+  --chart-sip-warning: oklch(0.75 0.15 75);
+  --chart-sip-info: oklch(0.6 0.12 250);
 
   /* ── Radius ── */
   --radius: 0.625rem;
@@ -207,6 +226,13 @@
   --chart-3: oklch(0.609 0.126 221.723);
   --chart-4: oklch(0.52 0.105 223.128);
   --chart-5: oklch(0.45 0.085 224.283);
+
+  /* ── SIP Identity Chart Colors (dark) ── */
+  --chart-sip-primary: oklch(0.45 0.085 224.283);
+  --chart-sip-secondary: oklch(0.715 0.143 215.221);
+  --chart-sip-success: oklch(0.65 0.15 145);
+  --chart-sip-warning: oklch(0.8 0.15 75);
+  --chart-sip-info: oklch(0.7 0.12 250);
 
   /* ── Sidebar (dark) ── */
   --sidebar: oklch(0.205 0 0);
@@ -324,6 +350,30 @@
     transition-property: color, background-color, border-color, opacity, transform;
     transition-duration: var(--duration-slow);
     transition-timing-function: var(--easing-standard);
+  }
+  .transition-motion-emphasized {
+    transition-property: color, background-color, border-color, opacity, transform;
+    transition-duration: var(--duration-normal);
+    transition-timing-function: var(--easing-emphasized);
+  }
+}
+
+/*
+ * SIP Density Utilities
+ * Usage: Apply density classes to containers for different spacing densities.
+ *   .density-comfortable — default, generous spacing
+ *   .density-compact     — reduced spacing for data-dense UIs
+ *   .density-dense       — minimal spacing for maximum content
+ */
+@layer utilities {
+  .density-comfortable {
+    --spacing-multiplier: var(--density-comfortable);
+  }
+  .density-compact {
+    --spacing-multiplier: var(--density-compact);
+  }
+  .density-dense {
+    --spacing-multiplier: var(--density-dense);
   }
 }
 

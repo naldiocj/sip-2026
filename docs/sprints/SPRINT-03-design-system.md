@@ -19,22 +19,22 @@ Estabelecer a fundação do Design System Enterprise do SIP e transformar o App 
 
 ## Tasks
 
-| ID | Task | Estado |
-|----|------|--------|
-| TASK-001 | Design Tokens + Typography + Identity SIP | TODO |
-| TASK-002 | Humanization Engine expandido | TODO |
-| TASK-003 | Navigation Config data model | TODO |
-| TASK-004 | Sidebar Enterprise (contextual, badges, responsive, mobile) | TODO |
-| TASK-005 | Header Enterprise (notifications, user, status) | TODO |
-| TASK-006 | Breadcrumbs inteligentes | TODO |
-| TASK-007 | PageContainer + PageHeader + PageToolbar enterprise | TODO |
-| TASK-008 | Button System (AsyncButton, ConfirmButton, etc.) | TODO |
-| TASK-009 | Status System central | TODO |
-| TASK-010 | Loading System (Skeletons especializados) | TODO |
-| TASK-011 | Empty States sistema | TODO |
-| TASK-012 | Error System (ErrorBoundary, ErrorState, RetryAction) | TODO |
-| TASK-013 | Rotas portuguesas + URL state hooks | TODO |
-| TASK-014 | Tests + Lint + Typecheck | TODO |
+| ID | Task | Ficheiro | Estado |
+|----|------|----------|--------|
+| TASK-001 | Design Tokens + Typography + Identity SIP | `tasks/TASK-001-design-tokens.md` | IMPLEMENTED |
+| TASK-002 | Humanization Engine expandido | `tasks/TASK-002-humanization-engine.md` | PENDING |
+| TASK-003 | Navigation Config data model | `tasks/TASK-003-navigation-config.md` | PENDING |
+| TASK-004 | Sidebar Enterprise | `tasks/TASK-004-sidebar-enterprise.md` | PENDING |
+| TASK-005 | Header Enterprise | `tasks/TASK-005-header-enterprise.md` | PENDING |
+| TASK-006 | Breadcrumbs inteligentes | `tasks/TASK-006-breadcrumbs.md` | PENDING |
+| TASK-007 | PageContainer + PageHeader + PageToolbar enterprise | `tasks/TASK-007-page-container.md` | PENDING |
+| TASK-008 | Button System | `tasks/TASK-008-button-system.md` | PENDING |
+| TASK-009 | Status System central | `tasks/TASK-009-status-system.md` | PENDING |
+| TASK-010 | Loading System | `tasks/TASK-010-loading-system.md` | PENDING |
+| TASK-011 | Empty States sistema | `tasks/TASK-011-empty-states.md` | PENDING |
+| TASK-012 | Error System | `tasks/TASK-012-error-system.md` | PENDING |
+| TASK-013 | Rotas portuguesas + URL state hooks | `tasks/TASK-013-routes-url-state.md` | PENDING |
+| TASK-014 | Tests + Lint + Typecheck | `tasks/TASK-014-sprint03-quality.md` | PENDING |
 
 ## Critérios de Conclusão
 
