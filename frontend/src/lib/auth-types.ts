@@ -16,6 +16,13 @@ export interface AuthUser {
   profiles: UserProfile[];
   permissions: string[];
   organization_scope: string[];
+  organizations?: Organization[];
+}
+
+export interface Organization {
+  id: string;
+  name: string;
+  type: string;
 }
 
 export interface LoginCredentials {
