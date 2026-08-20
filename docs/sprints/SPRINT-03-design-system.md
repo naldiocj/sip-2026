@@ -30,7 +30,7 @@ Estabelecer a fundação do Design System Enterprise do SIP e transformar o App 
 | TASK-007 | PageContainer + PageHeader + PageToolbar enterprise | `tasks/TASK-007-page-container.md` | DONE |
 | TASK-008 | Button System | `tasks/TASK-008-button-system.md` | DONE |
 | TASK-009 | Status System central | `tasks/TASK-009-status-system.md` | DONE |
-| TASK-010 | Loading System | `tasks/TASK-010-loading-system.md` | PENDING |
+| TASK-010 | Loading System | `tasks/TASK-010-loading-system.md` | DONE |
 | TASK-011 | Empty States sistema | `tasks/TASK-011-empty-states.md` | PENDING |
 | TASK-012 | Error System | `tasks/TASK-012-error-system.md` | PENDING |
 | TASK-013 | Rotas portuguesas + URL state hooks | `tasks/TASK-013-routes-url-state.md` | PENDING |
