@@ -3,6 +3,11 @@ import {
   humanizePermission,
   humanizeProfile,
   humanizeUserStatus,
+  humanizePersonStatus,
+  humanizeEmploymentStatus,
+  humanizeUnitType,
+  humanizeAssignmentType,
+  humanizeResponsibilityScope,
   humanizeProcessStatus,
   humanizeDocumentType,
   humanizeOccurrenceType,
@@ -131,6 +136,62 @@ describe("humanizeEntity", () => {
 
   it("falls back to titleCase for unknown entity types", () => {
     expect(humanizeEntity("unknown", "SOME_CODE")).toBe("Some Code");
+  });
+});
+
+describe("humanizePersonStatus", () => {
+  it("returns Portuguese label for known status", () => {
+    expect(humanizePersonStatus("ACTIVE")).toBe("Activo");
+    expect(humanizePersonStatus("RETIRED")).toBe("Reformado");
+  });
+
+  it("generates fallback for unknown status", () => {
+    expect(humanizePersonStatus("CUSTOM_STATUS")).toBe("Custom Status");
+  });
+});
+
+describe("humanizeEmploymentStatus", () => {
+  it("returns Portuguese label for known status", () => {
+    expect(humanizeEmploymentStatus("EMPLOYED")).toBe("Empregado");
+    expect(humanizeEmploymentStatus("ON_LEAVE")).toBe("Licença");
+  });
+
+  it("generates fallback for unknown status", () => {
+    expect(humanizeEmploymentStatus("UNKNOWN")).toBe("Unknown");
+  });
+});
+
+describe("humanizeUnitType", () => {
+  it("returns Portuguese label for known type", () => {
+    expect(humanizeUnitType("DIRECTION")).toBe("Direcção");
+    expect(humanizeUnitType("DEPARTMENT")).toBe("Departamento");
+    expect(humanizeUnitType("PIQUETE")).toBe("Piquete");
+  });
+
+  it("generates fallback for unknown type", () => {
+    expect(humanizeUnitType("UNKNOWN")).toBe("Unknown");
+  });
+});
+
+describe("humanizeAssignmentType", () => {
+  it("returns Portuguese label for known type", () => {
+    expect(humanizeAssignmentType("PRIMARY")).toBe("Principal");
+    expect(humanizeAssignmentType("ACTING")).toBe("Interino");
+  });
+
+  it("generates fallback for unknown type", () => {
+    expect(humanizeAssignmentType("UNKNOWN")).toBe("Unknown");
+  });
+});
+
+describe("humanizeResponsibilityScope", () => {
+  it("returns Portuguese label for known scope", () => {
+    expect(humanizeResponsibilityScope("DIRECTION")).toBe("Direção");
+    expect(humanizeResponsibilityScope("PROCESS_MANAGEMENT")).toBe("Gestão de Processos");
+  });
+
+  it("generates fallback for unknown scope", () => {
+    expect(humanizeResponsibilityScope("UNKNOWN")).toBe("Unknown");
   });
 });
 

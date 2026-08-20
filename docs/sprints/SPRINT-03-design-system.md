@@ -22,7 +22,7 @@ Estabelecer a fundação do Design System Enterprise do SIP e transformar o App 
 | ID | Task | Ficheiro | Estado |
 |----|------|----------|--------|
 | TASK-001 | Design Tokens + Typography + Identity SIP | `tasks/TASK-001-design-tokens.md` | IMPLEMENTED |
-| TASK-002 | Humanization Engine expandido | `tasks/TASK-002-humanization-engine.md` | PENDING |
+| TASK-002 | Humanization Engine expandido | `tasks/TASK-002-humanization-engine.md` | DONE |
 | TASK-003 | Navigation Config data model | `tasks/TASK-003-navigation-config.md` | PENDING |
 | TASK-004 | Sidebar Enterprise | `tasks/TASK-004-sidebar-enterprise.md` | PENDING |
 | TASK-005 | Header Enterprise | `tasks/TASK-005-header-enterprise.md` | PENDING |
