@@ -2,7 +2,9 @@
 
 ## Status
 
-**IN_PROGRESS**
+**DONE**
+
+> Sprint concluída em 2026-08-20. Relatório final em TASK-015.
 
 ## Origem
 
@@ -47,7 +49,7 @@ Esta sprint complementa a SPRINT-02 já executada (Administração, Pessoas, Org
 | TASK-012 | backend-tests | DONE |
 | TASK-013 | frontend-tests | DONE |
 | TASK-014 | documentation | DONE |
-| TASK-015 | final-review | PLANNED |
+| TASK-015 | final-review | DONE |
 
 ## Cobertura E2E (TASK-013)
 

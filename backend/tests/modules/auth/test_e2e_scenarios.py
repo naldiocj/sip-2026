@@ -15,7 +15,6 @@ Cenários:
 
 import uuid
 
-from app.modules.auth.domain.user import User
 from app.modules.organization.domain.unit import OrganizationalUnit
 from fastapi.testclient import TestClient
 from sqlalchemy import select
@@ -40,9 +39,7 @@ def _unique_username(prefix: str = "e2e") -> str:
 
 def _real_unit_id(db: Session) -> str:
     unit = (
-        db.execute(
-            select(OrganizationalUnit.id).where(OrganizationalUnit.is_active.is_(True))
-        )
+        db.execute(select(OrganizationalUnit.id).where(OrganizationalUnit.is_active.is_(True)))
         .scalars()
         .first()
     )
@@ -110,9 +107,7 @@ def test_e2e_001_create_user_with_profile_and_full_context(
 
 
 @requires_database
-def test_e2e_002_add_secondary_assignment(
-    client: TestClient, db_session: Session
-) -> None:
+def test_e2e_002_add_secondary_assignment(client: TestClient, db_session: Session) -> None:
     """E2E-002: adicionar segunda atribuição (secundária)."""
     admin_headers = _login(client, "admin", "admin123")
     user_id = str(created_user_id(client, admin_headers))
@@ -140,9 +135,7 @@ def test_e2e_002_add_secondary_assignment(
     )
     assert second.status_code == 201, second.text
 
-    assignments = client.get(
-        f"/api/v1/users/{user_id}/assignments", headers=admin_headers
-    )
+    assignments = client.get(f"/api/v1/users/{user_id}/assignments", headers=admin_headers)
     assert assignments.status_code == 200
     items = assignments.json()
     assert len(items) == 2
@@ -197,9 +190,7 @@ def test_e2e_003_change_primary_assignment_demotes_previous(
     )
     assert promote.status_code == 200, promote.text
 
-    assignments = client.get(
-        f"/api/v1/users/{user_id}/assignments", headers=admin_headers
-    ).json()
+    assignments = client.get(f"/api/v1/users/{user_id}/assignments", headers=admin_headers).json()
     by_id = {a["id"]: a for a in assignments}
     assert by_id[first_id]["is_primary"] is False, "anterior deixou de ser principal"
     assert by_id[second_id]["is_primary"] is True, "nova principal activa"
@@ -209,9 +200,7 @@ def test_e2e_003_change_primary_assignment_demotes_previous(
 
 
 @requires_database
-def test_e2e_004_unauthorized_gets_403(
-    client: TestClient, db_session: Session
-) -> None:
+def test_e2e_004_unauthorized_gets_403(client: TestClient, db_session: Session) -> None:
     """E2E-004: utilizador não autorizado → 403 em todas as acções de gestão."""
     chefe_headers = _login(client, "chefe_departamento", "chefe123")
     admin_headers = _login(client, "admin", "admin123")
@@ -219,8 +208,25 @@ def test_e2e_004_unauthorized_gets_403(
     unit_id = _real_unit_id(db_session)
 
     forbidden = [
-        ("post", "/api/v1/users", {"username": _unique_username(), "email": "x@example.com", "full_name": "X", "password": "segredo123"}),
-        ("post", f"/api/v1/users/{user_id}/assignments", {"organizational_unit_id": unit_id, "assignment_type": "SECONDARY", "is_primary": False}),
+        (
+            "post",
+            "/api/v1/users",
+            {
+                "username": _unique_username(),
+                "email": "x@example.com",
+                "full_name": "X",
+                "password": "segredo123",
+            },
+        ),
+        (
+            "post",
+            f"/api/v1/users/{user_id}/assignments",
+            {
+                "organizational_unit_id": unit_id,
+                "assignment_type": "SECONDARY",
+                "is_primary": False,
+            },
+        ),
         ("post", f"/api/v1/users/{user_id}/deactivate", None),
         ("post", f"/api/v1/users/{user_id}/profiles", {"profile_id": _real_profile_id(db_session)}),
         ("get", "/api/v1/audit", None),
