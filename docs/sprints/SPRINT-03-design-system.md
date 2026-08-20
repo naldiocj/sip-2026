@@ -33,7 +33,7 @@ Estabelecer a fundação do Design System Enterprise do SIP e transformar o App 
 | TASK-010 | Loading System | `tasks/TASK-010-loading-system.md` | DONE |
 | TASK-011 | Empty States sistema | `tasks/TASK-011-empty-states.md` | DONE |
 | TASK-012 | Error System | `tasks/TASK-012-error-system.md` | DONE |
-| TASK-013 | Rotas portuguesas + URL state hooks | `tasks/TASK-013-routes-url-state.md` | PENDING |
+| TASK-013 | Rotas portuguesas + URL state hooks | `tasks/TASK-013-routes-url-state.md` | DONE |
 | TASK-014 | Tests + Lint + Typecheck | `tasks/TASK-014-sprint03-quality.md` | PENDING |
 
 ## Critérios de Conclusão
