@@ -27,6 +27,7 @@ from app.modules.organization.application.substitution_service import Substituti
 from app.modules.organization.domain.exceptions import (
     AssignmentNotFoundError,
     DelegationNotFoundError,
+    InvalidAssignmentPeriodError,
     InvalidDelegationError,
     InvalidResponsibilityError,
     InvalidSubstitutionError,
@@ -148,6 +149,11 @@ def update_user_assignment(
     except MultiplePrimaryAssignmentError as e:
         db.rollback()
         raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail=str(e)) from None
+    except InvalidAssignmentPeriodError as e:
+        db.rollback()
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail=str(e)
+        ) from None
     except ValueError as e:
         db.rollback()
         raise _http_error(str(e)) from None

@@ -1,6 +1,7 @@
 """Router da API de organização."""
 
 import uuid
+from datetime import date
 from typing import Any
 
 import structlog
@@ -546,12 +547,27 @@ def list_user_assignments(
     user_id: str,
     user: User = Depends(require_permission("assignment.read")),
     db: Session = Depends(get_db_session),
-) -> list[UserAssignmentResponse]:
+) -> list[dict[str, object]]:
     """Lista as atribuições de um utilizador."""
     import uuid
 
     service = OrganizationService(db)
-    return service.get_user_assignments(uuid.UUID(user_id))  # type: ignore[return-value]
+    assignments = service.get_user_assignments(uuid.UUID(user_id))
+    return [
+        {
+            "id": a.id,
+            "user_id": a.user_id,
+            "organizational_unit_id": a.organizational_unit_id,
+            "assignment_type": str(a.assignment_type),
+            "is_primary": a.is_primary,
+            "start_date": a.start_date.isoformat() if a.start_date else None,
+            "end_date": a.end_date.isoformat() if a.end_date else None,
+            "status": str(a.status),
+            "created_at": a.created_at,
+            "updated_at": a.updated_at,
+        }
+        for a in assignments
+    ]
 
 
 @assignments_router.post(
@@ -565,7 +581,7 @@ def create_user_assignment(
     request: Request,
     user: User = Depends(require_permission("assignment.create")),
     db: Session = Depends(get_db_session),
-) -> UserAssignmentResponse:
+) -> dict[str, object]:
     """Cria uma atribuição de utilizador."""
     import uuid
 
@@ -576,6 +592,12 @@ def create_user_assignment(
     )
 
     org_service = OrganizationService(db)
+    target_user = db.get(User, uuid.UUID(user_id))
+    if target_user is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="User not found",
+        )
     unit = org_service.get_unit(body.organizational_unit_id)
     if unit is None:
         raise HTTPException(
@@ -593,12 +615,22 @@ def create_user_assignment(
                 detail="User already has a primary assignment. Deactivate it first.",
             )
 
+    start_date = date.fromisoformat(body.start_date) if body.start_date else None
+    end_date = date.fromisoformat(body.end_date) if body.end_date else None
+    if start_date is not None and end_date is not None and end_date < start_date:
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail="end_date cannot be before start_date.",
+        )
+
     assignment = UserAssignment(
         user_id=uuid.UUID(user_id),
         organizational_unit_id=body.organizational_unit_id,
         assignment_type=AssignmentType(body.assignment_type),
         is_primary=body.is_primary,
         status=AssignmentStatus.ACTIVE,
+        start_date=start_date,
+        end_date=end_date,
     )
     db.add(assignment)
     db.commit()
@@ -623,7 +655,18 @@ def create_user_assignment(
         unit_id=str(body.organizational_unit_id),
         assignment_type=body.assignment_type,
     )
-    return assignment  # type: ignore[return-value]
+    return {
+        "id": assignment.id,
+        "user_id": assignment.user_id,
+        "organizational_unit_id": assignment.organizational_unit_id,
+        "assignment_type": str(assignment.assignment_type),
+        "is_primary": assignment.is_primary,
+        "start_date": assignment.start_date.isoformat() if assignment.start_date else None,
+        "end_date": assignment.end_date.isoformat() if assignment.end_date else None,
+        "status": str(assignment.status),
+        "created_at": assignment.created_at,
+        "updated_at": assignment.updated_at,
+    }
 
 
 # --- Organization Context endpoint ---
