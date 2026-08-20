@@ -9,70 +9,51 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { usePathname } from "next/navigation";
+import { getBreadcrumbsForRoute } from "@/lib/navigation-config";
+import { useEntityResolution } from "@/hooks/use-entity-resolution";
 
-const segmentLabels: Record<string, string> = {
-  search: "Pesquisa",
-  documents: "Documentos",
-  security: "Segurança",
-  settings: "Definições",
-  processos: "Processos",
-  ocorrencias: "Ocorrências",
-  mandados: "Mandados",
-  despachos: "Despachos",
-  detidos: "Detidos",
-  piquete: "Piquete",
-  pgr: "PGR",
-  relatorios: "Relatórios",
-  notificacoes: "Notificações",
-  organizacao: "Organização",
-  utilizadores: "Utilizadores",
-  auditoria: "Auditoria",
-  templates: "Templates",
-  definicoes: "Definições",
-  novo: "Novo",
-  estrutura: "Estrutura",
-  unidades: "Unidades",
-  pessoas: "Pessoas",
-  atribuicoes: "Atribuições",
-  historico: "Histórico",
-  administracao: "Administração",
-  responsabilidades: "Responsabilidades",
-  delegacoes: "Delegações",
-};
+const dynamicRoutePatterns: Array<{ pattern: RegExp; entityType: string; labelPrefix?: string }> = [
+  { pattern: /^\/processos\/([^/]+)$/, entityType: "processos", labelPrefix: "Processo" },
+  { pattern: /^\/documentos\/([^/]+)$/, entityType: "documentos", labelPrefix: "Documento" },
+  { pattern: /^\/pessoas\/([^/]+)$/, entityType: "pessoas", labelPrefix: "Pessoa" },
+  { pattern: /^\/mandados\/([^/]+)$/, entityType: "mandados", labelPrefix: "Mandado" },
+  { pattern: /^\/despachos\/([^/]+)$/, entityType: "despachos", labelPrefix: "Despacho" },
+  { pattern: /^\/ocorrencias\/([^/]+)$/, entityType: "ocorrencias", labelPrefix: "Ocorrência" },
+  { pattern: /^\/detidos\/([^/]+)$/, entityType: "detidos", labelPrefix: "Detido" },
+];
 
 export function BreadcrumbNav() {
   const pathname = usePathname();
-  const segments = pathname.split("/").filter(Boolean);
+  const breadcrumbs = getBreadcrumbsForRoute(pathname);
 
-  if (segments.length === 0) {
-    return (
-      <Breadcrumb>
-        <BreadcrumbList>
-          <BreadcrumbItem>
-            <BreadcrumbPage>Dashboard</BreadcrumbPage>
-          </BreadcrumbItem>
-        </BreadcrumbList>
-      </Breadcrumb>
-    );
-  }
+  // Check for dynamic routes that need entity resolution
+  const dynamicMatch = dynamicRoutePatterns.find(({ pattern }) => pattern.test(pathname));
+  const entityId = dynamicMatch ? pathname.match(dynamicMatch.pattern)?.[1] : undefined;
+  const entityType = dynamicMatch?.entityType;
+  const labelPrefix = dynamicMatch?.labelPrefix;
+
+  const { data: entity } = useEntityResolution(entityType ?? "", entityId);
 
   return (
     <Breadcrumb>
       <BreadcrumbList>
-        <BreadcrumbItem>
-          <BreadcrumbLink href="/">Início</BreadcrumbLink>
-        </BreadcrumbItem>
-        {segments.map((segment, index) => {
-          const href = "/" + segments.slice(0, index + 1).join("/");
-          const label = segmentLabels[segment] || segment;
-          const isLast = index === segments.length - 1;
+        {breadcrumbs.map((crumb, index) => {
+          const isLast = index === breadcrumbs.length - 1;
+          const isDynamicRoute = dynamicMatch && index === breadcrumbs.length - 1;
+
           return (
-            <BreadcrumbItem key={href}>
-              <BreadcrumbSeparator />
+            <BreadcrumbItem key={crumb.route}>
+              {index > 0 && <BreadcrumbSeparator />}
               {isLast ? (
-                <BreadcrumbPage>{label}</BreadcrumbPage>
+                <BreadcrumbPage>
+                  {isDynamicRoute && entity
+                    ? `${labelPrefix} ${entity.label}`
+                    : isDynamicRoute && entityId
+                    ? `${labelPrefix} ${entityId}`
+                    : crumb.label}
+                </BreadcrumbPage>
               ) : (
-                <BreadcrumbLink href={href}>{label}</BreadcrumbLink>
+                <BreadcrumbLink href={crumb.route}>{crumb.label}</BreadcrumbLink>
               )}
             </BreadcrumbItem>
           );
