@@ -10,6 +10,11 @@ vi.mock("next/navigation", () => ({
   usePathname: () => "/",
 }));
 
+vi.mock("@/lib/utils", () => ({
+  getInitials: (name: string) => name.split(" ").filter(Boolean).slice(0, 2).map((part) => part[0]).join("").toUpperCase(),
+  cn: (...inputs: unknown[]) => inputs.filter(Boolean).join(" "),
+}));
+
 beforeEach(() => {
   Object.defineProperty(window, "matchMedia", {
     writable: true,
@@ -91,6 +96,30 @@ describe("AppSidebar", () => {
     expect(screen.getByText("Processos")).toBeTruthy();
     expect(screen.queryByText("Auditoria")).toBeNull();
     expect(screen.queryByText("Definicoes")).toBeNull();
+  });
+
+  it("hides the administration group without organization.read", () => {
+    const userWithoutOrgRead: AuthContextType["user"] = {
+      ...mockUser!,
+      permissions: [
+        "process.read",
+        "person.read",
+        "assignment.read",
+        "responsibility.read",
+        "notification.read",
+      ],
+    };
+    renderSidebar({ user: userWithoutOrgRead, isAuthenticated: true });
+    expect(screen.queryByText("Administração")).toBeNull();
+  });
+
+  it("shows the administration group with organization.read", () => {
+    const userWithOrgRead: AuthContextType["user"] = {
+      ...mockUser!,
+      permissions: ["organization.read", "user.read"],
+    };
+    renderSidebar({ user: userWithOrgRead, isAuthenticated: true });
+    expect(screen.getAllByText("Administração").length).toBeGreaterThanOrEqual(1);
   });
 
   it("shows user name in sidebar footer", () => {
