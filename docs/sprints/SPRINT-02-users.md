@@ -46,7 +46,7 @@ Esta sprint complementa a SPRINT-02 já executada (Administração, Pessoas, Org
 | TASK-011 | user-security-ui | DONE |
 | TASK-012 | backend-tests | DONE |
 | TASK-013 | frontend-tests | DONE |
-| TASK-014 | documentation | PLANNED |
+| TASK-014 | documentation | DONE |
 | TASK-015 | final-review | PLANNED |
 
 ## Cobertura E2E (TASK-013)
