@@ -1,44 +1,44 @@
 # Graph Report - sip  (2026-08-19)
 
 ## Corpus Check
-- 411 files · ~168,795 words
+- 422 files · ~171,486 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 4002 nodes · 7390 edges · 256 communities (226 shown, 30 thin omitted)
+- 4047 nodes · 7465 edges · 263 communities (233 shown, 30 thin omitted)
 - Extraction: 95% EXTRACTED · 5% INFERRED · 0% AMBIGUOUS · INFERRED: 352 edges (avg confidence: 0.94)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `a0e7d1d7`
+- Built from commit: `bdb56f12`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
 ## Community Hubs (Navigation)
 - test_models.py
-- management.py
-- test_auth_api.py
 - User
+- test_auth_api.py
+- organization/api/router.py
 - auth/api/router.py
-- Responsibility
-- cn
+- ResponsibilityService
+- person-form.tsx
 - test_audit.py
-- UUID
+- OrganizationService
 - page-container.tsx
 - HierarchyService
-- OrganizationService
-- unit-form.tsx
+- organization/domain/__init__.py
+- UnitType
 - FunctionalRoleService
-- SubstitutionService
-- person/api/router.py
+- AssignmentService
+- create_person
 - ROADMAP.md
-- organization/api/schemas.py
+- field.tsx
 - devDependencies
-- OrganizationalUnit
-- sidebar.tsx
+- UserAssignment
+- cn
 - dependencies
 - DelegationService
-- header.tsx
+- get_redis
 - delegations-section.tsx
 - LotacaoService
 - humanize.ts
@@ -49,17 +49,17 @@
 - Code Review and Quality
 - Test-Driven Development
 - get_settings
-- ResponsibilityService
-- AssignmentService
+- ResponsibilityScope
+- OrganizationalUnit
 - card.tsx
-- auth/api/dependencies.py
+- person/api/router.py
 - test_users_api.py
 - test_authorization.py
-- [id]/page.tsx
+- pessoas/page.tsx
 - Git Workflow and Versioning
 - config.py
-- test_organization_api.py
-- pessoas/page.tsx
+- Organization
+- TestOrganizationalUnit
 - What You Must Do When Invoked
 - API and Interface Design
 - Browser Testing with DevTools
@@ -68,7 +68,7 @@
 - CI/CD and Automation
 - Deprecation and Migration
 - Frontend UI Engineering
-- Person
+- PersonStatus
 - test_audit_integration.py
 - Context Engineering
 - Incremental Implementation
@@ -79,9 +79,9 @@
 - Debugging and Error Recovery
 - Documentation and ADRs
 - schemas/user.py
-- test_engine
+- tests/conftest.py
 - ErrorBoundary
-- get_user
+- users.py
 - PersonNotFoundError
 - test_person_api.py
 - Autenticação — SIP
@@ -90,11 +90,11 @@
 - events.py
 - person_service.py
 - Planning and Task Breakdown
-- unit-details.tsx
+- person-detail.tsx
 - ReOrder: Keep Your Regulars Ordering Direct
 - Interview Me
 - Task List: SIP Frontend Reengineering
-- test_seed.py
+- seed
 - Camadas de Segurança
 - TASK-001 — Repository Analysis
 - Autorização — SIP
@@ -116,15 +116,15 @@
 - TASK-006 — Sidebar Authorization
 - Desenvolvimento
 - Spec-Driven Development
-- register_exception_handlers
-- metrics_response
+- health.py
+- v1/router.py
 - test_migrations.py
 - scripts
 - TASK-007 — Security Audit Foundation
 - Source-Driven Development
 - AGENTS.md — Regras para Agentes IA no SIP
-- v1/router.py
-- breadcrumb-nav.tsx
+- api-client.ts
+- PersonNumberGenerator
 - TASK-002 — Database Migrations
 - TASK-008 — Tests
 - TASK-009 — Documentation
@@ -174,7 +174,7 @@
 - TASK-006 — CI (Continuous Integration)
 - TASK-007 — Documentation
 - Ideation Frameworks Reference
-- Base
+- UserSession
 - SIP Backend
 - ADR-001 — Modular Monolith
 - Arquitectura do Sistema SIP
@@ -195,7 +195,7 @@
 - Responsibility Scopes — Architecture
 - TASK-001 — Organization Domain Entities
 - Responsibility Model — Architecture
-- require_organization_manage
+- seed_dev.py
 - test_correlation.py
 - Arquitectura Documental do SIP
 - graphify reference: query, path, explain
@@ -204,7 +204,7 @@
 - search.py
 - ADR-004 — Assignment vs Responsibility
 - Tasks — SIP
-- .check_permission
+- admin-Administração-E2E-E2-237a0-r-não-acede-à-administração/error-context.md
 - frontend/README.md
 - ADR-005 — Delegation vs Substitution
 - graphify reference: add a URL and watch a folder
@@ -212,7 +212,7 @@
 - graphify reference: incremental update and cluster-only
 - SPRINT-02-prompt.md
 - ci.sh
-- @fontsource/geist-sans
+- admin-Administração-E2E-E2-237a0-r-não-acede-à-administração-retry1/error-context.md
 - @fontsource/inter
 - lucide-react
 - react-hook-form
@@ -221,7 +221,7 @@
 - graphify reference: transcribe video and audio
 - SPRINT-01
 - auth/application/__init__.py
-- AuthService
+- admin-Administração-E2E-E2-2e255-ura-mas-não-altera-o-global/error-context.md
 - auth/infrastructure/__init__.py
 - organization/api/__init__.py
 - organization/infrastructure/__init__.py
@@ -237,11 +237,18 @@
 - sonner
 - @vitejs/plugin-react
 - tw-animate-css
+- admin-Administração-E2E-E2-2e255-ura-mas-não-altera-o-global-retry1/error-context.md
+- admin-Administração-E2E-E2-6e729-penas-o-contexto-autorizado/error-context.md
+- admin-Administração-E2E-E2-6e729-penas-o-contexto-autorizado-retry1/error-context.md
 - postcss.config.mjs
 - .opencode/opencode.json
 - extraction-spec.md
 - idea-refine.sh
 - sip-backend
+- admin-Administração-E2E-E2-87f93-uição-e-consulta-o-contexto/error-context.md
+- admin-Administração-E2E-E2-87f93-uição-e-consulta-o-contexto-retry1/error-context.md
+- admin.spec.ts
+- clsx
 
 ## God Nodes (most connected - your core abstractions)
 1. `cn()` - 180 edges
@@ -270,107 +277,107 @@
 ## Import Cycles
 - None detected.
 
-## Communities (256 total, 30 thin omitted)
+## Communities (263 total, 30 thin omitted)
 
 ### Community 0 - "test_models.py"
-Cohesion: 0.07
-Nodes (45): Motor de autorização centralizado (RBAC). Toda a autorização passa por aqui —…, Scope de recurso — fundação para a SPRINT-02. Permite já expressar, no ponto de…, ResourceScope, Tabelas de associação para RBAC., humanize_enum(), humanize_permission(), humanize_profile(), humanize_user_status() (+37 more)
+Cohesion: 0.05
+Nodes (64): Alembic environment. A URL da base de dados vem sempre das Settings (variáveis…, Base, Base declarativa e mixins partilhados do SQLAlchemy., Base declarativa de todos os modelos., Primary key UUID gerada no lado da aplicação., created_at / updated_at consistentes. Estratégia SIP: - created_at:…, TimestampMixin, UUIDPrimaryKeyMixin (+56 more)
 
-### Community 1 - "management.py"
-Cohesion: 0.09
-Nodes (54): create_delegation(), create_responsibility(), create_substitution(), _delegation_dict(), end_responsibility(), end_substitution(), end_user_assignment(), get_delegation() (+46 more)
+### Community 1 - "User"
+Cohesion: 0.05
+Nodes (92): Entidade User. Representa um utilizador do sistema com credenciais de…, User, create_delegation(), create_responsibility(), create_substitution(), _delegation_dict(), end_responsibility(), end_substitution() (+84 more)
 
 ### Community 2 - "test_auth_api.py"
-Cohesion: 0.07
-Nodes (50): PasswordPolicy, PasswordService, Serviço de passwords — hashing e política centralizada. Arquitectura preparada…, Política mínima de passwords (centralizada)., Hashing e verificação de passwords (argon2id)., Gera o hash de uma password (nunca armazenar em texto)., Verifica uma password contra o hash. Nunca devolve detalhes., Valida a password contra a política vigente. (+42 more)
+Cohesion: 0.10
+Nodes (40): PasswordPolicy, PasswordService, Serviço de passwords — hashing e política centralizada. Arquitectura preparada…, Política mínima de passwords (centralizada)., Hashing e verificação de passwords (argon2id)., Gera o hash de uma password (nunca armazenar em texto)., Verifica uma password contra o hash. Nunca devolve detalhes., Valida a password contra a política vigente. (+32 more)
 
-### Community 3 - "User"
-Cohesion: 0.08
-Nodes (55): Entidade User. Representa um utilizador do sistema com credenciais de…, User, create_organization(), create_unit(), create_user_assignment(), deactivate_unit(), get_access_context(), get_organization() (+47 more)
+### Community 3 - "organization/api/router.py"
+Cohesion: 0.07
+Nodes (54): create_organization(), create_unit(), create_user_assignment(), deactivate_unit(), get_organization_context(), get_unit(), get_unit_tree(), list_organizations() (+46 more)
 
 ### Community 4 - "auth/api/router.py"
-Cohesion: 0.10
-Nodes (30): Garante que o utilizador está autenticado., require_authenticated_user(), login(), logout(), me(), get, post, Request (+22 more)
+Cohesion: 0.06
+Nodes (47): login(), logout(), me(), get, post, Request, Response, Session (+39 more)
 
-### Community 5 - "Responsibility"
-Cohesion: 0.17
-Nodes (10): date, UUID, Cria uma responsabilidade com validação., Obtém uma responsabilidade pelo ID., Lista responsabilidades de um utilizador., Termina uma responsabilidade (suave — o histórico é preservado)., InvalidResponsibilityError, Responsabilidade inválida (âmbito exige unidade, período inválido). (+2 more)
+### Community 5 - "ResponsibilityService"
+Cohesion: 0.09
+Nodes (23): date, Session, UUID, Serviço central para responsabilidades., Cria uma responsabilidade com validação., Obtém uma responsabilidade pelo ID., Lista responsabilidades de um utilizador., Termina uma responsabilidade (suave — o histórico é preservado). (+15 more)
 
-### Community 6 - "cn"
-Cohesion: 0.05
-Nodes (70): LoginForm(), LoginFormData, LoginFormProps, loginSchema, ComboboxField(), EMPLOYMENT_STATUSES, FUNCTIONAL_CATEGORIES, NATIONALITIES (+62 more)
+### Community 6 - "person-form.tsx"
+Cohesion: 0.06
+Nodes (46): UnitFormContent(), unitFormSchema, UnitFormValues, ComboboxField(), EMPLOYMENT_STATUSES, FUNCTIONAL_CATEGORIES, NATIONALITIES, PersonFormContent() (+38 more)
 
 ### Community 7 - "test_audit.py"
-Cohesion: 0.16
-Nodes (22): Factory de dependência: exige uma permissão específica. Uso nos routers::…, require_permission(), AuditService, Session, Regista eventos de auditoria na base de dados., Persiste um evento de auditoria (commit imediato por omissão). Defesa em…, AuditEvent, Evento de auditoria de segurança. (+14 more)
+Cohesion: 0.23
+Nodes (18): Factory de dependência: exige uma permissão específica. Uso nos routers::…, require_permission(), AuditEvent, Evento de auditoria de segurança., _events(), _events_of(), Session, TestClient (+10 more)
 
-### Community 8 - "UUID"
-Cohesion: 0.08
-Nodes (17): OrganizationalUnit, UserAssignment, UUID, Lista todas as unidades de uma organização (lista plana)., Constrói a árvore organizacional completa de uma organização. Devolve uma…, Obtém todas as atribuições activas de uma unidade. Devolve lista de…, Lista unidades de um tipo específico dentro de uma organização., Move uma unidade para um novo pai. (+9 more)
+### Community 8 - "OrganizationService"
+Cohesion: 0.07
+Nodes (27): OrganizationService, Organization, OrganizationalUnit, Session, UserAssignment, UUID, Lista todas as unidades de uma organização (lista plana)., Constrói a árvore organizacional completa de uma organização. Devolve uma… (+19 more)
 
 ### Community 9 - "page-container.tsx"
-Cohesion: 0.12
-Nodes (8): ProtectedRoute(), PageContainer(), PageContainerProps, PageContent(), PageContentProps, PageHeader(), PageHeaderProps, Skeleton()
+Cohesion: 0.11
+Nodes (11): ForgotPasswordPage(), DashboardContent(), ProtectedRoute(), PageContainer(), PageContainerProps, PageContent(), PageContentProps, PageHeader() (+3 more)
 
 ### Community 10 - "HierarchyService"
-Cohesion: 0.08
-Nodes (28): HierarchyService, OrganizationalUnit, Session, UUID, Serviço de hierarquia — operações de árvore para unidades organizacionais.…, Verifica se definir parent_id criaria um ciclo., Operações de árvore para unidades organizacionais., Obtém o pai directo de uma unidade. (+20 more)
+Cohesion: 0.11
+Nodes (17): HierarchyService, OrganizationalUnit, Session, UUID, Verifica se definir parent_id criaria um ciclo., Operações de árvore para unidades organizacionais., Obtém o pai directo de uma unidade., Obtém os filhos directos de uma unidade. (+9 more)
 
-### Community 11 - "OrganizationService"
-Cohesion: 0.04
-Nodes (71): OrganizationService, Organization, Serviço de organização — operações centrais para a gestão organizacional.…, Cria uma nova unidade organizacional., Serviço central para operações de organização., Obtém a organização pelo ID., Obtém a organização pelo código., Lista todas as organizações activas. (+63 more)
+### Community 11 - "organization/domain/__init__.py"
+Cohesion: 0.14
+Nodes (19): humanize_assignment_status(), humanize_assignment_type(), humanize_organization_status(), humanize_organization_type(), humanize_responsibility_scope(), humanize_unit_status(), humanize_unit_type(), Rótulos humanizados para entidades organizacionais. (+11 more)
 
-### Community 12 - "unit-form.tsx"
-Cohesion: 0.10
-Nodes (20): ForgotPasswordPage(), UnitFormContent(), unitFormSchema, UnitFormValues, PersonFormContent(), Button(), buttonVariants, Calendar() (+12 more)
+### Community 12 - "UnitType"
+Cohesion: 0.16
+Nodes (19): Estado da unidade organizacional., Enum OrganizationalUnitType., Tipos de unidades organizacionais., UnitType, UnitStatus, assignment_service(), fixture, Organization (+11 more)
 
 ### Community 13 - "FunctionalRoleService"
 Cohesion: 0.11
 Nodes (17): FunctionalRoleService, date, Session, UUID, Serviço central para funções funcionais de utilizadores., Atribui uma função a um utilizador numa unidade., Obtém uma atribuição de função pelo ID., Lista as funções de um utilizador (activas por omissão). (+9 more)
 
-### Community 14 - "SubstitutionService"
-Cohesion: 0.10
-Nodes (16): date, Session, UUID, Serviço central para substituições., Cria uma substituição com validação., Obtém uma substituição pelo ID., Lista substituições de um utilizador., Termina uma substituição (suave — o histórico é preservado). (+8 more)
+### Community 14 - "AssignmentService"
+Cohesion: 0.11
+Nodes (20): AssignmentService, date, Session, UserAssignment, UUID, Lista atribuições activas de uma unidade., Termina uma atribuição (suave — o histórico é preservado)., Actualiza campos da atribuição com validação. (+12 more)
 
-### Community 15 - "person/api/router.py"
-Cohesion: 0.10
-Nodes (37): create_person(), deactivate_person(), get_person(), _handle_error(), list_persons(), Exception, get, patch (+29 more)
+### Community 15 - "create_person"
+Cohesion: 0.09
+Nodes (36): create_person(), deactivate_person(), get_person(), _handle_error(), list_persons(), Exception, get, patch (+28 more)
 
 ### Community 16 - "ROADMAP.md"
 Cohesion: 0.05
 Nodes (37): A IA deve executar:, Auditoria, Chefe Departamento, Critério de sucesso, Director, Documentos, E a regra mais importante, FASE 00 — Bootstrap / Arquitectura (+29 more)
 
-### Community 17 - "organization/api/schemas.py"
-Cohesion: 0.07
-Nodes (40): AccessContextResponse, DelegationCreate, DelegationResponse, OrganizationContextResponse, OrganizationCreate, OrganizationUpdate, BaseModel, Schemas da API de organização. (+32 more)
+### Community 17 - "field.tsx"
+Cohesion: 0.12
+Nodes (17): LoginForm(), LoginFormData, LoginFormProps, loginSchema, Alert(), AlertAction(), AlertDescription(), AlertTitle() (+9 more)
 
 ### Community 18 - "devDependencies"
 Cohesion: 0.05
 Nodes (39): eslint, eslint-config-next, devDependencies, eslint, eslint-config-next, husky, jsdom, lint-staged (+31 more)
 
-### Community 19 - "OrganizationalUnit"
-Cohesion: 0.24
-Nodes (15): OrganizationalUnit, Entidade OrganizationalUnit. Representa uma unidade dentro da hierarquia…, AssignmentStatus, Estado da atribuição., _find_user(), _login(), Session, TestClient (+7 more)
+### Community 19 - "UserAssignment"
+Cohesion: 0.21
+Nodes (17): AssignmentStatus, AssignmentType, Tipos de atribuições de utilizadores a unidades organizacionais., Estado da atribuição., Atribuição de utilizador a unidade organizacional. Liga utilizadores a unidades…, UserAssignment, _find_user(), _login() (+9 more)
 
-### Community 20 - "sidebar.tsx"
-Cohesion: 0.07
-Nodes (36): metadata, RootLayout(), AppLayout(), AUTH_ROUTES, NavMain(), Collapsible(), CollapsibleContent(), CollapsibleTrigger() (+28 more)
+### Community 20 - "cn"
+Cohesion: 0.04
+Nodes (87): metadata, RootLayout(), AppLayout(), AUTH_ROUTES, BreadcrumbNav(), segmentLabels, Header(), NavUser() (+79 more)
 
 ### Community 21 - "dependencies"
 Cohesion: 0.06
-Nodes (35): @base-ui/react, class-variance-authority, clsx, cmdk, date-fns, @fontsource/geist-mono, dependencies, @base-ui/react (+27 more)
+Nodes (35): @base-ui/react, class-variance-authority, cmdk, date-fns, @fontsource/geist-mono, @fontsource/geist-sans, dependencies, @base-ui/react (+27 more)
 
 ### Community 22 - "DelegationService"
-Cohesion: 0.07
-Nodes (34): Rótulos legíveis por humanos para os âmbitos efectivos., DelegationService, date, Session, UUID, DelegationService — gestão de delegações de responsabilidade., Obtém uma delegação pelo ID., Lista todas as delegações activas. (+26 more)
-
-### Community 23 - "header.tsx"
 Cohesion: 0.11
-Nodes (27): Header(), NavUser(), ICON_MAP, OrganizationTreeProps, TreeNode(), TreeNodeProps, Avatar(), AvatarBadge() (+19 more)
+Nodes (20): DelegationService, date, Session, UUID, Obtém uma delegação pelo ID., Lista todas as delegações activas., Lista delegações em que o utilizador é delegante ou delegado., Revoga uma delegação (suave — o histórico é preservado). (+12 more)
+
+### Community 23 - "get_redis"
+Cohesion: 0.17
+Nodes (10): Redis, RateLimiter, Rate limiting para endpoints sensíveis (login, refresh, password).…, Limita tentativas por chave (IP, username, etc.) numa janela., Regista uma tentativa e devolve True se dentro do limite., Tentativas restantes para a chave., get_redis(), Redis (+2 more)
 
 ### Community 24 - "delegations-section.tsx"
-Cohesion: 0.12
-Nodes (45): ASSIGNMENT_TYPES, ConfirmDialog(), ConfirmDialogProps, SCOPES, SCOPES, UNIT_REQUIRED_SCOPES, FUNCTIONAL_ROLES, UserPicker() (+37 more)
+Cohesion: 0.10
+Nodes (51): ASSIGNMENT_TYPES, AssignmentsTable(), ConfirmDialog(), ConfirmDialogProps, SCOPES, SCOPES, UNIT_REQUIRED_SCOPES, FUNCTIONAL_ROLES (+43 more)
 
 ### Community 25 - "LotacaoService"
 Cohesion: 0.14
@@ -378,7 +385,7 @@ Nodes (14): LotacaoService, Session, UserAssignment, UUID, LotacaoService — co
 
 ### Community 26 - "humanize.ts"
 Cohesion: 0.06
-Nodes (54): AppSidebar(), navItemToMain(), withBadges(), AssignmentsTable(), SidebarContent(), SidebarFooter(), SidebarHeader(), TODO: descomentar quando o backend estiver pronto (+46 more)
+Nodes (54): AppSidebar(), navItemToMain(), withBadges(), NavMain(), SidebarContent(), SidebarFooter(), SidebarHeader(), TODO: descomentar quando o backend estiver pronto (+46 more)
 
 ### Community 27 - "compilerOptions"
 Cohesion: 0.06
@@ -393,8 +400,8 @@ Cohesion: 0.07
 Nodes (29): 1. Estado Actual do Frontend, 2.1 Layout & Shell, 2.2 Design Tokens & Tipografia, 2.3 Componentes UI (shadcn/ui), 2.4 Formulários, 2.5 Data Fetching, 2.6 Organização, 2.7 Auth & Route Protection (+21 more)
 
 ### Community 30 - "administracao/organizacao/page.tsx"
-Cohesion: 0.10
-Nodes (35): OrganizationContent(), OrganizationContent(), AssignmentForm(), ResponsibilityForm(), SubstitutionForm(), OrganizationTree(), UnitDataTableProps, UnitDetailsProps (+27 more)
+Cohesion: 0.06
+Nodes (58): OrganizationContent(), OrganizationContent(), AssignmentForm(), DelegationForm(), DelegationsSection(), ResponsibilitiesSection(), ResponsibilityForm(), SubstitutionForm() (+50 more)
 
 ### Community 31 - "Code Review and Quality"
 Cohesion: 0.07
@@ -408,33 +415,33 @@ Nodes (29): Browser Testing with DevTools, Common Rationalizations, DAMP Over DR
 Cohesion: 0.13
 Nodes (22): get_settings(), Instância única (cacheada) da configuração., Any, UUID, Serviço de tokens JWT. Access Token: curto (configurável, default 30 min),…, Criação e validação de tokens de acesso (JWT)., Valida e decodifica um token. Levanta InvalidTokenError em caso de token…, TokenService (+14 more)
 
-### Community 34 - "ResponsibilityService"
-Cohesion: 0.06
-Nodes (40): AccessContext, AccessContextService, build_access_context(), _person_dict(), Any, Session, UUID, Serviço de contexto de acesso — resolve o contexto organizacional do… (+32 more)
+### Community 34 - "ResponsibilityScope"
+Cohesion: 0.05
+Nodes (47): AccessContext, AccessContextService, build_access_context(), _person_dict(), Any, Session, UUID, Serviço de contexto de acesso — resolve o contexto organizacional do… (+39 more)
 
-### Community 35 - "AssignmentService"
-Cohesion: 0.06
-Nodes (48): AssignmentService, date, Session, UserAssignment, UUID, AssignmentService — gestão central de atribuições de utilizadores. Regras: -…, Lista atribuições activas de uma unidade., Termina uma atribuição (suave — o histórico é preservado). (+40 more)
+### Community 35 - "OrganizationalUnit"
+Cohesion: 0.05
+Nodes (63): _handle_error(), Exception, Converte erros de domínio em erros HTTP., AssignmentService — gestão central de atribuições de utilizadores. Regras: -…, FunctionalRoleService — gestão de funções exercidas na estrutura. Distinto de…, Serviço de hierarquia — operações de árvore para unidades organizacionais.…, Serviço de organização — operações centrais para a gestão organizacional.…, ResponsibilityService — gestão de responsabilidades funcionais. (+55 more)
 
 ### Community 36 - "card.tsx"
 Cohesion: 0.10
-Nodes (12): ADMIN_SECTIONS, AdministracaoContent(), features, HealthStatus(), Card(), CardContent(), CardDescription(), CardFooter() (+4 more)
+Nodes (13): ADMIN_SECTIONS, AdministracaoContent(), features, HealthStatus(), Card(), CardAction(), CardContent(), CardDescription() (+5 more)
 
-### Community 37 - "auth/api/dependencies.py"
-Cohesion: 0.11
-Nodes (26): get_db_session(), Session, Gestão de sessões SQLAlchemy., Dependency para injeção de sessão nos routers., _extract_token(), get_current_user(), Request, Session (+18 more)
+### Community 37 - "person/api/router.py"
+Cohesion: 0.08
+Nodes (32): get_db_session(), Session, Gestão de sessões SQLAlchemy., Dependency para injeção de sessão nos routers., _extract_token(), get_current_user(), Request, Session (+24 more)
 
 ### Community 38 - "test_users_api.py"
 Cohesion: 0.25
 Nodes (13): _auth_headers(), requires_database, Session, TestClient, Testes da API de listagem de utilizadores (pickers administrativos)., Sem autenticação, a listagem de utilizadores é rejeitada., A listagem devolve utilizadores activos com dados seguros., A pesquisa filtra por username/nome. (+5 more)
 
 ### Community 39 - "test_authorization.py"
-Cohesion: 0.12
-Nodes (30): Factory de dependência: exige um perfil específico (activo)., require_profile(), AuthorizationService, Session, Avalia permissões e perfis de um utilizador., O utilizador possui o perfil (activo)., auth_client(), _get_user() (+22 more)
+Cohesion: 0.11
+Nodes (32): Factory de dependência: exige um perfil específico (activo)., require_profile(), AuthorizationService, Session, Avalia permissões e perfis de um utilizador., Permissões activas (union) dos perfis activos do utilizador., O utilizador possui a permissão (qualquer perfil activo)., O utilizador possui o perfil (activo). (+24 more)
 
-### Community 40 - "[id]/page.tsx"
-Cohesion: 0.12
-Nodes (22): PessoaDetalheContent(), PersonDataTable(), PersonDataTableProps, formatDate(), PersonDetail(), PersonDetailProps, PersonForm(), PersonFormProps (+14 more)
+### Community 40 - "pessoas/page.tsx"
+Cohesion: 0.11
+Nodes (23): PessoaDetalheContent(), PessoasContent(), PersonDataTableProps, formatDate(), PersonDetail(), PersonDetailProps, PersonForm(), PersonFormProps (+15 more)
 
 ### Community 41 - "Git Workflow and Versioning"
 Cohesion: 0.07
@@ -444,13 +451,13 @@ Nodes (26): 1. Commit Early, Commit Often, 2. Atomic Commits, 3. Descriptive Mes
 Cohesion: 0.08
 Nodes (26): Configuração centralizada do backend. Toda a configuração é carregada através…, Settings, get_logger(), Logging estruturado. Os logs permitem identificar: timestamp, level, service,…, setup_logging(), CorrelationIdMiddleware, Any, BaseHTTPMiddleware (+18 more)
 
-### Community 43 - "test_organization_api.py"
-Cohesion: 0.22
-Nodes (20): _auth_headers(), _login(), _org_id(), Session, TestClient, UUID, Testes da API de organização completa (TASK-017). Cobrem: GET/POST…, Criação de unidade exige organization.manage (403 para sem permissão). (+12 more)
+### Community 43 - "Organization"
+Cohesion: 0.19
+Nodes (22): Organization, Entidade Organization. Representa a organização institucional principal., _auth_headers(), _login(), _org_id(), Session, TestClient, UUID (+14 more)
 
-### Community 44 - "pessoas/page.tsx"
-Cohesion: 0.20
-Nodes (8): PessoasContent(), LoginPage(), DashboardContent(), Home(), useAuth(), useCreatePerson(), usePeople(), mockAuthValue
+### Community 44 - "TestOrganizationalUnit"
+Cohesion: 0.26
+Nodes (4): requires_database, Session, TestOrganizationalUnit, TestOrganizationType
 
 ### Community 45 - "What You Must Do When Invoked"
 Cohesion: 0.08
@@ -484,13 +491,13 @@ Nodes (23): Adapter Pattern, Code Is a Liability, Common Rationalizations, Compu
 Cohesion: 0.08
 Nodes (23): Accessibility (WCAG 2.1 AA), ARIA Labels, Avoid the AI Aesthetic, Color, Common Rationalizations, Component Architecture, Component Patterns, Design System Adherence (+15 more)
 
-### Community 53 - "Person"
-Cohesion: 0.16
-Nodes (18): humanize_employment_status(), humanize_person_status(), humanize_personal_status(), Rótulos humanizados para entidades de pessoa., Rótulo legível por humanos para um estado de pessoa., Rótulo legível por humanos para um estado pessoal., Rótulo legível por humanos para um estado de emprego., EmploymentStatus (+10 more)
+### Community 53 - "PersonStatus"
+Cohesion: 0.23
+Nodes (14): humanize_employment_status(), humanize_person_status(), humanize_personal_status(), Rótulos humanizados para entidades de pessoa., Rótulo legível por humanos para um estado de pessoa., Rótulo legível por humanos para um estado pessoal., Rótulo legível por humanos para um estado de emprego., EmploymentStatus (+6 more)
 
 ### Community 54 - "test_audit_integration.py"
 Cohesion: 0.19
-Nodes (22): _assert_no_secrets(), _auth_headers(), _events(), _get_org_id(), _login(), Session, TestClient, UUID (+14 more)
+Nodes (21): _assert_no_secrets(), _auth_headers(), _events(), _get_org_id(), _login(), Session, TestClient, UUID (+13 more)
 
 ### Community 55 - "Context Engineering"
 Cohesion: 0.09
@@ -505,8 +512,8 @@ Cohesion: 0.09
 Nodes (22): Common Rationalizations, Core Web Vitals Targets, Large Bundle Size, Log every attempt, including the reverted ones, Missing Caching (Backend), Missing Image Optimization (Frontend), N+1 Queries (Backend), Overview (+14 more)
 
 ### Community 58 - "PersonService"
-Cohesion: 0.16
-Nodes (23): PersonService, Session, Serviço central para operações de pessoa., Gera o próximo número de pessoa atomicamente., PersonNumberGenerator, Gera números de pessoa sequenciais (PES-000001)., Devolve o próximo número de pessoa dado o último., requires_database (+15 more)
+Cohesion: 0.23
+Nodes (18): PersonService, Session, Serviço central para operações de pessoa., requires_database, Testes de domínio Person (TASK-001/002/003)., test_associate_person_to_two_users_rejected(), test_associate_user_to_person(), test_create_person_generates_person_number() (+10 more)
 
 ### Community 59 - "components.json"
 Cohesion: 0.09
@@ -528,21 +535,21 @@ Nodes (21): ADR Lifecycle, ADR Template, API Documentation, Architecture Decisio
 Cohesion: 0.13
 Nodes (20): PermissionResponse, PermissionSummary, ProfileResponse, ProfileSummary, BaseModel, Schemas da API de utilizadores. Estes schemas são usados na serialização de…, Schema base de utilizador com campos comuns., Schema para criar um novo utilizador. (+12 more)
 
-### Community 64 - "test_engine"
-Cohesion: 0.13
-Nodes (19): _clean_test_data(), client(), database_available(), db_session(), _prepare_test_database(), Engine, fixture, MonkeyPatch (+11 more)
+### Community 64 - "tests/conftest.py"
+Cohesion: 0.14
+Nodes (21): _clean_test_data(), client(), database_available(), db_session(), _prepare_test_database(), Engine, fixture, MonkeyPatch (+13 more)
 
 ### Community 65 - "ErrorBoundary"
 Cohesion: 0.29
 Nodes (3): ErrorBoundary, ErrorBoundaryProps, ErrorBoundaryState
 
-### Community 66 - "get_user"
-Cohesion: 0.21
-Nodes (12): get_user(), list_users(), BaseModel, get, Session, UUID, Item de listagem de utilizador para selecção (nunca expõe credenciais)., Resposta de listagem de utilizadores. (+4 more)
+### Community 66 - "users.py"
+Cohesion: 0.22
+Nodes (13): get_user(), list_users(), BaseModel, get, Session, UUID, Router de utilizadores: listagem para pickers administrativos., Item de listagem de utilizador para selecção (nunca expõe credenciais). (+5 more)
 
 ### Community 67 - "PersonNotFoundError"
-Cohesion: 0.12
-Nodes (14): date, Person, UUID, Cria uma nova pessoa., Actualiza os campos de uma pessoa (apenas os campos fornecidos)., Desactiva uma pessoa (suave — o histórico é preservado)., Obtém a pessoa associada a um utilizador (via user.person)., Associa um utilizador a uma pessoa (integridade 1:1). Levanta… (+6 more)
+Cohesion: 0.14
+Nodes (12): Person, UUID, Actualiza os campos de uma pessoa (apenas os campos fornecidos)., Desactiva uma pessoa (suave — o histórico é preservado)., Obtém a pessoa associada a um utilizador (via user.person)., Associa um utilizador a uma pessoa (integridade 1:1). Levanta…, Desassocia um utilizador da sua pessoa. O histórico/dados são preservados., Obtém uma pessoa pelo ID. (+4 more)
 
 ### Community 68 - "test_person_api.py"
 Cohesion: 0.25
@@ -554,7 +561,7 @@ Nodes (19): Anti-User-Enumeration, Auditoria, Autenticação — SIP, AuthProvid
 
 ### Community 70 - "use-management.ts"
 Cohesion: 0.07
-Nodes (34): AssignmentsSection(), DelegationForm(), DelegationsSection(), ResponsibilitiesSection(), SubstitutionsSection(), managementKeys, useCreateDelegation(), useCreateResponsibility() (+26 more)
+Nodes (30): AssignmentsSection(), SubstitutionsSection(), managementKeys, useCreateDelegation(), useCreateResponsibility(), useCreateSubstitution(), useDelegations(), useEndAssignment() (+22 more)
 
 ### Community 71 - "SPEC — SPRINT-01: Identidade, Autenticação e Autorização"
 Cohesion: 0.10
@@ -572,9 +579,9 @@ Nodes (12): PersonService — operações centrais para a gestão de pessoas. Fo
 Cohesion: 0.11
 Nodes (18): Common Rationalizations, Output Files, Overview, Parallelization Opportunities, Plan Document Template, Planning and Task Breakdown, Red Flags, See Also (+10 more)
 
-### Community 75 - "unit-details.tsx"
-Cohesion: 0.25
-Nodes (12): UnitDataTable(), UnitDetails(), ASSIGNMENT_TYPE_META, AssignmentTypeMetadata, getAssignmentTypeMetadata(), getStatusMetadata(), getUnitTypeMetadata(), STATUS_META (+4 more)
+### Community 75 - "person-detail.tsx"
+Cohesion: 0.26
+Nodes (8): PersonDataTable(), Separator(), Tabs(), TabsContent(), TabsList(), tabsListVariants, TabsTrigger(), humanizePersonStatus()
 
 ### Community 76 - "ReOrder: Keep Your Regulars Ordering Direct"
 Cohesion: 0.11
@@ -588,9 +595,9 @@ Nodes (17): Common Rationalizations, Example, Interaction with Other Skills, Int
 Cohesion: 0.11
 Nodes (17): Checkpoint: After SPRINT-03, Phase 1: Data Layer, Phase 1: Foundation (Tasks 1-3), Phase 1: Modal Engine, Phase 2: DataTable Engine, Phase 2: Form Engine, Phase 2: Layout Enterprise (Tasks 4-7), Phase 3: Core Components (Tasks 8-12) (+9 more)
 
-### Community 79 - "test_seed.py"
-Cohesion: 0.24
-Nodes (16): fixture, requires_database, Session, Testes do seed de desenvolvimento (TASK-002)., seeded_session(), test_admin_has_all_permissions(), test_pgr_has_no_global_process_access(), test_profile_permission_mapping_respected() (+8 more)
+### Community 79 - "seed"
+Cohesion: 0.18
+Nodes (21): Devolve todos os códigos de permissão., Session, Executa o seed (idempotente). Devolve contagem de objectos criados., seed(), test_permission_constants_are_unique_and_formatted(), fixture, requires_database, Session (+13 more)
 
 ### Community 80 - "Camadas de Segurança"
 Cohesion: 0.12
@@ -609,8 +616,8 @@ Cohesion: 0.12
 Nodes (15): ADMINISTRADOR_SISTEMA, AGENTE_PGR, AGENTE_PIQUETE, DIRECTOR, EDITOR_DOCUMENTAL, Hierarquia de Perfis, Humanização, INSTRUTOR_PROCESSUAL (+7 more)
 
 ### Community 84 - "auth-context.tsx"
-Cohesion: 0.08
-Nodes (22): Providers(), SidebarProvider(), AuthContext, AuthContextType, AuthProvider(), apiClient, ApiError, AUTH_COOKIE_NAME (+14 more)
+Cohesion: 0.11
+Nodes (15): LoginPage(), Home(), Providers(), AuthContext, AuthContextType, AuthProvider(), ApiErrorDetail, AuthUser (+7 more)
 
 ### Community 85 - "Person Model — Architecture"
 Cohesion: 0.17
@@ -676,13 +683,13 @@ Nodes (13): Arquitectura, Desenvolvimento, Docker Compose Profiles, Endpoints, E
 Cohesion: 0.14
 Nodes (13): Common Rationalizations, Keeping the Spec Alive, Overview, Phase 0: Scope Check, Phase 1: Specify, Phase 2: Plan, Phase 3: Tasks, Phase 4: Implement (+5 more)
 
-### Community 101 - "register_exception_handlers"
-Cohesion: 0.21
-Nodes (10): FastAPI, Tratamento global de erros. Respostas consistentes em formato ApiErrorResponse.…, register_exception_handlers(), ApiErrorResponse, ErrorDetail, BaseModel, Schemas comuns da API., Resposta consistente para erros. { "code": "VALIDATION_ERROR", "message":… (+2 more)
+### Community 101 - "health.py"
+Cohesion: 0.14
+Nodes (19): FastAPI, Tratamento global de erros. Respostas consistentes em formato ApiErrorResponse.…, register_exception_handlers(), ApiErrorResponse, ErrorDetail, HealthResponse, BaseModel, Schemas comuns da API. (+11 more)
 
-### Community 102 - "metrics_response"
-Cohesion: 0.33
-Nodes (6): metrics(), get, Response, metrics_response(), Response, Resposta Prometheus em /metrics.
+### Community 102 - "v1/router.py"
+Cohesion: 0.17
+Nodes (8): Router principal da API v1., metrics(), get, Response, metrics_response(), Response, Resposta Prometheus em /metrics., Módulo API de pessoa.
 
 ### Community 103 - "test_migrations.py"
 Cohesion: 0.28
@@ -704,13 +711,13 @@ Nodes (12): Common Rationalizations, Overview, Red Flags, Retrieval Safety: Trea
 Cohesion: 0.17
 Nodes (11): AGENTS.md — Regras para Agentes IA no SIP, Ciclo Obrigatório de Execução, Comentários de Código (Backend e Frontend):, Componentes de Domínio/Negócio (Fora de ui/):, Componentes Genéricos (app/components/ui/):, Formato de Commits, graphify (USO OBRIGATÓRIO), Prioridades (+3 more)
 
-### Community 108 - "v1/router.py"
-Cohesion: 0.18
-Nodes (11): HealthResponse, Router principal da API v1., health(), live(), get, Session, Health checks da API., ready() (+3 more)
+### Community 108 - "api-client.ts"
+Cohesion: 0.24
+Nodes (8): apiClient, ApiError, AUTH_COOKIE_NAME, AuthSessionError, dispatchSessionExpired(), errorFromResponse(), request(), ApiErrorResponse
 
-### Community 109 - "breadcrumb-nav.tsx"
-Cohesion: 0.29
-Nodes (9): BreadcrumbNav(), segmentLabels, Breadcrumb(), BreadcrumbEllipsis(), BreadcrumbItem(), BreadcrumbLink(), BreadcrumbList(), BreadcrumbPage() (+1 more)
+### Community 109 - "PersonNumberGenerator"
+Cohesion: 0.22
+Nodes (7): date, Cria uma nova pessoa., Gera o próximo número de pessoa atomicamente., PersonNumberGenerator, Gera números de pessoa sequenciais (PES-000001)., Devolve o próximo número de pessoa dado o último., test_person_number_generator_handles_edge_cases()
 
 ### Community 110 - "TASK-002 — Database Migrations"
 Cohesion: 0.17
@@ -854,7 +861,7 @@ Nodes (10): Acceptance Criteria, Architecture, Checkpoints, Definition of Done, 
 
 ### Community 145 - "permission"
 Cohesion: 0.10
-Nodes (19): command, enabled, type, mcp, graphify, permission, bash, doom_loop (+11 more)
+Nodes (20): command, enabled, type, lsp, mcp, graphify, permission, bash (+12 more)
 
 ### Community 146 - "Delegation Model — Architecture"
 Cohesion: 0.20
@@ -908,9 +915,9 @@ Nodes (8): Acceptance Criteria, Dependencies, Implementation, Objective, Scope, 
 Cohesion: 0.22
 Nodes (8): Analogous Inspiration, Constraint-Based Ideation, First Principles Thinking, How Might We (HMW), Ideation Frameworks Reference, Jobs to Be Done (JTBD), Pre-mortem, SCAMPER
 
-### Community 159 - "Base"
-Cohesion: 0.08
-Nodes (26): Alembic environment. A URL da base de dados vem sempre das Settings (variáveis…, Base, Base declarativa e mixins partilhados do SQLAlchemy., Base declarativa de todos os modelos., Primary key UUID gerada no lado da aplicação., created_at / updated_at consistentes. Estratégia SIP: - created_at:…, TimestampMixin, UUIDPrimaryKeyMixin (+18 more)
+### Community 159 - "UserSession"
+Cohesion: 0.25
+Nodes (5): Sessão de autenticação do utilizador. Uma sessão é criada no login e revogada…, Indica se a sessão foi revogada., Revoga esta sessão (idempotente)., UserSession, test_user_session_instantiation_and_revocation()
 
 ### Community 160 - "SIP Backend"
 Cohesion: 0.25
@@ -992,9 +999,9 @@ Nodes (6): Acceptance Criteria, Files, Objective, Scope, Skills, TASK-001 — Or
 Cohesion: 0.20
 Nodes (9): API, Design Decisions, Entity, Overview, Responsibility, Responsibility Model — Architecture, ResponsibilityScope (Enum), ResponsibilityStatus (Enum) (+1 more)
 
-### Community 180 - "require_organization_manage"
+### Community 180 - "seed_dev.py"
 Cohesion: 0.40
-Nodes (6): Request, Session, Exige a permissão organization.manage., Exige a permissão organization.read., require_organization_manage(), require_organization_read()
+Nodes (4): OrganizationStatus, Estado da organização., main(), Seed de desenvolvimento — DEV ONLY. Cria perfis oficiais, permissões do sistema…
 
 ### Community 181 - "test_correlation.py"
 Cohesion: 0.47
@@ -1028,6 +1035,10 @@ Nodes (7): ADR-004 — Assignment vs Responsibility, Alternativas consideradas, 
 Cohesion: 0.40
 Nodes (4): Convenção, Formato de cada Task, Regra, Tasks — SIP
 
+### Community 189 - "admin-Administração-E2E-E2-237a0-r-não-acede-à-administração/error-context.md"
+Cohesion: 0.50
+Nodes (3): Error details, Instructions, Test info
+
 ### Community 190 - "frontend/README.md"
 Cohesion: 0.50
 Nodes (3): Deploy on Vercel, Getting Started, Learn More
@@ -1056,29 +1067,53 @@ Nodes (3): Administração, Gestão de Pessoas, Estrutura Organizacional,, Lota�
 Cohesion: 0.83
 Nodes (3): fail(), pass(), ci.sh script
 
-### Community 213 - "AuthService"
-Cohesion: 0.14
-Nodes (13): AccountBlockedError, AccountNotActiveError, AuthError, AuthService, InvalidCredentialsError, Exception, Session, Revoga a sessão activa mais recente do utilizador (idempotente). (+5 more)
+### Community 204 - "admin-Administração-E2E-E2-237a0-r-não-acede-à-administração-retry1/error-context.md"
+Cohesion: 0.50
+Nodes (3): Error details, Instructions, Test info
+
+### Community 213 - "admin-Administração-E2E-E2-2e255-ura-mas-não-altera-o-global/error-context.md"
+Cohesion: 0.50
+Nodes (3): Error details, Instructions, Test info
+
+### Community 229 - "admin-Administração-E2E-E2-2e255-ura-mas-não-altera-o-global-retry1/error-context.md"
+Cohesion: 0.50
+Nodes (3): Error details, Instructions, Test info
+
+### Community 230 - "admin-Administração-E2E-E2-6e729-penas-o-contexto-autorizado/error-context.md"
+Cohesion: 0.50
+Nodes (3): Error details, Instructions, Test info
+
+### Community 231 - "admin-Administração-E2E-E2-6e729-penas-o-contexto-autorizado-retry1/error-context.md"
+Cohesion: 0.50
+Nodes (3): Error details, Instructions, Test info
+
+### Community 259 - "admin-Administração-E2E-E2-87f93-uição-e-consulta-o-contexto/error-context.md"
+Cohesion: 0.50
+Nodes (3): Error details, Instructions, Test info
+
+### Community 260 - "admin-Administração-E2E-E2-87f93-uição-e-consulta-o-contexto-retry1/error-context.md"
+Cohesion: 0.50
+Nodes (3): Error details, Instructions, Test info
 
 ## Knowledge Gaps
-- **1526 isolated node(s):** `$schema`, `sip-backend`, `$schema`, `style`, `rsc` (+1521 more)
+- **1554 isolated node(s):** `$schema`, `sip-backend`, `$schema`, `style`, `rsc` (+1549 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **30 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `User` connect `User` to `test_models.py`, `management.py`, `test_auth_api.py`, `auth/api/router.py`, `test_audit.py`, `OrganizationService`, `person/api/router.py`, `OrganizationalUnit`, `LotacaoService`, `Base`, `ResponsibilityService`, `auth/api/dependencies.py`, `test_authorization.py`, `test_organization_api.py`, `test_management_api.py`, `require_organization_manage`, `test_audit_integration.py`, `.check_permission`, `test_engine`, `get_user`, `test_person_api.py`, `person_service.py`, `test_seed.py`, `AuthService`?**
-  _High betweenness centrality (0.042) - this node is a cross-community bridge._
-- **Why does `OrganizationService` connect `OrganizationService` to `ResponsibilityService`, `AssignmentService`, `User`, `Responsibility`, `UUID`, `HierarchyService`, `OrganizationalUnit`, `DelegationService`, `Base`?**
-  _High betweenness centrality (0.014) - this node is a cross-community bridge._
-- **Why does `get_settings()` connect `get_settings` to `test_engine`, `test_auth_api.py`, `auth/api/router.py`, `auth/api/dependencies.py`, `test_audit.py`, `events.py`, `test_authorization.py`, `config.py`, `OrganizationService`, `v1/router.py`, `test_migrations.py`, `test_seed.py`, `AuthService`, `search.py`, `Base`?**
-  _High betweenness centrality (0.012) - this node is a cross-community bridge._
+- **Why does `User` connect `User` to `test_models.py`, `test_auth_api.py`, `organization/api/router.py`, `auth/api/router.py`, `test_audit.py`, `create_person`, `UserAssignment`, `LotacaoService`, `ResponsibilityScope`, `OrganizationalUnit`, `person/api/router.py`, `test_authorization.py`, `Organization`, `test_management_api.py`, `seed_dev.py`, `test_audit_integration.py`, `tests/conftest.py`, `users.py`, `test_person_api.py`, `person_service.py`, `seed`?**
+  _High betweenness centrality (0.041) - this node is a cross-community bridge._
+- **Why does `OrganizationService` connect `OrganizationService` to `test_models.py`, `User`, `ResponsibilityScope`, `organization/api/router.py`, `OrganizationalUnit`, `ResponsibilityService`, `HierarchyService`, `Organization`, `organization/domain/__init__.py`, `UnitType`, `AssignmentService`, `TestOrganizationalUnit`, `UserAssignment`, `DelegationService`?**
+  _High betweenness centrality (0.013) - this node is a cross-community bridge._
+- **Why does `get_settings()` connect `get_settings` to `test_models.py`, `tests/conftest.py`, `test_auth_api.py`, `auth/api/router.py`, `person/api/router.py`, `health.py`, `test_audit.py`, `events.py`, `test_authorization.py`, `config.py`, `test_migrations.py`, `seed`, `get_redis`, `search.py`?**
+  _High betweenness centrality (0.011) - this node is a cross-community bridge._
 - **Are the 35 inferred relationships involving `OrganizationService` (e.g. with `create_organization()` and `create_unit()`) actually correct?**
   _`OrganizationService` has 35 INFERRED edges - model-reasoned connections that need verification._
 - **Are the 18 inferred relationships involving `AssignmentService` (e.g. with `end_user_assignment()` and `update_user_assignment()`) actually correct?**
   _`AssignmentService` has 18 INFERRED edges - model-reasoned connections that need verification._
 - **What connects `$schema`, `sip-backend`, `$schema` to the rest of the system?**
-  _1526 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _1554 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `test_models.py` be split into smaller, more focused modules?**
-  _Cohesion score 0.06610169491525424 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.048733874820831344 - nodes in this community are weakly interconnected._

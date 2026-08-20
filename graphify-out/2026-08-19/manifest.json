@@ -960,9 +960,9 @@
     "semantic_hash": ""
   },
   "frontend/src/app/administracao/organizacao/page.tsx": {
-    "mtime": 1787134537.0244732,
-    "seen": 1787164428.3516166,
-    "ast_hash": "5dc95ecdc550ecb7e96182b5fa21b2f6",
+    "mtime": 1787175375.2813275,
+    "seen": 1787176061.58927,
+    "ast_hash": "9955419ac4c149f1d1adf9b55b0089fe",
     "semantic_hash": ""
   },
   "frontend/src/app/administracao/page.tsx": {
@@ -1218,9 +1218,9 @@
     "semantic_hash": ""
   },
   "frontend/src/components/organization/organization-tree.tsx": {
-    "mtime": 1787127467.5530896,
-    "seen": 1787164428.3516793,
-    "ast_hash": "e4e81518f1b0311b4f5620f8eeb376dd",
+    "mtime": 1787175091.8677332,
+    "seen": 1787176061.589461,
+    "ast_hash": "3ac87be543c42b37ec27a562be0280eb",
     "semantic_hash": ""
   },
   "frontend/src/components/organization/unit-data-table.tsx": {
@@ -1470,9 +1470,9 @@
     "semantic_hash": ""
   },
   "frontend/src/hooks/use-organization.ts": {
-    "mtime": 1787127467.5610907,
-    "seen": 1787164428.351739,
-    "ast_hash": "d8b7c66b2dc074b6913d848b74a92b21",
+    "mtime": 1787174900.4975445,
+    "seen": 1787176061.589626,
+    "ast_hash": "6512c8348e59f897f76edb5f1ece7500",
     "semantic_hash": ""
   },
   "frontend/src/hooks/use-people.ts": {
@@ -1518,9 +1518,9 @@
     "semantic_hash": ""
   },
   "frontend/src/lib/organization-api.ts": {
-    "mtime": 1787127467.5610907,
-    "seen": 1787164428.3517501,
-    "ast_hash": "54204fe6a4e2bb156c13c59cc2d8e085",
+    "mtime": 1787174845.3353398,
+    "seen": 1787176061.5896647,
+    "ast_hash": "fc0c4abb438bc24a575d088f1be66d21",
     "semantic_hash": ""
   },
   "frontend/src/lib/organization-metadata.ts": {
@@ -1578,9 +1578,9 @@
     "semantic_hash": ""
   },
   "opencode.json": {
-    "mtime": 1787164944.5987258,
-    "seen": 1787173174.456154,
-    "ast_hash": "b737d31f9f8b6abf99f60924ea95d538",
+    "mtime": 1787173289.0210001,
+    "seen": 1787176061.5897086,
+    "ast_hash": "8f36dde4f032ac2f14ef3ad87475c1c6",
     "semantic_hash": ""
   },
   "scripts/ci.sh": {
@@ -1776,9 +1776,9 @@
     "semantic_hash": ""
   },
   "docs/sprints/SPRINT-02.md": {
-    "mtime": 1787171235.5753546,
-    "seen": 1787173174.4562755,
-    "ast_hash": "a76e67ddf265db549be027dec37d2a33",
+    "mtime": 1787176030.488533,
+    "seen": 1787176061.5898619,
+    "ast_hash": "3f2d997634d180a309dd9d5d0cfbda27",
     "semantic_hash": ""
   },
   "docs/sprints/SPRINT-03-design-system.md": {
@@ -2517,6 +2517,72 @@
     "mtime": 1787165406.9443111,
     "seen": 1787173174.456239,
     "ast_hash": "ff1497b7aaa42813220cc7053ef40a09",
+    "semantic_hash": ""
+  },
+  "frontend/e2e/admin.spec.ts": {
+    "mtime": 1787174873.4358373,
+    "seen": 1787176061.5891802,
+    "ast_hash": "a9e6152c1192ddcbc3f4a8d6cef527ed",
+    "semantic_hash": ""
+  },
+  "frontend/src/__tests__/organization-tree.test.tsx": {
+    "mtime": 1787175611.9279675,
+    "seen": 1787176061.5892317,
+    "ast_hash": "31ebd4c8078de4b0129922e243b352f0",
+    "semantic_hash": ""
+  },
+  "frontend/src/components/organization/move-unit-dialog.tsx": {
+    "mtime": 1787174931.5004206,
+    "seen": 1787176061.589457,
+    "ast_hash": "754f84befdb29a2d34ab9d666fbd23a3",
+    "semantic_hash": ""
+  },
+  "frontend/test-results/admin-Administra\u00e7\u00e3o-E2E-E2-237a0-r-n\u00e3o-acede-\u00e0-administra\u00e7\u00e3o-retry1/error-context.md": {
+    "mtime": 1787175137.2873116,
+    "seen": 1787176061.58997,
+    "ast_hash": "f85e9ed906e2497426bbda883543e3a4",
+    "semantic_hash": ""
+  },
+  "frontend/test-results/admin-Administra\u00e7\u00e3o-E2E-E2-237a0-r-n\u00e3o-acede-\u00e0-administra\u00e7\u00e3o/error-context.md": {
+    "mtime": 1787175110.117801,
+    "seen": 1787176061.5899758,
+    "ast_hash": "f85e9ed906e2497426bbda883543e3a4",
+    "semantic_hash": ""
+  },
+  "frontend/test-results/admin-Administra\u00e7\u00e3o-E2E-E2-2e255-ura-mas-n\u00e3o-altera-o-global-retry1/error-context.md": {
+    "mtime": 1787175081.2277927,
+    "seen": 1787176061.5899804,
+    "ast_hash": "00aef0d41800b0f10d562891c79199f4",
+    "semantic_hash": ""
+  },
+  "frontend/test-results/admin-Administra\u00e7\u00e3o-E2E-E2-2e255-ura-mas-n\u00e3o-altera-o-global/error-context.md": {
+    "mtime": 1787175065.6974041,
+    "seen": 1787176061.5899842,
+    "ast_hash": "00aef0d41800b0f10d562891c79199f4",
+    "semantic_hash": ""
+  },
+  "frontend/test-results/admin-Administra\u00e7\u00e3o-E2E-E2-6e729-penas-o-contexto-autorizado-retry1/error-context.md": {
+    "mtime": 1787175155.292553,
+    "seen": 1787176061.589988,
+    "ast_hash": "cdcbca24bbb9890bfab4b25bafdba071",
+    "semantic_hash": ""
+  },
+  "frontend/test-results/admin-Administra\u00e7\u00e3o-E2E-E2-6e729-penas-o-contexto-autorizado/error-context.md": {
+    "mtime": 1787175150.1713116,
+    "seen": 1787176061.5899925,
+    "ast_hash": "cdcbca24bbb9890bfab4b25bafdba071",
+    "semantic_hash": ""
+  },
+  "frontend/test-results/admin-Administra\u00e7\u00e3o-E2E-E2-87f93-ui\u00e7\u00e3o-e-consulta-o-contexto-retry1/error-context.md": {
+    "mtime": 1787175056.9476564,
+    "seen": 1787176061.5899963,
+    "ast_hash": "11850342d15a53166b31d72c714fc992",
+    "semantic_hash": ""
+  },
+  "frontend/test-results/admin-Administra\u00e7\u00e3o-E2E-E2-87f93-ui\u00e7\u00e3o-e-consulta-o-contexto/error-context.md": {
+    "mtime": 1787175044.8650477,
+    "seen": 1787176061.5900002,
+    "ast_hash": "11850342d15a53166b31d72c714fc992",
     "semantic_hash": ""
   }
 }

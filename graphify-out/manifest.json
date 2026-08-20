@@ -1572,9 +1572,9 @@
     "semantic_hash": ""
   },
   "frontend/vitest.config.ts": {
-    "mtime": 1786990298.0807557,
-    "seen": 1787164428.3517632,
-    "ast_hash": "3004dd22a63b79452296915a92128c49",
+    "mtime": 1787177899.6852326,
+    "seen": 1787178100.7518384,
+    "ast_hash": "1a85619178dfb473c6582112c37f6dcd",
     "semantic_hash": ""
   },
   "opencode.json": {
@@ -1776,9 +1776,9 @@
     "semantic_hash": ""
   },
   "docs/sprints/SPRINT-02.md": {
-    "mtime": 1787176030.488533,
-    "seen": 1787176061.5898619,
-    "ast_hash": "3f2d997634d180a309dd9d5d0cfbda27",
+    "mtime": 1787178077.2825868,
+    "seen": 1787178100.7519796,
+    "ast_hash": "dbc26b59b7eec9b6fd1ffe155e7d2d7e",
     "semantic_hash": ""
   },
   "docs/sprints/SPRINT-03-design-system.md": {
@@ -2412,9 +2412,9 @@
     "semantic_hash": ""
   },
   "frontend/src/__tests__/management-sections.test.tsx": {
-    "mtime": 1787170977.5244489,
-    "seen": 1787173174.455945,
-    "ast_hash": "e95570516a11479a6bd080282e0f77ac",
+    "mtime": 1787177085.353892,
+    "seen": 1787178100.7515628,
+    "ast_hash": "5d4faa7554669cad4d24a372779d1cc7",
     "semantic_hash": ""
   },
   "frontend/src/app/administracao/substituicoes/page.tsx": {
@@ -2583,6 +2583,24 @@
     "mtime": 1787175044.8650477,
     "seen": 1787176061.5900002,
     "ast_hash": "11850342d15a53166b31d72c714fc992",
+    "semantic_hash": ""
+  },
+  "frontend/src/__tests__/substitutions-section.test.tsx": {
+    "mtime": 1787177121.6070225,
+    "seen": 1787178100.751585,
+    "ast_hash": "7d1f005e902ec976bf422e0090837802",
+    "semantic_hash": ""
+  },
+  "frontend/src/__tests__/unit-data-table.test.tsx": {
+    "mtime": 1787177654.6773183,
+    "seen": 1787178100.7515879,
+    "ast_hash": "9ce4498aa98b8e9b3b3f4b10012c8be1",
+    "semantic_hash": ""
+  },
+  "prompts/SPRINT-02-1-users.md": {
+    "mtime": 1787177899.9052525,
+    "seen": 1787178100.7520266,
+    "ast_hash": "cfdedc9680c65d9d22b7906feb0a5a2a",
     "semantic_hash": ""
   }
 }
