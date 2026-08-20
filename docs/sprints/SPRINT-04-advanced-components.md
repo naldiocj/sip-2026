@@ -21,7 +21,7 @@ Criar os componentes avançados transversais: Modal Engine, Form Engine, Command
 
 | ID | Task | Estado |
 |----|------|--------|
-| TASK-015 | Enterprise Dialog Engine | TODO |
+| TASK-015 | Enterprise Dialog Engine | DONE |
 | TASK-016 | Dialog variants (Confirm, Form, Details, FullScreen) | TODO |
 | TASK-017 | Drawer Engine | TODO |
 | TASK-018 | AdvancedSelect | TODO |
