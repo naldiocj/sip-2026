@@ -14,7 +14,6 @@ export function useIsMobile() {
       setIsMobile(window.innerWidth < MOBILE_BREAKPOINT)
     }
     mql.addEventListener("change", onChange)
-    // Initial check is done via lazy initialization
     return () => mql.removeEventListener("change", onChange)
   }, [])
 
