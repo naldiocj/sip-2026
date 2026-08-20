@@ -6,7 +6,7 @@ Estabelecer a fundação do Design System Enterprise do SIP e transformar o App 
 
 ## Estado
 
-**PLANNED**
+**DONE**
 
 ## Capabilities
 
