@@ -28,7 +28,7 @@ Estabelecer a fundação do Design System Enterprise do SIP e transformar o App 
 | TASK-005 | Header Enterprise | `tasks/TASK-005-header-enterprise.md` | DONE |
 | TASK-006 | Breadcrumbs inteligentes | `tasks/TASK-006-breadcrumbs.md` | DONE |
 | TASK-007 | PageContainer + PageHeader + PageToolbar enterprise | `tasks/TASK-007-page-container.md` | DONE |
-| TASK-008 | Button System | `tasks/TASK-008-button-system.md` | PENDING |
+| TASK-008 | Button System | `tasks/TASK-008-button-system.md` | DONE |
 | TASK-009 | Status System central | `tasks/TASK-009-status-system.md` | PENDING |
 | TASK-010 | Loading System | `tasks/TASK-010-loading-system.md` | PENDING |
 | TASK-011 | Empty States sistema | `tasks/TASK-011-empty-states.md` | PENDING |
