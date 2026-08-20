@@ -1,0 +1,17 @@
+{
+  "$schema": "https://app.kilo.ai/config.json",
+  "plugin": [
+    "file:///home/dds02/projetos/sic/sip/.kilo/plugins/graphify.js"
+  ],
+  "mcp": {
+    "graphify": {
+      "command": [
+        "/home/dds02/.local/share/graphifyy-venv/bin/python",
+        "-m",
+        "graphify.serve",
+        "/home/dds02/projetos/sic/sip/graphify-out/graph.json"
+      ],
+      "enabled": true
+    }
+  }
+}

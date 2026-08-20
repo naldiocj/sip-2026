@@ -4,10 +4,10 @@
     "graphify": {
       "type": "local",
       "command": [
-        "/home/naldiocj/.local/share/uv/tools/graphifyy/bin/python",
+        "/home/dds02/.local/share/graphifyy-venv/bin/python",
         "-m",
         "graphify.serve",
-        "/home/naldiocj/projects/sic/sip/graphify-out/graph.json"
+        "/home/dds02/projetos/sic/sip/graphify-out/graph.json"
       ],
       "enabled": true
     }

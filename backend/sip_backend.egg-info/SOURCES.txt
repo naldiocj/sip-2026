@@ -25,7 +25,9 @@ app/db/session.py
 app/modules/__init__.py
 app/modules/auth/__init__.py
 app/modules/auth/api/__init__.py
+app/modules/auth/api/audit.py
 app/modules/auth/api/dependencies.py
+app/modules/auth/api/profiles.py
 app/modules/auth/api/router.py
 app/modules/auth/api/users.py
 app/modules/auth/api/schemas/__init__.py
@@ -37,6 +39,7 @@ app/modules/auth/application/authorization.py
 app/modules/auth/application/password.py
 app/modules/auth/application/service.py
 app/modules/auth/application/tokens.py
+app/modules/auth/application/user_service.py
 app/modules/auth/domain/__init__.py
 app/modules/auth/domain/associations.py
 app/modules/auth/domain/audit.py
